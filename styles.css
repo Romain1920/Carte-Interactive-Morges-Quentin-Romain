@@ -8,6 +8,8 @@ body {
   font-family: system-ui, -apple-system, Segoe UI, sans-serif;
   display: flex;
   flex-direction: column;
+  background: #0b172a;
+  min-height: 100vh;
 }
 
 header {
@@ -19,6 +21,7 @@ header {
 .map-wrapper {
   flex: 1;
   position: relative;
+  background: #0b172a;
 }
 
 #map {
@@ -31,20 +34,6 @@ header {
   margin: 0;
   font-size: 14px;
   opacity: 0.9;
-}
-
-.maplibregl-popup-content {
-  background: rgba(15, 23, 42, 0.95);
-  color: #f8fafc;
-  border-radius: 12px;
-  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.35);
-  padding: 16px 18px;
-  width: clamp(220px, 38vw, 420px);
-  max-width: min(440px, 90vw);
-}
-
-.maplibregl-popup-tip {
-  border-top-color: rgba(15, 23, 42, 0.95) !important;
 }
 
 .popup-content h3 {
@@ -72,29 +61,6 @@ header {
 .popup-content::-webkit-scrollbar-thumb {
   background: rgba(148, 163, 184, 0.4);
   border-radius: 4px;
-}
-
-@media (max-width: 500px) {
-  .maplibregl-popup-content {
-    width: calc(100vw - 32px);
-    max-width: calc(100vw - 32px);
-    padding: 14px 15px;
-  }
-
-  .layer-toggle {
-    left: 50%;
-    right: auto;
-    top: auto;
-    bottom: 12px;
-    transform: translateX(-50%);
-    width: calc(100vw - 32px);
-    max-width: 320px;
-    z-index: 5;
-  }
-
-  .map-wrapper {
-    padding-bottom: 120px;
-  }
 }
 
 .popup-carousel {
@@ -161,7 +127,7 @@ header {
 .popup-comments textarea {
   width: 100%;
   box-sizing: border-box;
-  min-height: 50px;
+  min-height: 44px;
   resize: vertical;
   margin-bottom: 6px;
   background: #1e293b;
@@ -169,6 +135,7 @@ header {
   border: 1px solid #334155;
   border-radius: 6px;
   padding: 6px 8px;
+  font-size: 16px;
 }
 
 .popup-comments button {
@@ -239,6 +206,139 @@ header {
   border: 1px solid #facc15;
 }
 
+.details-open .layer-toggle {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.75);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 30;
+}
+
+.lightbox.visible {
+  display: flex;
+}
+
+.lightbox-content {
+  position: relative;
+  width: min(92vw, 960px);
+  height: min(85vh, 640px);
+  background: #0f172a;
+  border-radius: 14px;
+  box-shadow: 0 30px 50px rgba(15, 23, 42, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.lightbox img,
+.lightbox iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border: 0;
+  display: none;
+}
+
+.lightbox iframe {
+  background: #111827;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: none;
+  background: rgba(15, 23, 42, 0.85);
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.details-panel {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 25;
+}
+
+.details-panel.visible {
+  display: flex;
+}
+
+.details-content {
+  position: relative;
+  width: min(820px, 92vw);
+  max-height: min(92vh, 720px);
+  background: rgba(15, 23, 42, 0.98);
+  border-radius: 20px;
+  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.5);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.details-content .popup-content {
+  max-height: none;
+  overflow: auto;
+}
+
+.details-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .details-panel {
+    padding: env(safe-area-inset-top, 0) env(safe-area-inset-left, 0) env(safe-area-inset-bottom, 0);
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .details-content {
+    width: 100vw;
+    min-height: 100vh;
+    max-height: none;
+    border-radius: 0;
+    padding: calc(env(safe-area-inset-top, 0) + 16px) 18px calc(env(safe-area-inset-bottom, 0) + 32px);
+  }
+
+  .details-body {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .details-close {
+    top: calc(env(safe-area-inset-top, 0) + 8px);
+    right: calc(env(safe-area-inset-right, 0) + 12px);
+  }
+
+  #map {
+    min-height: 100vh;
+  }
+}
+
 @media (max-width: 720px) {
   .layer-toggle {
     position: fixed;
@@ -250,36 +350,5 @@ header {
     width: min(420px, calc(100vw - 32px));
     z-index: 12;
     backdrop-filter: blur(12px);
-  }
-
-  .map-wrapper {
-    padding-bottom: 150px;
-  }
-
-  .maplibregl-popup-content {
-    width: calc(100vw - 24px);
-    max-width: calc(100vw - 24px);
-    padding: 14px 16px;
-  }
-}
-
-@media (max-width: 520px) {
-  .maplibregl-popup-content {
-    width: calc(100vw - 12px);
-    max-width: calc(100vw - 12px);
-    padding: 12px 14px;
-    border-radius: 10px;
-  }
-
-  .popup-content {
-    max-height: min(55vh, 400px);
-  }
-
-  .popup-content h3 {
-    font-size: 16px;
-  }
-
-  .popup-content p {
-    font-size: 13px;
   }
 }
