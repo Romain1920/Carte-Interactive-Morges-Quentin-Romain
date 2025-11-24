@@ -18,6 +18,49 @@ header {
   color: white;
 }
 
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+}
+
+.scenario-switch {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.scenario-button {
+  padding: 6px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: transparent;
+  color: #e2e8f0;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  min-width: 120px;
+}
+
+.scenario-button.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+.scenario-button:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 2px;
+}
+
 .map-wrapper {
   flex: 1;
   position: relative;
@@ -28,12 +71,6 @@ header {
   height: 100%;
   width: 100%;
   min-height: 400px;
-}
-
-.notice {
-  margin: 0;
-  font-size: 14px;
-  opacity: 0.9;
 }
 
 .popup-content h3 {
@@ -164,6 +201,12 @@ header {
   margin: 0 0 6px;
   font-size: 14px;
   font-weight: 600;
+}
+
+.toggle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .toggle-item {

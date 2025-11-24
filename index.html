@@ -9,8 +9,13 @@
 </head>
 <body>
   <header>
-    <h1 style="margin: 0; font-size: 18px;">Groupe 3 - Vielle ville de Morges</h1>
-    <p class="notice">Carte interactive des aménagements proposés</p>
+    <div class="header-top">
+      <h1>Groupe 3 - Vielle ville de Morges</h1>
+      <div class="scenario-switch" role="tablist" aria-label="Modes d'affichage">
+        <button class="scenario-button active" data-scenario="diagnostic" role="tab" aria-selected="true">Diagnostic</button>
+        <button class="scenario-button" data-scenario="projet" role="tab" aria-selected="false">Projet</button>
+      </div>
+    </div>
   </header>
   <div class="map-wrapper">
     <div id="map" role="application" aria-label="Carte interactive centrée sur Morges"></div>
@@ -19,20 +24,7 @@
     </div>
     <div class="layer-toggle" role="region" aria-label="Affichage des couches">
       <h2>Affichage</h2>
-      <div class="toggle-item">
-        <label for="toggle-interventions">
-          <span class="legend-icon point"></span>
-          <span>Interventions prévues</span>
-        </label>
-        <input type="checkbox" id="toggle-interventions" data-toggle="interventions" checked />
-      </div>
-      <div class="toggle-item">
-        <label for="toggle-perimeter">
-          <span class="legend-icon square"></span>
-          <span>Périmètre</span>
-        </label>
-        <input type="checkbox" id="toggle-perimeter" data-toggle="perimeter" checked />
-      </div>
+      <div id="layer-toggle-list" class="toggle-list"></div>
     </div>
   </div>
 

@@ -4,40 +4,37 @@ import "maplibre-gl/dist/maplibre-gl.css";
 window.addEventListener("DOMContentLoaded", () => {
   const morgesCenter = [6.496, 46.509];
 
-  const poiGeoJson = {
-    type: "FeatureCollection",
-    features: [
-      {
-        id: 1,
-        type: "Feature",
-        geometry: { type: "Point", coordinates: [6.501173649086801, 46.509627396869014] },
-        properties: {
-          title: "Déplacement des quais et transformation en plage",
-          description: "Description à compléter.",
-          images: ["https://placekitten.com/400/240", "https://placekitten.com/401/240"],
-        },
+  const rawProjetFeatures = [
+    {
+      id: 1,
+      type: "Feature",
+      geometry: { type: "Point", coordinates: [6.501173649086801, 46.509627396869014] },
+      properties: {
+        title: "Déplacement des quais et transformation en plage",
+        description: "Description à compléter.",
+        images: ["https://placekitten.com/400/240", "https://placekitten.com/401/240"],
       },
-      {
-        id: 2,
-        type: "Feature",
-        geometry: { type: "Point", coordinates: [6.501393097261323, 46.51102600956074] },
-        properties: {
-          title: "Déplacement des quais et transformation en plage",
-          description:
-            "Le projet propose de déplacer les quais plus en amont dans la baie afin de libérer le front lacustre et de le transformer en une grande plage publique. Cette intervention mettrait en valeur la géographie particulière de la baie de Morges et offrirait un accès direct et généreux au lac pour les habitant·e·s, les visiteur·euse·s et les usagers des promenades. La nouvelle plage deviendrait un espace central de détente, de baignade et de sociabilité, en continuité avec les quais réaménagés et les parcours piétons existants.",
-          images: ["https://vl7zgyqezaiej8w4.public.blob.vercel-storage.com/ref_rives_I-1.png"],
-        },
+    },
+    {
+      id: 2,
+      type: "Feature",
+      geometry: { type: "Point", coordinates: [6.501393097261323, 46.51102600956074] },
+      properties: {
+        title: "Déplacement des quais et transformation en plage",
+        description:
+          "Le projet propose de déplacer les quais plus en amont dans la baie afin de libérer le front lacustre et de le transformer en une grande plage publique. Cette intervention mettrait en valeur la géographie particulière de la baie de Morges et offrirait un accès direct et généreux au lac pour les habitant·e·s, les visiteur·euse·s et les usagers des promenades. La nouvelle plage deviendrait un espace central de détente, de baignade et de sociabilité, en continuité avec les quais réaménagés et les parcours piétons existants.",
+        images: ["https://vl7zgyqezaiej8w4.public.blob.vercel-storage.com/ref_rives_I-1.png"],
       },
-      { id: 3, type: "Feature", geometry: { type: "Point", coordinates: [6.501999472118144, 46.51032553330137] }, properties: { title: "Point 3", description: "Description à compléter.", images: [] } },
-      { id: 4, type: "Feature", geometry: { type: "Point", coordinates: [6.500648172917296, 46.50993521909845] }, properties: { title: "Point 4", description: "Description à compléter.", images: [] } },
-      { id: 5, type: "Feature", geometry: { type: "Point", coordinates: [6.498168462480993, 46.50899805879923] }, properties: { title: "Point 5", description: "Description à compléter.", images: [] } },
-      { id: 6, type: "Feature", geometry: { type: "Point", coordinates: [6.498868117689945, 46.508632163109276] }, properties: { title: "Point 6", description: "Description à compléter.", images: [] } },
-      { id: 7, type: "Feature", geometry: { type: "Point", coordinates: [6.499552002131644, 46.50811525597903] }, properties: { title: "Point 7", description: "Description à compléter.", images: [] } },
-      { id: 8, type: "Feature", geometry: { type: "Point", coordinates: [6.497160843948601, 46.50706604124388] }, properties: { title: "Point 8", description: "Description à compléter.", images: [] } },
-      { id: 9, type: "Feature", geometry: { type: "Point", coordinates: [6.496842475479566, 46.50931757070339] }, properties: { title: "Point 9", description: "Description à compléter.", images: [] } },
-      { id: 10, type: "Feature", geometry: { type: "Point", coordinates: [6.496824972852992, 46.510215603310755] }, properties: { title: "Point 10", description: "Description à compléter.", images: [] } },
-    ],
-  };
+    },
+    { id: 3, type: "Feature", geometry: { type: "Point", coordinates: [6.501999472118144, 46.51032553330137] }, properties: { title: "Point 3", description: "Description à compléter.", images: [] } },
+    { id: 4, type: "Feature", geometry: { type: "Point", coordinates: [6.500648172917296, 46.50993521909845] }, properties: { title: "Point 4", description: "Description à compléter.", images: [] } },
+    { id: 5, type: "Feature", geometry: { type: "Point", coordinates: [6.498168462480993, 46.50899805879923] }, properties: { title: "Point 5", description: "Description à compléter.", images: [] } },
+    { id: 6, type: "Feature", geometry: { type: "Point", coordinates: [6.498868117689945, 46.508632163109276] }, properties: { title: "Point 6", description: "Description à compléter.", images: [] } },
+    { id: 7, type: "Feature", geometry: { type: "Point", coordinates: [6.499552002131644, 46.50811525597903] }, properties: { title: "Point 7", description: "Description à compléter.", images: [] } },
+    { id: 8, type: "Feature", geometry: { type: "Point", coordinates: [6.497160843948601, 46.50706604124388] }, properties: { title: "Point 8", description: "Description à compléter.", images: [] } },
+    { id: 9, type: "Feature", geometry: { type: "Point", coordinates: [6.496842475479566, 46.50931757070339] }, properties: { title: "Point 9", description: "Description à compléter.", images: [] } },
+    { id: 10, type: "Feature", geometry: { type: "Point", coordinates: [6.496824972852992, 46.510215603310755] }, properties: { title: "Point 10", description: "Description à compléter.", images: [] } },
+  ];
 
   const zoneCoords = [
     [6.496428089845968, 46.505720246977845],
@@ -110,14 +107,68 @@ window.addEventListener("DOMContentLoaded", () => {
     ],
   };
 
-  const allCoords = [morgesCenter, ...poiGeoJson.features.map((f) => f.geometry.coordinates)];
-  const lngs = allCoords.map((c) => c[0]);
-  const lats = allCoords.map((c) => c[1]);
-  const boundsBuffer = 0.02;
-  const bounds = [
-    [Math.min(...lngs) - boundsBuffer, Math.min(...lats) - boundsBuffer],
-    [Math.max(...lngs) + boundsBuffer, Math.max(...lats) + boundsBuffer],
-  ];
+  const cloneFeature = (feature, overrides = {}) => ({
+    ...feature,
+    geometry: { ...feature.geometry, coordinates: [...feature.geometry.coordinates] },
+    properties: { ...feature.properties, ...overrides },
+  });
+
+  const diagnosticFeatures = [];
+
+  const projetFeatures = rawProjetFeatures.map((feature) =>
+    cloneFeature(feature, {
+      title: feature.properties.title.startsWith("Projet") ? feature.properties.title : `Projet – ${feature.properties.title}`,
+      description: feature.properties.description
+        ? `Vision projet : ${feature.properties.description}`
+        : "Vision projet à préciser.",
+    }),
+  );
+
+  const buildCollection = (features) => ({ type: "FeatureCollection", features });
+
+  const scenarios = {
+    diagnostic: {
+      label: "Diagnostic",
+      poiGeoJson: buildCollection(diagnosticFeatures),
+      focusZone,
+      maskGeoJson,
+    },
+    projet: {
+      label: "Projet",
+      poiGeoJson: buildCollection(projetFeatures),
+      focusZone,
+      maskGeoJson,
+    },
+  };
+
+  const scenarioLayers = {
+    diagnostic: [
+      { id: "perimeter", label: "Périmètre", iconClass: "square" },
+    ],
+    projet: [
+      { id: "interventions", label: "Interventions prévues", iconClass: "point" },
+      { id: "perimeter", label: "Périmètre", iconClass: "square" },
+    ],
+  };
+
+  const toggleStates = {
+    diagnostic: { perimeter: true },
+    projet: { interventions: true, perimeter: true },
+  };
+
+  const bounds = (() => {
+    const coords = [morgesCenter];
+    Object.values(scenarios).forEach((scenario) => {
+      scenario.poiGeoJson.features.forEach((feature) => coords.push(feature.geometry.coordinates));
+    });
+    const lngs = coords.map((c) => c[0]);
+    const lats = coords.map((c) => c[1]);
+    const buffer = 0.02;
+    return [
+      [Math.min(...lngs) - buffer, Math.min(...lats) - buffer],
+      [Math.max(...lngs) + buffer, Math.max(...lats) + buffer],
+    ];
+  })();
 
   const orthoLayerTemplate = "https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage/default/current/3857/{z}/{x}/{y}.jpeg";
 
@@ -141,6 +192,7 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   const coordDisplay = document.getElementById("coord-display");
+  const layerToggleList = document.getElementById("layer-toggle-list");
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-left");
   map.on("mousemove", (event) => {
     if (!coordDisplay) return;
@@ -316,9 +368,23 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  const poiMarkers = [];
-  const addPoiMarkers = () => {
-    poiGeoJson.features.forEach((feature) => {
+  let poiMarkers = [];
+  let currentScenario = "diagnostic";
+
+  const scenarioButtons = document.querySelectorAll(".scenario-button");
+  const updateScenarioButtons = (activeKey) => {
+    scenarioButtons.forEach((button) => {
+      const isActive = button.dataset.scenario === activeKey;
+      button.classList.toggle("active", isActive);
+      button.setAttribute("aria-selected", isActive ? "true" : "false");
+      button.setAttribute("tabindex", isActive ? "0" : "-1");
+    });
+  };
+
+  const createPoiMarkers = (features) => {
+    poiMarkers.forEach((marker) => marker.remove());
+    poiMarkers = [];
+    features.forEach((feature) => {
       const marker = new maplibregl.Marker({ color: "#38bdf8" }).setLngLat(feature.geometry.coordinates).addTo(map);
       marker.getElement().addEventListener("click", (event) => {
         event.stopPropagation();
@@ -344,16 +410,68 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  const initLayerToggles = () => {
-    const interventionToggle = document.querySelector('[data-toggle="interventions"]');
-    const perimeterToggle = document.querySelector('[data-toggle="perimeter"]');
+  const applyToggleState = (scenarioKey, toggleId) => {
+    const enabled = toggleStates[scenarioKey]?.[toggleId];
+    if (toggleId === "interventions") {
+      setMarkersVisibility(Boolean(enabled));
+    } else if (toggleId === "perimeter") {
+      setPerimeterVisibility(Boolean(enabled));
+    }
+  };
 
-    interventionToggle?.addEventListener("change", (event) => {
-      setMarkersVisibility(event.target.checked);
+  const renderLayerToggles = (scenarioKey) => {
+    if (!layerToggleList) return;
+    const configs = scenarioLayers[scenarioKey] || [];
+    if (!toggleStates[scenarioKey]) toggleStates[scenarioKey] = {};
+    layerToggleList.innerHTML = "";
+
+    configs.forEach((cfg) => {
+      if (typeof toggleStates[scenarioKey][cfg.id] !== "boolean") {
+        toggleStates[scenarioKey][cfg.id] = true;
+      }
+
+      const item = document.createElement("div");
+      item.className = "toggle-item";
+
+      const label = document.createElement("label");
+      label.setAttribute("for", `toggle-${scenarioKey}-${cfg.id}`);
+
+      const icon = document.createElement("span");
+      icon.className = `legend-icon ${cfg.iconClass || ""}`.trim();
+
+      const text = document.createElement("span");
+      text.textContent = cfg.label;
+
+      label.append(icon, text);
+
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.id = `toggle-${scenarioKey}-${cfg.id}`;
+      input.dataset.toggle = cfg.id;
+      input.checked = toggleStates[scenarioKey][cfg.id];
+      input.addEventListener("change", (event) => {
+        toggleStates[scenarioKey][cfg.id] = event.target.checked;
+        applyToggleState(scenarioKey, cfg.id);
+      });
+
+      item.append(label, input);
+      layerToggleList.appendChild(item);
+      applyToggleState(scenarioKey, cfg.id);
     });
-    perimeterToggle?.addEventListener("change", (event) => {
-      setPerimeterVisibility(event.target.checked);
-    });
+  };
+
+  const applyScenario = (key) => {
+    const scenario = scenarios[key];
+    if (!scenario) return;
+    currentScenario = key;
+    closeDetailsPanel();
+    createPoiMarkers(scenario.poiGeoJson.features);
+    const focusSource = map.getSource("focus-zone");
+    const maskSource = map.getSource("focus-mask");
+    focusSource?.setData(scenario.focusZone);
+    maskSource?.setData(scenario.maskGeoJson);
+    renderLayerToggles(key);
+    updateScenarioButtons(key);
   };
 
   const hideBaseIcons = () => {
@@ -364,11 +482,20 @@ window.addEventListener("DOMContentLoaded", () => {
       .forEach((layer) => map.setLayoutProperty(layer.id, "visibility", "none"));
   };
 
+  scenarioButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const scenarioKey = button.dataset.scenario;
+      if (scenarioKey && scenarioKey !== currentScenario) {
+        applyScenario(scenarioKey);
+      }
+    });
+  });
+
   map.on("load", () => {
     map.fitBounds(bounds, { padding: 40, duration: 0 });
 
-    map.addSource("focus-zone", { type: "geojson", data: focusZone });
-    map.addSource("focus-mask", { type: "geojson", data: maskGeoJson });
+    map.addSource("focus-zone", { type: "geojson", data: scenarios[currentScenario].focusZone });
+    map.addSource("focus-mask", { type: "geojson", data: scenarios[currentScenario].maskGeoJson });
     map.addLayer({
       id: "focus-mask-layer",
       type: "fill",
@@ -388,11 +515,7 @@ window.addEventListener("DOMContentLoaded", () => {
       },
     });
 
-    addPoiMarkers();
-    setMarkersVisibility(true);
-    const perimeterToggle = document.querySelector('[data-toggle="perimeter"]');
-    setPerimeterVisibility(perimeterToggle ? perimeterToggle.checked : true);
-    initLayerToggles();
+    applyScenario(currentScenario);
     hideBaseIcons();
     map.on("styledata", hideBaseIcons);
   });
