@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Carte interactive - Morges</title>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.css"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1 style="margin: 0; font-size: 18px;">Groupe 3 - Vielle ville de Morges</h1>
+    <p class="notice">Carte interactive des aménagements proposés</p>
+  </header>
+  <div class="map-wrapper">
+    <div id="map" role="application" aria-label="Carte interactive centrée sur Morges"></div>
+    <div class="coord-display" id="coord-display" aria-live="polite">
+      Lat 46.50900 · Lng 6.49600
+    </div>
+    <div class="layer-toggle" role="region" aria-label="Affichage des couches">
+      <h2>Affichage</h2>
+      <div class="toggle-item">
+        <label for="toggle-interventions">
+          <span class="legend-icon point"></span>
+          <span>Interventions prévues</span>
+        </label>
+        <input type="checkbox" id="toggle-interventions" data-toggle="interventions" checked />
+      </div>
+      <div class="toggle-item">
+        <label for="toggle-perimeter">
+          <span class="legend-icon square"></span>
+          <span>Périmètre</span>
+        </label>
+        <input type="checkbox" id="toggle-perimeter" data-toggle="perimeter" checked />
+      </div>
+    </div>
+  </div>
+
+  <div class="details-panel" id="details-panel" aria-hidden="true">
+    <div class="details-content" role="dialog" aria-modal="true" aria-label="Informations détaillées">
+      <button class="details-close" id="details-close" aria-label="Fermer">&times;</button>
+      <div id="details-body"></div>
+    </div>
+  </div>
+
+  <div class="lightbox" id="media-lightbox" aria-hidden="true">
+    <div class="lightbox-content" role="dialog" aria-modal="true" aria-label="Média en plein écran">
+      <button class="lightbox-close" id="lightbox-close" aria-label="Fermer l'aperçu">&times;</button>
+      <img id="lightbox-image" alt="" />
+      <iframe id="lightbox-frame" title="Document"></iframe>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.js"></script>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
