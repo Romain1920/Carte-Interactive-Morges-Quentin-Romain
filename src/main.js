@@ -115,7 +115,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const diagnosticFeatures = [];
 
-  const diagnosticAutoAxes = {
+  const diagnosticAutoAxesPrimary = {
     type: "FeatureCollection",
     features: [
       {
@@ -244,63 +244,197 @@ window.addEventListener("DOMContentLoaded", () => {
     ],
   };
 
-  const projetFeatures = rawProjetFeatures.map((feature) =>
+  const diagnosticAutoAxesSecondary = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "LineString",
+          coordinates: [
+            [6.521726909130038, 46.51778626113868],
+            [6.520813817843157, 46.51783065853215],
+            [6.519418332648826, 46.51789986825811],
+            [6.518893037347558, 46.517917500513306],
+            [6.5184044916196076, 46.51790999190509],
+            [6.517411492124747, 46.51781789898482],
+            [6.517065647654154, 46.5177851598589],
+            [6.5168325057775105, 46.517734483929466],
+            [6.515799386145899, 46.51761738106768],
+            [6.513477563787053, 46.51735186956948],
+            [6.511480500514598, 46.51710151632039],
+            [6.509293794530041, 46.516856463163194],
+            [6.508896375071936, 46.516849503085815],
+            [6.508621915142371, 46.51680828483323],
+            [6.507501017933429, 46.51664220078099],
+            [6.5069119632437795, 46.516502466111085],
+            [6.50580020766523, 46.516103064146904],
+            [6.504437936180417, 46.515578670069154],
+            [6.50415114219732, 46.51543670356163],
+            [6.503790377740609, 46.515206391498076],
+            [6.503384723525724, 46.51488494446459],
+            [6.502658860690346, 46.514261153236966],
+            [6.501877076632802, 46.51360084215247],
+            [6.501473048909835, 46.51326257443014],
+            [6.501310010339687, 46.51311285947171],
+            [6.500783216540129, 46.51267052543691],
+            [6.500424500708535, 46.51235893869402],
+            [6.500262550694509, 46.51219346683935],
+            [6.500119780541846, 46.51199839903111],
+            [6.500013880545918, 46.511794119761],
+            [6.499986123088533, 46.511711230016914],
+            [6.4999333108080775, 46.51149797548117],
+            [6.499931914355522, 46.51139223338985],
+            [6.4999368116902465, 46.51128839534074],
+            [6.4999288938122275, 46.511166008934204],
+            [6.4998889100325865, 46.51109312822637],
+            [6.499827589968525, 46.51105450969969],
+            [6.499717297565654, 46.51104649476461],
+            [6.499211856875037, 46.511136269339595],
+            [6.4988993598324285, 46.511203574182545],
+            [6.498648336866, 46.51121450505296],
+            [6.498499428451175, 46.5111882397002],
+            [6.498291740970021, 46.51113155330125],
+            [6.498050207054968, 46.511059281714004],
+            [6.497849784516094, 46.51095253225261],
+            [6.497754817746535, 46.51087785938315],
+            [6.49746067513977, 46.51064656308589],
+            [6.496973387399011, 46.51025937252292],
+            [6.496899720391048, 46.51019485243167],
+            [6.496607704451221, 46.509649071568006],
+            [6.496393854510477, 46.50924048548982],
+            [6.496205486642244, 46.50889179170755],
+            [6.496158713724916, 46.508761438830355],
+            [6.496151459785388, 46.50866337910858],
+            [6.496171274096636, 46.508481443344365],
+            [6.4961961933903, 46.50817859441828],
+            [6.496212632242931, 46.50802415000929],
+            [6.4962277614305615, 46.50790250293961],
+            [6.496211728539376, 46.50785638691791],
+            [6.4961865019480705, 46.507811835622825],
+            [6.496137015015498, 46.507780605246694],
+            [6.496051754501026, 46.50773731920063],
+            [6.4959163162829805, 46.507697776851494],
+            [6.49483509943577, 46.50754833301149],
+            [6.49437726277191, 46.507485632365025],
+            [6.49359819056161, 46.50736908075702],
+            [6.493157814903147, 46.50728479256164],
+            [6.492777594461227, 46.507193272786886],
+            [6.492460912693525, 46.507115439096786],
+            [6.4916703949158165, 46.506883279031804],
+            [6.491033113971361, 46.50666779255719],
+            [6.490692891260315, 46.50651924197197],
+            [6.490308237109609, 46.50634061013371],
+            [6.4901685237666085, 46.50628089246222],
+            [6.490106272564626, 46.50628097284407],
+            [6.490013585358062, 46.50628863876375],
+            [6.489904619114196, 46.50628050581216],
+            [6.4898603475968875, 46.506263559194366],
+            [6.489807946016262, 46.50622265876369],
+            [6.489787815511246, 46.50617546379824],
+            [6.489763922281316, 46.50612285013564],
+            [6.489686509297527, 46.50606436286396],
+            [6.489396925345237, 46.50577773600797],
+            [6.4890647089145, 46.50544074051334],
+            [6.488655215665689, 46.50501731600521],
+            [6.488387748916604, 46.50476931582458],
+            [6.48761100313935, 46.503934734424575],
+            [6.487537429687235, 46.50387614077674],
+            [6.4874759681428875, 46.503826848739884],
+            [6.4874083936956985, 46.50379872395064],
+            [6.48734498873844, 46.50376705315254],
+            [6.48730760381606, 46.503735467019695],
+            [6.487291233719115, 46.50370236682109],
+            [6.487294491016761, 46.503668218856106],
+            [6.48727584860803, 46.50362340093035],
+            [6.487216479365852, 46.50349859979418],
+            [6.486827014595505, 46.503077553854304],
+            [6.486182679022653, 46.502415951083655],
+            [6.485835495716196, 46.502047153889364],
+            [6.485337544588732, 46.501527471992304],
+            [6.485057088521424, 46.50121675523302],
+            [6.484586666840533, 46.50074167248584],
+            [6.484318986746172, 46.50049085445436],
+            [6.484207919903419, 46.50036601025136],
+            [6.483999364318606, 46.50010372568466],
+            [6.483770031376186, 46.49985565975677],
+            [6.4834108525886895, 46.499476833527645],
+            [6.483017069768051, 46.49905817405203],
+            [6.482616987929087, 46.49863139794889],
+            [6.482234719184772, 46.498234277532625],
+            [6.482074935302258, 46.498039550744046],
+            [6.481976191217461, 46.497910146271394],
+            [6.4818746632756, 46.497758911566926],
+            [6.48179527545893, 46.49754882647743],
+            [6.4817502640514935, 46.497403792644214],
+            [6.481701867011545, 46.49708266542362],
+            [6.481660661271828, 46.49690830230212],
+            [6.481597695399632, 46.49670886572515],
+            [6.48149413870613, 46.496530574445785],
+            [6.481371949074853, 46.49636989697665],
+            [6.48123848834053, 46.49621300341585],
+            [6.480834102769592, 46.49590714056319],
+            [6.480635674565832, 46.49579274251283],
+            [6.480328812992505, 46.49562750528244],
+            [6.4801480765523864, 46.495554518948346],
+            [6.479936451120019, 46.49547699767516],
+            [6.479814785596341, 46.49544063068585],
+            [6.479697428502158, 46.495439316373904],
+            [6.47964547541177, 46.495430892310864],
+            [6.479597668871016, 46.495406523551736],
+            [6.479540389865051, 46.49535850364645],
+            [6.479471150644604, 46.49531266259342],
+            [6.4792197954136155, 46.495193719757005],
+            [6.478946065201659, 46.49509730932316],
+            [6.478131668441033, 46.49481783153197],
+            [6.477542504995659, 46.49461612010145],
+            [6.476958516381149, 46.49441050703701],
+            [6.476051952918704, 46.494091864028476],
+            [6.475353311047611, 46.493853107519456],
+            [6.4748875149084535, 46.49369564027114],
+          ],
+        },
+      },
+    ],
+  };
+
+  
+
+  const projectFeatures = rawProjetFeatures.map((feature) =>
     cloneFeature(feature, {
       title: feature.properties.title.startsWith("Projet") ? feature.properties.title : `Projet – ${feature.properties.title}`,
-      description: feature.properties.description
-        ? `Vision projet : ${feature.properties.description}`
-        : "Vision projet à préciser.",
     }),
   );
 
-  const buildCollection = (features) => ({ type: "FeatureCollection", features });
-
-  const scenarios = {
-    diagnostic: {
-      label: "Diagnostic",
-      poiGeoJson: buildCollection(diagnosticFeatures),
-      focusZone,
-      maskGeoJson,
-    },
-    projet: {
-      label: "Projet",
-      poiGeoJson: buildCollection(projetFeatures),
-      focusZone,
-      maskGeoJson,
-    },
-  };
-
-  const scenarioLayers = {
-    diagnostic: [
-      { type: "toggle", id: "perimeter", label: "Périmètre", iconClass: "square" },
-      {
-        type: "group",
-        title: "Un centre-ville ceinturé par les axes de mobilité",
-        items: [{ type: "toggle", id: "diagnostic-auto", label: "Les axes de mobilité du transport automobile", iconClass: "line" }],
-      },
-    ],
-    projet: [
-      { type: "toggle", id: "interventions", label: "Interventions prévues", iconClass: "point" },
-      { type: "toggle", id: "perimeter", label: "Périmètre", iconClass: "square" },
-    ],
-  };
-
-  const toggleStates = {
-    diagnostic: { perimeter: true, "diagnostic-auto": true },
-    projet: { interventions: true, perimeter: true },
+  const collectCoords = (collections) => {
+    const coords = [];
+    const pushCoords = (node) => {
+      if (!node) return;
+      if (typeof node[0] === "number" && typeof node[1] === "number") {
+        coords.push(node);
+        return;
+      }
+      if (Array.isArray(node)) node.forEach(pushCoords);
+    };
+    collections.forEach((collection) => {
+      collection?.features?.forEach((feature) => {
+        pushCoords(feature?.geometry?.coordinates);
+      });
+    });
+    return coords;
   };
 
   const bounds = (() => {
-    const coords = [morgesCenter];
-    Object.values(scenarios).forEach((scenario) => {
-      scenario.poiGeoJson.features.forEach((feature) => coords.push(feature.geometry.coordinates));
-    });
+    const coords = collectCoords([{ features: projectFeatures }, diagnosticAutoAxesPrimary, diagnosticAutoAxesSecondary]);
+    if (!coords.length) return [[6.48, 46.49], [6.53, 46.53]];
     const lngs = coords.map((c) => c[0]);
     const lats = coords.map((c) => c[1]);
-    const buffer = 0.02;
+    const baseBuffer = 0.001;
+    const westBuffer = 0.0004;
     return [
-      [Math.min(...lngs) - buffer, Math.min(...lats) - buffer],
-      [Math.max(...lngs) + buffer, Math.max(...lats) + buffer],
+      [Math.min(...lngs) - westBuffer, Math.min(...lats) - baseBuffer],
+      [Math.max(...lngs) + baseBuffer, Math.max(...lats) + baseBuffer],
     ];
   })();
 
@@ -323,10 +457,12 @@ window.addEventListener("DOMContentLoaded", () => {
     center: morgesCenter,
     zoom: 15,
     maxBounds: bounds,
+    attributionControl: false,
   });
 
   const coordDisplay = document.getElementById("coord-display");
-  const layerToggleList = document.getElementById("layer-toggle-list");
+  const mapSourceLabel = document.getElementById("map-source");
+  if (mapSourceLabel) mapSourceLabel.textContent = "Données cartographiques · swisstopo (WMTS)";
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-left");
   map.on("mousemove", (event) => {
     if (!coordDisplay) return;
@@ -502,23 +638,34 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  let poiMarkers = [];
-  let currentScenario = "diagnostic";
-
-  const scenarioButtons = document.querySelectorAll(".scenario-button");
-  const updateScenarioButtons = (activeKey) => {
-    scenarioButtons.forEach((button) => {
-      const isActive = button.dataset.scenario === activeKey;
-      button.classList.toggle("active", isActive);
-      button.setAttribute("aria-selected", isActive ? "true" : "false");
-      button.setAttribute("tabindex", isActive ? "0" : "-1");
-    });
+  const sectionState = { diagnostic: true, projet: true };
+  const sectionButtons = document.querySelectorAll("[data-section-toggle]");
+  const updateSectionVisibility = (key) => {
+    const section = document.querySelector(`[data-section="${key}"]`);
+    const visible = sectionState[key];
+    if (section) section.classList.toggle("hidden", !visible);
+    const button = document.querySelector(`[data-section-toggle="${key}"]`);
+    if (button) {
+      button.classList.toggle("active", visible);
+      button.setAttribute("aria-pressed", visible ? "true" : "false");
+    }
   };
+  sectionButtons.forEach((button) => {
+    const key = button.dataset.sectionToggle;
+    button.addEventListener("click", () => {
+      sectionState[key] = !sectionState[key];
+      updateSectionVisibility(key);
+    });
+    updateSectionVisibility(key);
+  });
 
-  const createPoiMarkers = (features) => {
-    poiMarkers.forEach((marker) => marker.remove());
-    poiMarkers = [];
-    features.forEach((feature) => {
+  const layerInputs = Array.from(document.querySelectorAll("[data-layer]"));
+  const checklistButtons = Array.from(document.querySelectorAll(".checklist-button"));
+
+  const poiMarkers = [];
+
+  const createPoiMarkers = () => {
+    projectFeatures.forEach((feature) => {
       const marker = new maplibregl.Marker({ color: "#38bdf8" }).setLngLat(feature.geometry.coordinates).addTo(map);
       marker.getElement().addEventListener("click", (event) => {
         event.stopPropagation();
@@ -545,103 +692,36 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   const setDiagnosticAutoVisibility = (visible) => {
-    const layerId = "diagnostic-auto-layer";
-    if (map.getLayer(layerId)) {
-      map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
-    }
-  };
-
-  const applyToggleState = (scenarioKey, toggleId) => {
-    const enabled = toggleStates[scenarioKey]?.[toggleId];
-    if (toggleId === "interventions") {
-      setMarkersVisibility(Boolean(enabled));
-    } else if (toggleId === "perimeter") {
-      setPerimeterVisibility(Boolean(enabled));
-    } else if (toggleId === "diagnostic-auto") {
-      const isDiagnostic = scenarioKey === "diagnostic" && currentScenario === "diagnostic";
-      setDiagnosticAutoVisibility(Boolean(enabled) && isDiagnostic);
-    }
-  };
-
-  const createToggleElement = (scenarioKey, cfg) => {
-    if (typeof toggleStates[scenarioKey][cfg.id] !== "boolean") {
-      toggleStates[scenarioKey][cfg.id] = true;
-    }
-    const item = document.createElement("div");
-    item.className = "toggle-item";
-
-    const label = document.createElement("label");
-    label.setAttribute("for", `toggle-${scenarioKey}-${cfg.id}`);
-
-    const icon = document.createElement("span");
-    icon.className = `legend-icon ${cfg.iconClass || ""}`.trim();
-
-    const text = document.createElement("span");
-    text.textContent = cfg.label;
-
-    label.append(icon, text);
-
-    const input = document.createElement("input");
-    input.type = "checkbox";
-    input.id = `toggle-${scenarioKey}-${cfg.id}`;
-    input.dataset.toggle = cfg.id;
-    input.checked = toggleStates[scenarioKey][cfg.id];
-    input.addEventListener("change", (event) => {
-      toggleStates[scenarioKey][cfg.id] = event.target.checked;
-      applyToggleState(scenarioKey, cfg.id);
-    });
-
-    item.append(label, input);
-    applyToggleState(scenarioKey, cfg.id);
-    return item;
-  };
-
-  const renderLayerToggles = (scenarioKey) => {
-    if (!layerToggleList) return;
-    const configs = scenarioLayers[scenarioKey] || [];
-    if (!toggleStates[scenarioKey]) toggleStates[scenarioKey] = {};
-    layerToggleList.innerHTML = "";
-
-    configs.forEach((cfg) => {
-      if (cfg.type === "group" && cfg.items?.length) {
-        const group = document.createElement("div");
-        group.className = "toggle-group";
-        if (cfg.title) {
-          const title = document.createElement("div");
-          title.className = "toggle-group-title";
-          title.textContent = cfg.title;
-          group.appendChild(title);
-        }
-        cfg.items.forEach((itemCfg) => {
-          toggleStates[scenarioKey][itemCfg.id] ??= true;
-          group.appendChild(createToggleElement(scenarioKey, itemCfg));
-        });
-        layerToggleList.appendChild(group);
-      } else {
-        toggleStates[scenarioKey][cfg.id] ??= true;
-        layerToggleList.appendChild(createToggleElement(scenarioKey, cfg));
+    ["diagnostic-auto-1-layer", "diagnostic-auto-2-layer"].forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
       }
     });
   };
 
-  const applyScenario = (key) => {
-    const scenario = scenarios[key];
-    if (!scenario) return;
-    currentScenario = key;
-    closeDetailsPanel();
-    createPoiMarkers(scenario.poiGeoJson.features);
-    const focusSource = map.getSource("focus-zone");
-    const maskSource = map.getSource("focus-mask");
-    focusSource?.setData(scenario.focusZone);
-    maskSource?.setData(scenario.maskGeoJson);
-    renderLayerToggles(key);
-    updateScenarioButtons(key);
-    if (key === "diagnostic") {
-      const enabled = toggleStates.diagnostic?.["diagnostic-auto"] ?? true;
-      setDiagnosticAutoVisibility(Boolean(enabled));
-    } else {
-      setDiagnosticAutoVisibility(false);
-    }
+  const layerHandlers = {
+    perimeter: (checked) => setPerimeterVisibility(checked),
+    "diagnostic-axes": (checked) => setDiagnosticAutoVisibility(checked),
+    "project-interventions": (checked) => setMarkersVisibility(checked),
+  };
+
+  const bindLayerInputs = () => {
+    layerInputs.forEach((input) => {
+      const key = input.dataset.layer;
+      const handler = layerHandlers[key];
+      if (!handler) return;
+      handler(Boolean(input.checked));
+      input.addEventListener("change", () => handler(Boolean(input.checked)));
+    });
+  };
+
+  const bindChecklistButtons = () => {
+    checklistButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const active = button.classList.toggle("active");
+        button.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+    });
   };
 
   const hideBaseIcons = () => {
@@ -652,21 +732,13 @@ window.addEventListener("DOMContentLoaded", () => {
       .forEach((layer) => map.setLayoutProperty(layer.id, "visibility", "none"));
   };
 
-  scenarioButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const scenarioKey = button.dataset.scenario;
-      if (scenarioKey && scenarioKey !== currentScenario) {
-        applyScenario(scenarioKey);
-      }
-    });
-  });
-
   map.on("load", () => {
     map.fitBounds(bounds, { padding: 40, duration: 0 });
 
-    map.addSource("focus-zone", { type: "geojson", data: scenarios[currentScenario].focusZone });
-    map.addSource("focus-mask", { type: "geojson", data: scenarios[currentScenario].maskGeoJson });
-    map.addSource("diagnostic-auto", { type: "geojson", data: diagnosticAutoAxes });
+    map.addSource("focus-zone", { type: "geojson", data: focusZone });
+    map.addSource("focus-mask", { type: "geojson", data: maskGeoJson });
+    map.addSource("diagnostic-auto-1", { type: "geojson", data: diagnosticAutoAxesPrimary });
+    map.addSource("diagnostic-auto-2", { type: "geojson", data: diagnosticAutoAxesSecondary });
     map.addLayer({
       id: "focus-mask-layer",
       type: "fill",
@@ -677,18 +749,20 @@ window.addEventListener("DOMContentLoaded", () => {
       },
     });
     map.addLayer({
-      id: "focus-zone-layer",
+      id: "diagnostic-auto-1-layer",
       type: "line",
-      source: "focus-zone",
+      source: "diagnostic-auto-1",
+      layout: { visibility: "none" },
       paint: {
-        "line-color": "#facc15",
-        "line-width": 2,
+        "line-color": "#ff2d2d",
+        "line-width": 4,
+        "line-opacity": 0.9,
       },
     });
     map.addLayer({
-      id: "diagnostic-auto-layer",
+      id: "diagnostic-auto-2-layer",
       type: "line",
-      source: "diagnostic-auto",
+      source: "diagnostic-auto-2",
       layout: { visibility: "none" },
       paint: {
         "line-color": "#ff2d2d",
@@ -697,7 +771,8 @@ window.addEventListener("DOMContentLoaded", () => {
       },
     });
 
-    applyScenario(currentScenario);
+    bindLayerInputs();
+    bindChecklistButtons();
     hideBaseIcons();
     map.on("styledata", hideBaseIcons);
   });

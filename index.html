@@ -11,9 +11,9 @@
   <header>
     <div class="header-top">
       <h1>Groupe 3 - Vielle ville de Morges</h1>
-      <div class="scenario-switch" role="tablist" aria-label="Modes d'affichage">
-        <button class="scenario-button active" data-scenario="diagnostic" role="tab" aria-selected="true">Diagnostic</button>
-        <button class="scenario-button" data-scenario="projet" role="tab" aria-selected="false">Projet</button>
+      <div class="scenario-switch" role="group" aria-label="Affichage des sections">
+        <button class="scenario-button active" data-section-toggle="diagnostic" aria-pressed="true">Diagnostic</button>
+        <button class="scenario-button active" data-section-toggle="projet" aria-pressed="true">Projet</button>
       </div>
     </div>
   </header>
@@ -22,9 +22,146 @@
     <div class="coord-display" id="coord-display" aria-live="polite">
       Lat 46.50900 · Lng 6.49600
     </div>
+    <div class="map-source" id="map-source" aria-live="polite"></div>
     <div class="layer-toggle" role="region" aria-label="Affichage des couches">
       <h2>Affichage</h2>
-      <div id="layer-toggle-list" class="toggle-list"></div>
+      <section class="panel-section">
+        <h3>Données de base</h3>
+        <label class="toggle-item">
+          <span>
+            <span class="legend-icon square"></span>
+            Périmètre du projet
+          </span>
+          <input type="checkbox" data-layer="perimeter" />
+        </label>
+      </section>
+
+      <section class="panel-section" data-section="diagnostic">
+        <h3>Données du diagnostic</h3>
+        <div class="panel-subtitle">1. Un centre-ville enclavé par les infrastructures de transport</div>
+        <label class="toggle-item">
+          <span>
+            <span class="legend-icon line"></span>
+            Axes routiers principaux
+          </span>
+          <input type="checkbox" data-layer="diagnostic-axes" />
+        </label>
+        <label class="toggle-item">
+          <span>
+            <span class="legend-icon parking"></span>
+            Espaces dédiés au stationnement
+          </span>
+          <input type="checkbox" data-layer="diagnostic-parking" />
+        </label>
+
+        <div class="panel-subtitle">2. Des espaces libres mais inaccessibles</div>
+        <label class="toggle-item">
+          <span>
+            <span class="legend-icon green"></span>
+            Espaces privés d’intérêt
+          </span>
+          <input type="checkbox" data-layer="diagnostic-private" />
+        </label>
+
+        <div class="panel-subtitle">3. Une relation au lac restreinte</div>
+        <label class="toggle-item">
+          <span>
+            <span class="legend-icon blue"></span>
+            Éléments saillants de la relation inégale avec le lac
+          </span>
+          <input type="checkbox" data-layer="diagnostic-lake" />
+        </label>
+
+        <div class="panel-subtitle">En conséquence</div>
+        <div class="panel-checklist">
+          <button type="button" class="checklist-button" data-info="diagnostic-consequence-noise" aria-pressed="false">
+            Une pollution sonore et sanitaire
+          </button>
+          <button type="button" class="checklist-button" data-info="diagnostic-consequence-vulnerable" aria-pressed="false">
+            Un centre-ville vulnérable à l’horizon 2050
+          </button>
+          <button type="button" class="checklist-button" data-info="diagnostic-consequence-attractivity" aria-pressed="false">
+            Un potentiel d’attractivité sous-exploité
+          </button>
+        </div>
+      </section>
+
+      <section class="panel-section" data-section="projet">
+        <h3>Données du projet</h3>
+        <div class="panel-subtitle">1. Un centre-ville libéré des flux de transit</div>
+        <label class="toggle-item">
+          <span>
+            <span class="legend-icon line"></span>
+            Axes routiers principaux retravaillés
+          </span>
+          <input type="checkbox" data-layer="project-axes" />
+        </label>
+        <label class="toggle-item">
+          <span>
+            <span class="legend-icon parking"></span>
+            Espaces dédiés au stationnement valorisant les installations souterraines
+          </span>
+          <input type="checkbox" data-layer="project-parking" />
+        </label>
+        <button type="button" class="panel-link">Voir démonstration des reports de stationnements</button>
+
+        <div class="panel-subtitle">2. Des espaces libres mis en valeur</div>
+        <label class="toggle-item">
+          <span>
+            <span class="legend-icon green"></span>
+            Espaces requalifiés ou libérés au potentiel urbain
+          </span>
+          <input type="checkbox" data-layer="project-spaces" />
+        </label>
+        <button type="button" class="panel-link">Afficher les intentions de projets sur les espaces libérés</button>
+
+        <div class="panel-subtitle">3. Une relation au lac réinventée</div>
+        <label class="toggle-item">
+          <span>
+            <span class="legend-icon blue"></span>
+            Littoral désormais ouvert aux usagers
+          </span>
+          <input type="checkbox" data-layer="project-lake-open" />
+        </label>
+        <label class="toggle-item">
+          <span>
+            <span class="legend-icon green"></span>
+            Littoral renaturé
+          </span>
+          <input type="checkbox" data-layer="project-lake-renature" />
+        </label>
+        <button type="button" class="panel-link">Afficher les intentions de projets du nouveau littoral</button>
+
+        <div class="panel-subtitle">4. Éléments supplémentaires</div>
+        <label class="toggle-item">
+          <span>
+            <span class="legend-icon density"></span>
+            Zones de densification identifiées
+          </span>
+          <input type="checkbox" data-layer="project-density" />
+        </label>
+        <label class="toggle-item">
+          <span>
+            <span class="legend-icon green"></span>
+            Toitures végétalisables
+          </span>
+          <input type="checkbox" data-layer="project-roofs" />
+        </label>
+        <button type="button" class="panel-link">Afficher les intentions de densification et de végétalisation</button>
+
+        <div class="panel-subtitle">En conséquence</div>
+        <div class="panel-checklist">
+          <button type="button" class="checklist-button" data-info="project-consequence-noise" aria-pressed="false">
+            Une pollution sonore diminuée
+          </button>
+          <button type="button" class="checklist-button" data-info="project-consequence-resilient" aria-pressed="false">
+            Un centre-ville plus résilient
+          </button>
+          <button type="button" class="checklist-button" data-info="project-consequence-attractivity" aria-pressed="false">
+            Un potentiel d’attractivité développé
+          </button>
+        </div>
+      </section>
     </div>
   </div>
 
