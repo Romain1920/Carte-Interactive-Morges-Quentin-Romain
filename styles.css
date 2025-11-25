@@ -209,6 +209,19 @@ header h1 {
   gap: 10px;
 }
 
+.toggle-group {
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.toggle-group-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 4px;
+}
+
 .toggle-item {
   display: flex;
   align-items: center;
@@ -246,6 +259,14 @@ header h1 {
 .legend-icon.square {
   background: rgba(255, 255, 255, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.legend-icon.line {
+  width: 18px;
+  height: 4px;
+  border-radius: 999px;
+  background: #ff2d2d;
+  box-shadow: 0 0 0 1px rgba(255, 45, 45, 0.4);
 }
 
 .details-open .layer-toggle {
