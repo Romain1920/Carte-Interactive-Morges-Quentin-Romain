@@ -3,6 +3,9 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 window.addEventListener("DOMContentLoaded", () => {
   const morgesCenter = [6.496, 46.509];
+  const earthRadius = 6378137;
+  const baseLatRad = (morgesCenter[1] * Math.PI) / 180;
+  const baseLngRad = (morgesCenter[0] * Math.PI) / 180;
 
   const rawProjetFeatures = [
     {
@@ -399,6 +402,91 @@ window.addEventListener("DOMContentLoaded", () => {
     ],
   };
 
+  const coneBaseData = [
+    {
+      coordinates: [6.502018594868456, 46.512924952548545],
+      bearing: 100,
+      title: "Arrivée par l'est",
+      description: "Apperçu du littoral en approche du site par l'Est. Accès impossible mais vue agréable. ",
+      image: "https://vl7zgyqezaiej8w4.public.blob.vercel-storage.com/20251009_145607.jpg",
+    },
+    {
+      coordinates: [6.501356850392333, 46.5110231303041],
+      bearing: 50,
+      title: "Perspective sur la baie et la Marina",
+      description: "Dégagement de la vue et accès en trompe l'oeil. Vue dégagé et emplacement idéal en bordure de baie mais malgré un aménagement laissant espérer la possibilité de baignade celle-ci est interdite par la présence d'une petite Marina ",
+      image: "https://vl7zgyqezaiej8w4.public.blob.vercel-storage.com/20251009_145505.jpg",
+    },
+    {
+      coordinates: [6.501943833511341, 46.51057462619408],
+      bearing: 180,
+      title: "Entrée sur les quais Igor Starvinsky et Lochmann depuis l'Est",
+      description: "On retrouve la même relation limitée que depuis l'approche par l'Est, accès et relation avec le Lac physiquement impossible sauf qu'ici, la croissance des massifs végétaux esthétique, empêche à plusieurs points la vue sur la Lac.",
+      image: "https://vl7zgyqezaiej8w4.public.blob.vercel-storage.com/20251009_153431.jpg",
+    },
+    {
+      coordinates: [6.499741357559488, 46.50800873941242],
+      bearing: 160,
+      title: "Accès au Lac",
+      description: "Depuis l'approche de l'Est jusqu'au parc de l'indépendance, ce petit espace est le seul permettant l'accès direct au Lac pour les usagers. Bien que très minéralisé et limité dans son approche, il montre le potentiel d'un traitrement différent du littoral sur le reste du littoral. ",
+      image: "https://vl7zgyqezaiej8w4.public.blob.vercel-storage.com/20251009_153921.jpg",
+    },
+    {
+      coordinates: [6.499049572322902, 46.50769169116244],
+      bearing: 190,
+      title: "Vue sur le port de Morges",
+      description: "Lieu emblématique du littoral morgien, ce port, malgré l'accès limité au Lac qu'il impose, offre une vue superbe en bordure de vielle ville avec ses tourelles et ses drapeaux, il amène beaucoup de cachet à la place de la Navigation",
+      image: "https://vl7zgyqezaiej8w4.public.blob.vercel-storage.com/20251009_154108.jpg",
+    },
+    {
+      coordinates: [6.4969549392799255, 46.50530171580491],
+      bearing: 200,
+      title: "Fin de parcours au Parc de l'Indépendance ",
+      description: "La vue dégagée malgrée la digue d'enrochement et la rembarde démontre le gain visuel d'un littoral aménagé pour favoriser la vue. Malgré tout, le traitement très minéral laisse encore du potentiel gagnerait à être renaturé en partie",
+      image: "https://vl7zgyqezaiej8w4.public.blob.vercel-storage.com/20251009_154735.jpg",
+    },
+  ];
+
+  const degToRad = (value) => (value * Math.PI) / 180;
+
+  const destinationFromPoint = (center, distance, bearingDeg) => {
+    const bearingRad = degToRad(bearingDeg);
+    const latRad = (center[1] * Math.PI) / 180;
+    const angularDistance = distance / earthRadius;
+    const destLat = Math.asin(Math.sin(latRad) * Math.cos(angularDistance) + Math.cos(latRad) * Math.sin(angularDistance) * Math.cos(bearingRad));
+    const destLng =
+      (center[0] * Math.PI) / 180 +
+      Math.atan2(Math.sin(bearingRad) * Math.sin(angularDistance) * Math.cos(latRad), Math.cos(angularDistance) - Math.sin(latRad) * Math.sin(destLat));
+    return [destLng * (180 / Math.PI), destLat * (180 / Math.PI)];
+  };
+
+  const createConePolygon = (center, bearingDeg) => {
+    const halfSpread = 22;
+    const longDistance = 85;
+    const steps = 6;
+    const coords = [center];
+    for (let i = 0; i <= steps; i += 1) {
+      const angle = bearingDeg - halfSpread + (2 * halfSpread * i) / steps;
+      coords.push(destinationFromPoint(center, longDistance, angle));
+    }
+    coords.push(center);
+    return [coords];
+  };
+
+  const diagnosticLakeViews = {
+    type: "FeatureCollection",
+    features: coneBaseData.map((view, index) => ({
+      type: "Feature",
+      properties: {
+        id: `lake-view-${index}`,
+        title: view.title,
+        description: view.description,
+        image: view.image,
+      },
+      geometry: { type: "Polygon", coordinates: createConePolygon(view.coordinates, view.bearing) },
+    })),
+  };
+
   const diagnosticParkingSurfaces = {
     type: "FeatureCollection",
     features: [
@@ -453,10 +541,6 @@ window.addEventListener("DOMContentLoaded", () => {
       { type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [[[6.498342098715891, 46.510795918765844],[6.498139952954433, 46.510867656815655],[6.498014681221957, 46.510719799940695],[6.497978021458856, 46.51068646538966],[6.498229002160462, 46.51059246721691],[6.498342098715891, 46.510795918765844]]] } },
     ],
   };
-
-  const earthRadius = 6378137;
-  const baseLatRad = (morgesCenter[1] * Math.PI) / 180;
-  const baseLngRad = (morgesCenter[0] * Math.PI) / 180;
 
   const projectToMeters = (lng, lat) => {
     const lngRad = (lng * Math.PI) / 180;
@@ -568,7 +652,15 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   const bounds = (() => {
-    const coords = collectCoords([{ features: projectFeatures }, diagnosticAutoAxesPrimary, diagnosticAutoAxesSecondary, diagnosticAutoAxesTertiary, annotatedParking.data, annotatedPrivate.data]);
+    const coords = [...zoneCoords, ...collectCoords([
+      { features: projectFeatures },
+      diagnosticAutoAxesPrimary,
+      diagnosticAutoAxesSecondary,
+      diagnosticAutoAxesTertiary,
+      annotatedParking.data,
+      annotatedPrivate.data,
+      diagnosticLakeViews,
+    ])];
     if (!coords.length) return [[6.48, 46.49], [6.53, 46.53]];
     const lngs = coords.map((c) => c[0]);
     const lats = coords.map((c) => c[1]);
@@ -862,11 +954,21 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  const diagnosticLakeLayerIds = ["diagnostic-lake-fill", "diagnostic-lake-outline"];
+  const setDiagnosticLakeVisibility = (visible) => {
+    diagnosticLakeLayerIds.forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
+      }
+    });
+  };
+
   const layerHandlers = {
     perimeter: (checked) => setPerimeterVisibility(checked),
     "diagnostic-axes": (checked) => setDiagnosticAutoVisibility(checked),
     "diagnostic-parking": (checked) => setDiagnosticParkingVisibility(checked),
     "diagnostic-private": (checked) => setDiagnosticPrivateVisibility(checked),
+    "diagnostic-lake": (checked) => setDiagnosticLakeVisibility(checked),
     "project-interventions": (checked) => setMarkersVisibility(checked),
   };
 
@@ -907,6 +1009,7 @@ window.addEventListener("DOMContentLoaded", () => {
     map.addSource("diagnostic-auto-3", { type: "geojson", data: diagnosticAutoAxesTertiary });
     map.addSource("diagnostic-parking", { type: "geojson", data: annotatedParking.data });
     map.addSource("diagnostic-private", { type: "geojson", data: annotatedPrivate.data });
+    map.addSource("diagnostic-lake", { type: "geojson", data: diagnosticLakeViews });
     map.addLayer({
       id: "focus-mask-layer",
       type: "fill",
@@ -1047,6 +1150,28 @@ window.addEventListener("DOMContentLoaded", () => {
       },
     });
 
+    map.addLayer({
+      id: "diagnostic-lake-fill",
+      type: "fill",
+      source: "diagnostic-lake",
+      layout: { visibility: "none" },
+      paint: {
+        "fill-color": "#38bdf8",
+        "fill-opacity": 0.35,
+      },
+    });
+    map.addLayer({
+      id: "diagnostic-lake-outline",
+      type: "line",
+      source: "diagnostic-lake",
+      layout: { visibility: "none" },
+      paint: {
+        "line-color": "#0ea5e9",
+        "line-width": 1.5,
+        "line-dasharray": [1, 1.5],
+      },
+    });
+
     const formatArea = (value) => new Intl.NumberFormat("fr-CH").format(Math.round(value));
     const registerSurfacePopup = (layerId, totalArea, label) => {
       map.on("click", layerId, (event) => {
@@ -1070,6 +1195,36 @@ window.addEventListener("DOMContentLoaded", () => {
 
     registerSurfacePopup("diagnostic-parking-fill", annotatedParking.totalArea, "Espaces dédiés au stationnement");
     registerSurfacePopup("diagnostic-private-fill", annotatedPrivate.totalArea, "Espaces privés d’intérêt");
+
+    const createLakePopupHtml = ({ title, description, image }) => `
+      <div class="panel-popup">
+        ${image ? `<img src="${image}" alt="" />` : ""}
+        <div class="panel-popup-body">
+          <div class="panel-popup-title">${title || "Relation au lac"}</div>
+          ${description ? `<p>${description}</p>` : ""}
+        </div>
+      </div>
+    `;
+
+    const registerLakePopup = (layerId) => {
+      map.on("click", layerId, (event) => {
+        const feature = event.features?.[0];
+        if (!feature) return;
+        const { title, description, image } = feature.properties || {};
+        new maplibregl.Popup({ closeButton: false, maxWidth: "320px" })
+          .setLngLat(event.lngLat)
+          .setHTML(createLakePopupHtml({ title, description, image }))
+          .addTo(map);
+      });
+      map.on("mouseenter", layerId, () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+      map.on("mouseleave", layerId, () => {
+        map.getCanvas().style.cursor = "";
+      });
+    };
+
+    registerLakePopup("diagnostic-lake-fill");
 
     bindLayerInputs();
     bindChecklistButtons();
