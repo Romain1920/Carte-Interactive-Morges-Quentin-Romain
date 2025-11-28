@@ -756,6 +756,124 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const annotatedParking = annotatePolygonCollection(diagnosticParkingSurfaces);
   const annotatedPrivate = annotatePolygonCollection(diagnosticPrivateSpaces);
+  const projectParkingSurfaces = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [6.495523080780791, 46.50650032632334],
+              [6.495544207364722, 46.50645668899746],
+              [6.496796868838325, 46.507318372299984],
+              [6.496763008116146, 46.50733951167677],
+              [6.495523080780791, 46.50650032632334],
+            ],
+          ],
+        },
+        properties: { name: null, description: null },
+      },
+      {
+        type: "Feature",
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [6.4966289493137195, 46.50864233633299],
+              [6.4966893319977945, 46.50865969890006],
+              [6.4964979482329275, 46.50874578299975],
+              [6.496407056305918, 46.50872803331762],
+              [6.4966289493137195, 46.50864233633299],
+            ],
+          ],
+        },
+        properties: { name: null, description: null },
+      },
+      {
+        type: "Feature",
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [6.501226204642317, 46.51090825437806],
+              [6.501241394645769, 46.510862811649226],
+              [6.500220358418638, 46.51101505125853],
+              [6.500213375027253, 46.511057370581526],
+              [6.501226204642317, 46.51090825437806],
+            ],
+          ],
+        },
+        properties: { name: null, description: null },
+      },
+      {
+        type: "Feature",
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [6.499901842243361, 46.5084832977443],
+              [6.499921574550343, 46.508497106524715],
+              [6.499569463245598, 46.5087245453475],
+              [6.499551676395529, 46.508712720541816],
+              [6.499901842243361, 46.5084832977443],
+            ],
+          ],
+        },
+        properties: { name: null, description: null },
+      },
+      {
+        type: "Feature",
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [6.49750812602713, 46.50741934387084],
+              [6.49759052681529, 46.50741752628272],
+              [6.49783108029518, 46.50724555139142],
+              [6.497772767476919, 46.50721739201838],
+              [6.49750812602713, 46.50741934387084],
+            ],
+          ],
+        },
+        properties: { name: null, description: null },
+      },
+      {
+        type: "Feature",
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [6.499729814868739, 46.51088112025285],
+              [6.499777576815894, 46.51082961313548],
+              [6.499373923413431, 46.510934864288316],
+              [6.4993907181807415, 46.510962527357925],
+              [6.499729814868739, 46.51088112025285],
+            ],
+          ],
+        },
+        properties: { name: null, description: null },
+      },
+      {
+        type: "Feature",
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [6.500188901108367, 46.51097914514757],
+              [6.500180534827158, 46.51094924095604],
+              [6.501220870762295, 46.51079387477705],
+              [6.501205295563406, 46.51083603680611],
+              [6.500188901108367, 46.51097914514757],
+            ],
+          ],
+        },
+        properties: { name: null, description: null },
+      },
+    ],
+  };
+  const projectAnnotatedParking = annotatePolygonCollection(projectParkingSurfaces);
 
   const diagnosticAutoAxesTertiary = {
     type: "FeatureCollection",
@@ -797,9 +915,346 @@ window.addEventListener("DOMContentLoaded", () => {
     ],
   };
 
-  
+  const projectAutoWestEast = [
+    [6.475438880170141, 46.493852832246844],
+    [6.476000172576537, 46.49405090238244],
+    [6.47672859907116, 46.49430208799687],
+    [6.477772359644058, 46.49466423033653],
+    [6.478949884912211, 46.495072219876334],
+    [6.479210069596569, 46.49515648782354],
+    [6.4793276623746685, 46.495188150783726],
+    [6.479493837517201, 46.49522770618859],
+    [6.479603563671845, 46.49524588872814],
+    [6.479683236649696, 46.495232537384595],
+    [6.479721958934533, 46.495234892482195],
+    [6.479764178680311, 46.49524231997668],
+    [6.479809163990286, 46.49525879172046],
+    [6.479839287140332, 46.495284664721076],
+    [6.479865662374697, 46.49532849508162],
+    [6.479899572613486, 46.49537468389074],
+    [6.480111388838777, 46.495491690034356],
+    [6.480458038239927, 46.4956597187284],
+    [6.4809159723847864, 46.495919341290744],
+    [6.481019501497112, 46.49598788091946],
+    [6.481154000735081, 46.49609488801033],
+    [6.481263318766094, 46.49619116796383],
+    [6.4813768815278605, 46.49631157328883],
+    [6.481444294880701, 46.496392381380275],
+    [6.481532915373931, 46.49651501837458],
+    [6.4816079036060055, 46.4966575148148],
+    [6.481677201252601, 46.496822552283405],
+    [6.481723236431552, 46.49698083949925],
+    [6.481739330283024, 46.49708936290098],
+    [6.481757639108579, 46.497234628085984],
+    [6.481778144342682, 46.497364185877395],
+    [6.48181640893618, 46.4974851291487],
+    [6.481857946863979, 46.497608022271834],
+    [6.4818947923587995, 46.49769874220453],
+    [6.481958933921756, 46.497814488374786],
+    [6.4820413275810385, 46.49793866081625],
+    [6.4821127925509225, 46.49803425866081],
+    [6.482330730933213, 46.49828276326062],
+    [6.4826198935368575, 46.49859347827354],
+    [6.4828678025035344, 46.49884670445154],
+    [6.483322248421561, 46.49933566100609],
+    [6.4837898323502, 46.499835179667386],
+    [6.483948414932256, 46.50000227806349],
+    [6.48412306992253, 46.500188087397724],
+    [6.48430675068691, 46.50038821181481],
+    [6.484420594521441, 46.500503949490636],
+    [6.484896503337559, 46.50101346973765],
+    [6.48543160785546, 46.501577427428025],
+    [6.486146971015576, 46.50231586379342],
+    [6.487140258913072, 46.50338165680995],
+    [6.487315189913331, 46.50353189292932],
+    [6.487423144362949, 46.503596812241604],
+    [6.487503316473769, 46.50363755661579],
+    [6.487569957522287, 46.50369125666652],
+    [6.487591697870939, 46.50374601047083],
+    [6.487629170368506, 46.50385771324377],
+    [6.4876564482344214, 46.50392585082043],
+    [6.488206161106291, 46.50457571654349],
+    [6.488767844163757, 46.505110310185195],
+    [6.4894236799479, 46.50576135069207],
+    [6.489575474749012, 46.505877270335816],
+    [6.489686934591452, 46.50593238368506],
+    [6.489806692829052, 46.50598413726255],
+    [6.4899065415843635, 46.50601313221294],
+    [6.490022526400607, 46.50601574193474],
+    [6.490088932338006, 46.50603065518515],
+    [6.4901602025770755, 46.50607905146955],
+    [6.490197618996444, 46.50612796310092],
+    [6.4902505865574565, 46.50620679706465],
+    [6.490359601514066, 46.50626893280629],
+    [6.490598071540348, 46.50635809311396],
+    [6.491101320224307, 46.50653658583602],
+    [6.491583401380446, 46.50672233853848],
+    [6.492079626362064, 46.50692782634631],
+    [6.492406202292177, 46.507036645625305],
+    [6.492757193406616, 46.507141611117085],
+    [6.492973134952843, 46.50719573883076],
+    [6.493438638472816, 46.50729012253441],
+    [6.494276278864041, 46.50742133899973],
+    [6.494660815425619, 46.507466765922246],
+    [6.495097949423329, 46.50755299273764],
+    [6.495458980345318, 46.507610865379114],
+    [6.495795258539998, 46.50766888605738],
+    [6.496004223582955, 46.50772670528349],
+    [6.496143356694158, 46.507788167946465],
+    [6.496196778148725, 46.507832819968975],
+    [6.496239030155887, 46.50787483352828],
+    [6.496262315590668, 46.507966525232824],
+    [6.4962633574141915, 46.50806533105615],
+    [6.4962289868215155, 46.50823034117771],
+    [6.4961827145200735, 46.5084579485816],
+    [6.496156506536173, 46.50860256353123],
+    [6.496152919721213, 46.50873126453399],
+    [6.496196437877396, 46.50888307244863],
+    [6.496331670714012, 46.50912979134079],
+    [6.496455846334228, 46.50935761980128],
+    [6.496675376095102, 46.50978060124126],
+    [6.49684596058913, 46.510091618803116],
+    [6.496911344110243, 46.51019951223484],
+    [6.497016500956833, 46.51029362642061],
+    [6.497147065546922, 46.51039074162605],
+    [6.497641270940366, 46.51078420038898],
+    [6.497817220320587, 46.51093247441222],
+    [6.497914319134943, 46.51099519918903],
+    [6.498066341607317, 46.51106770938401],
+    [6.498222336684903, 46.51111376255833],
+    [6.498307347886911, 46.51113578768276],
+    [6.498494672075666, 46.511186232822354],
+    [6.498610958096884, 46.51120990851316],
+    [6.498709787510966, 46.51122059167368],
+    [6.498810312918457, 46.51122096770866],
+    [6.498984375834489, 46.511187208301514],
+    [6.4993239214333, 46.51111722450242],
+    [6.499578139957282, 46.51106413932904],
+    [6.499718096942406, 46.51104047729901],
+    [6.499834570975561, 46.51104600616779],
+    [6.499902784270016, 46.51107897122336],
+    [6.499951524880343, 46.51112475641494],
+    [6.499983317327823, 46.51117838200685],
+    [6.499989757101383, 46.51126717134983],
+    [6.499998423051594, 46.511459362188006],
+    [6.500017587954549, 46.51160473991302],
+    [6.5000384072349116, 46.51171786078964],
+    [6.500104927883493, 46.511875146198214],
+    [6.500208696121092, 46.51204977634774],
+    [6.500275988294159, 46.51214294516022],
+    [6.500430503459042, 46.512306791358135],
+    [6.500636837836276, 46.512486756888],
+    [6.501107840779147, 46.51287345859511],
+    [6.501472076642192, 46.5131687067079],
+    [6.501959737547365, 46.51360852505935],
+    [6.502753475814572, 46.514270455185176],
+    [6.503448991160475, 46.51485581787039],
+    [6.503778988064871, 46.51514004161702],
+    [6.503861173922918, 46.51519996401393],
+    [6.5039873549219065, 46.515279077670456],
+    [6.504111745048731, 46.51536110372425],
+    [6.504232967227997, 46.51542764125428],
+    [6.504379320900603, 46.51549947762868],
+    [6.505202747230742, 46.51582592371827],
+    [6.505430287642122, 46.515902914252116],
+    [6.506331035476681, 46.51623430904773],
+    [6.506718502049031, 46.516375588280496],
+    [6.507273822507548, 46.51655485945028],
+    [6.507667650399472, 46.51663546173359],
+    [6.508268774603228, 46.51669782869686],
+    [6.509775000364202, 46.51688078508987],
+    [6.511837367287607, 46.517109674193165],
+    [6.513557954357473, 46.51731149458932],
+    [6.51535389273544, 46.517535072107215],
+    [6.517030587336146, 46.517726414009346],
+    [6.517565880896437, 46.51778699775024],
+    [6.518401993527096, 46.51785210492954],
+    [6.519083507442143, 46.51787765558828],
+    [6.519593668067655, 46.51786410749912],
+    [6.5212989198154006, 46.51778994088849],
+    [6.523726053284224, 46.517664693801734],
+  ];
 
-  
+  const projectAutoEastWest = [
+    [6.5249438403401445, 46.51764100313303],
+    [6.524363540281023, 46.517652850812055],
+    [6.523664620398424, 46.51769420639281],
+    [6.520136682884968, 46.51786669985383],
+    [6.519159399671542, 46.51791539645402],
+    [6.51870765686107, 46.51791915290093],
+    [6.518388871250631, 46.51790713209082],
+    [6.518005474962164, 46.51787220130699],
+    [6.517599766052478, 46.51782238609705],
+    [6.517382301932587, 46.517819114514715],
+    [6.517214235640277, 46.51780715707446],
+    [6.517029465229, 46.517775920476076],
+    [6.516889161827616, 46.51774112262715],
+    [6.51464095961027, 46.51747905080457],
+    [6.511116095167524, 46.51705757280238],
+    [6.509437481342511, 46.516870271833504],
+    [6.5091429979085795, 46.516845908619096],
+    [6.508650981663905, 46.5167897303083],
+    [6.50814346450411, 46.51673341421584],
+    [6.507681767374885, 46.516674442960095],
+    [6.5073612882687035, 46.51661459567832],
+    [6.506981540068327, 46.51652263613919],
+    [6.505398805166041, 46.51595490159181],
+    [6.504831407714093, 46.51573630475121],
+    [6.504457927023985, 46.515583206427976],
+    [6.5042135209815335, 46.515459306394156],
+    [6.503813510346519, 46.515222078510504],
+    [6.50364071660654, 46.51509071861165],
+    [6.5034182405570355, 46.51490618156059],
+    [6.503083909719118, 46.514616395177804],
+    [6.502799607245014, 46.51438205097636],
+    [6.501888691539219, 46.51360925651665],
+    [6.5016043724525865, 46.513379316293886],
+    [6.501491052054332, 46.51327710809704],
+    [6.501357500152906, 46.513146962132566],
+    [6.501083901715028, 46.51291094925959],
+    [6.500845118601173, 46.5127176449992],
+    [6.500345944476659, 46.51228425053316],
+    [6.500232336959184, 46.512151987980985],
+    [6.500132599744327, 46.51202719958408],
+    [6.50005652984596, 46.511902785584475],
+    [6.500012163499454, 46.51177084892313],
+    [6.4999725676206745, 46.51166653504287],
+    [6.499942758317884, 46.511520952661414],
+    [6.49992616783967, 46.511424597038015],
+    [6.499924604628083, 46.51120969849228],
+    [6.499911057169043, 46.511158736239956],
+    [6.499864134867862, 46.51110079688468],
+    [6.499773301147564, 46.511063726733674],
+    [6.499637319664977, 46.51108051394899],
+    [6.499395180438013, 46.511129411879494],
+    [6.498832641453795, 46.51123724126737],
+    [6.498738344417362, 46.51125912358522],
+    [6.498686683287001, 46.51130047154302],
+    [6.498645596326312, 46.511319483470615],
+    [6.498583292160236, 46.51131660267263],
+    [6.498530112220099, 46.5112773874166],
+    [6.498427116272456, 46.51121809714359],
+    [6.498247748681795, 46.51116877039082],
+    [6.4980567416726185, 46.51112128819036],
+    [6.497910185672667, 46.51105156692549],
+    [6.497717265629119, 46.51090417406055],
+    [6.497138916569101, 46.51043402838678],
+    [6.496943544589587, 46.51027855177917],
+    [6.496900080081103, 46.510242522543976],
+    [6.496846385358636, 46.51016986743113],
+    [6.496213903590137, 46.50899041002585],
+    [6.4961421774968535, 46.508850709017665],
+    [6.496126747158361, 46.50879780673402],
+    [6.496108331075796, 46.50873455335053],
+    [6.496105470337909, 46.508647461295666],
+    [6.496126879428859, 46.508488204491485],
+    [6.496153684808826, 46.50834306182576],
+    [6.496174945470313, 46.50823146055637],
+    [6.4961867518818135, 46.5081166963932],
+    [6.496207174426581, 46.50803577451221],
+    [6.496187826480276, 46.507891530974966],
+    [6.496141730323267, 46.507816670086626],
+    [6.495942178878271, 46.507723323616865],
+    [6.495620480545879, 46.50765860946375],
+    [6.4946857741210815, 46.50752371555255],
+    [6.493902591453963, 46.50741490458362],
+    [6.493597082627333, 46.50736225550887],
+    [6.493061483468521, 46.507271164356816],
+    [6.492467204061321, 46.50711330486167],
+    [6.4917803789156, 46.5069130904889],
+    [6.491227595336758, 46.50673815103481],
+    [6.490833640502154, 46.50658686378684],
+    [6.49052104034603, 46.506432782573974],
+    [6.490331289052126, 46.50634348233969],
+    [6.49020269128521, 46.50628992968556],
+    [6.4901292030788325, 46.50626258567201],
+    [6.4900478436691325, 46.50627299063083],
+    [6.489957731861925, 46.50627736304648],
+    [6.489888253639207, 46.50625951048737],
+    [6.489833136869184, 46.50623301359043],
+    [6.489797716260987, 46.50619559174586],
+    [6.489766487456298, 46.50616341387621],
+    [6.4897223434430185, 46.50610391417789],
+    [6.489661883680931, 46.50603517761947],
+    [6.48946163756161, 46.50584207366226],
+    [6.489042588465566, 46.50543083512194],
+    [6.488620316095639, 46.50498512976065],
+    [6.487639847091331, 46.503969440698064],
+    [6.487531676887111, 46.50387387876689],
+    [6.487427173105034, 46.50381558211746],
+    [6.487354116914614, 46.50379160343899],
+    [6.487307653122615, 46.5037582849724],
+    [6.487289583414637, 46.5037306491458],
+    [6.487281309686987, 46.50368918756721],
+    [6.487282053374728, 46.50364691165492],
+    [6.487236069868469, 46.50355254284246],
+    [6.486986322187438, 46.50324908083267],
+    [6.4862303215327755, 46.50246988188359],
+    [6.486089629284967, 46.50231497169125],
+    [6.485786246639676, 46.50199056943079],
+    [6.485644844268536, 46.50184741858635],
+    [6.485120267687114, 46.50130034354341],
+    [6.484689974242023, 46.50084767466122],
+    [6.484381907840762, 46.50055120199006],
+    [6.484275328130416, 46.50044390613966],
+    [6.484186581275758, 46.50032276508163],
+    [6.48411379925866, 46.50024028430137],
+    [6.483817042780998, 46.499894712703295],
+    [6.483244264611811, 46.499290297170425],
+    [6.482642832380571, 46.49865618355146],
+    [6.482260335145672, 46.49824493039524],
+    [6.48215714564966, 46.498126104567945],
+    [6.48210115873045, 46.4980609003216],
+    [6.481999657764525, 46.497934510771614],
+    [6.481914214814045, 46.49779970273288],
+    [6.481817627068903, 46.49760227522283],
+    [6.481747348345961, 46.4973584891483],
+    [6.481714749088281, 46.497162051714064],
+    [6.481693026422345, 46.49701751802261],
+    [6.481681999313907, 46.496963295231886],
+    [6.481651629300928, 46.49685406428067],
+    [6.481604673310315, 46.49673020843091],
+    [6.481535563728803, 46.49659568488944],
+    [6.481465099318921, 46.496478857593324],
+    [6.4813209019982025, 46.496302426278255],
+    [6.481137611933369, 46.49612433145852],
+    [6.480906016642481, 46.49594535602765],
+    [6.480637086215832, 46.49579185594773],
+    [6.480148432515912, 46.49554809905283],
+    [6.479901605614928, 46.49545872181033],
+    [6.479803715837535, 46.49543669292265],
+    [6.479731454441613, 46.49543976293943],
+    [6.4796599674438395, 46.49543915847313],
+    [6.479603944849873, 46.49541685835733],
+    [6.479557161547394, 46.49538692711545],
+    [6.479515621858892, 46.495345156502445],
+    [6.479461779563619, 46.495306173242206],
+    [6.479252438834987, 46.49520341483372],
+    [6.478969847286414, 46.49510705456711],
+    [6.478380791426263, 46.49490156829906],
+    [6.477949050365262, 46.49475531836004],
+    [6.4773170715226485, 46.494531476463344],
+    [6.4764397390497175, 46.49423027475161],
+    [6.475664398093551, 46.49395602988253],
+    [6.4750753299685195, 46.49375340271848],
+    [6.474202385130171, 46.49345630127976],
+  ];
+
+  const projectAutoAxes = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        properties: { id: "project-axis-1" },
+        geometry: { type: "LineString", coordinates: projectAutoWestEast },
+      },
+      {
+        type: "Feature",
+        properties: { id: "project-axis-2" },
+        geometry: { type: "LineString", coordinates: projectAutoEastWest },
+      },
+    ],
+  };
 
   const projectFeatures = rawProjetFeatures.map((feature) =>
     cloneFeature(feature, {
@@ -826,15 +1281,20 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   const bounds = (() => {
-    const coords = [...zoneCoords, ...collectCoords([
-      { features: projectFeatures },
-      diagnosticAutoAxesPrimary,
-      diagnosticAutoAxesSecondary,
-      diagnosticAutoAxesTertiary,
-      annotatedParking.data,
-      annotatedPrivate.data,
-      diagnosticLakeViews,
-    ])];
+    const coords = [
+      ...zoneCoords,
+      ...collectCoords([
+        { features: projectFeatures },
+        diagnosticAutoAxesPrimary,
+        diagnosticAutoAxesSecondary,
+        diagnosticAutoAxesTertiary,
+        projectAutoAxes,
+        annotatedParking.data,
+        projectAnnotatedParking.data,
+        annotatedPrivate.data,
+        diagnosticLakeViews,
+      ]),
+    ];
     if (!coords.length) return [[6.48, 46.49], [6.53, 46.53]];
     const lngs = coords.map((c) => c[0]);
     const lats = coords.map((c) => c[1]);
@@ -1069,6 +1529,29 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const layerInputs = Array.from(document.querySelectorAll("[data-layer]"));
   const checklistButtons = Array.from(document.querySelectorAll(".checklist-button"));
+  const diagnosticLayerKeys = ["perimeter", "diagnostic-axes", "diagnostic-parking", "diagnostic-private", "diagnostic-lake"];
+  const projectLayerKeys = [
+    "project-axes",
+    "project-parking",
+    "project-spaces",
+    "project-lake-open",
+    "project-lake-renature",
+    "project-density",
+    "project-roofs",
+    "project-interventions",
+  ];
+  const diagnosticChecklistKeys = ["diagnostic-consequence-vulnerable", "diagnostic-consequence-attractivity"];
+  const projectChecklistKeys = ["project-consequence-noise", "project-consequence-resilient", "project-consequence-attractivity"];
+  const layerInputByKey = {};
+  const checklistButtonByKey = {};
+  layerInputs.forEach((input) => {
+    const key = input.dataset.layer;
+    if (key) layerInputByKey[key] = input;
+  });
+  checklistButtons.forEach((button) => {
+    const key = button.dataset.info;
+    if (key) checklistButtonByKey[key] = button;
+  });
 
   const poiMarkers = [];
 
@@ -1101,9 +1584,28 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const diagnosticAutoLineLayerIds = ["diagnostic-auto-1-layer", "diagnostic-auto-2-layer", "diagnostic-auto-3-layer"];
   const diagnosticAutoArrowLayerIds = ["diagnostic-auto-1-arrow-layer", "diagnostic-auto-2-arrow-layer", "diagnostic-auto-3-arrow-layer"];
+  const projectAutoLineLayerIds = ["project-auto-line-layer"];
+  const projectAutoArrowLayerIds = ["project-auto-arrow-layer"];
+  const projectParkingLayerIds = ["project-parking-fill", "project-parking-outline"];
 
   const setDiagnosticAutoVisibility = (visible) => {
     [...diagnosticAutoLineLayerIds, ...diagnosticAutoArrowLayerIds].forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
+      }
+    });
+  };
+
+  const setProjectAutoVisibility = (visible) => {
+    [...projectAutoLineLayerIds, ...projectAutoArrowLayerIds].forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
+      }
+    });
+  };
+
+  const setProjectParkingVisibility = (visible) => {
+    projectParkingLayerIds.forEach((layerId) => {
       if (map.getLayer(layerId)) {
         map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
       }
@@ -1160,10 +1662,8 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   const setDiagnosticPollutionMode = (mode) => {
-    if (mode !== "none" && noiseVisibilityState.projectMode !== "none") {
-      setProjectPollutionMode("none", { suppressLegendUpdate: true });
-      if (projectPollutionSelect) projectPollutionSelect.value = "none";
-      setProjectNoiseButtonState(false);
+    if (mode !== "none") {
+      clearProjectContext();
     }
     const nextMode = diagnosticPollutionConfigs[mode] ? mode : "none";
     noiseVisibilityState.diagnosticMode = nextMode;
@@ -1191,9 +1691,8 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   const setProjectPollutionMode = (mode, { suppressLegendUpdate } = {}) => {
-    if (mode !== "none" && noiseVisibilityState.diagnosticMode !== "none") {
-      if (diagnosticPollutionSelect) diagnosticPollutionSelect.value = "none";
-      setDiagnosticPollutionMode("none");
+    if (mode !== "none") {
+      clearDiagnosticContext();
     }
     const nextMode = projectPollutionConfigs[mode] ? mode : "none";
     noiseVisibilityState.projectMode = nextMode;
@@ -1218,20 +1717,72 @@ window.addEventListener("DOMContentLoaded", () => {
     "diagnostic-axes": (checked) => setDiagnosticAutoVisibility(checked),
     "diagnostic-parking": (checked) => setDiagnosticParkingVisibility(checked),
     "diagnostic-private": (checked) => setDiagnosticPrivateVisibility(checked),
-    perimeter: (checked) => setPerimeterVisibility(checked),
     "diagnostic-lake": (checked) => setDiagnosticLakeVisibility(checked),
+    "project-axes": (checked) => setProjectAutoVisibility(checked),
+    "project-parking": (checked) => setProjectParkingVisibility(checked),
     "project-interventions": (checked) => setMarkersVisibility(checked),
   };
 
   const consequenceHandlers = {};
 
+  const resetChecklistButtons = (keys) => {
+    keys.forEach((key) => {
+      if (key === "project-consequence-noise") {
+        setProjectNoiseButtonState(false);
+        return;
+      }
+      const button = checklistButtonByKey[key];
+      if (!button || !button.classList.contains("active")) return;
+      button.classList.remove("active");
+      button.setAttribute("aria-pressed", "false");
+      consequenceHandlers[key]?.(false);
+    });
+  };
+
+  const deselectLayerGroup = (keys) => {
+    keys.forEach((targetKey) => {
+      const targetInput = layerInputByKey[targetKey];
+      if (!targetInput || !targetInput.checked) return;
+      targetInput.checked = false;
+      const targetHandler = layerHandlers[targetKey];
+      if (targetHandler) targetHandler(false);
+    });
+  };
+
+  const clearProjectContext = () => {
+    deselectLayerGroup(projectLayerKeys);
+    if (projectPollutionSelect) projectPollutionSelect.value = "none";
+    setProjectPollutionMode("none", { suppressLegendUpdate: true });
+    setProjectNoiseButtonState(false);
+    resetChecklistButtons(projectChecklistKeys);
+  };
+
+  const clearDiagnosticContext = () => {
+    deselectLayerGroup(diagnosticLayerKeys);
+    if (diagnosticPollutionSelect) diagnosticPollutionSelect.value = "none";
+    setDiagnosticPollutionMode("none");
+    resetChecklistButtons(diagnosticChecklistKeys);
+  };
+
+  const enforceLayerExclusivity = (key, checked) => {
+    if (!checked) return;
+    if (diagnosticLayerKeys.includes(key)) {
+      clearProjectContext();
+    } else if (projectLayerKeys.includes(key)) {
+      clearDiagnosticContext();
+    }
+  };
+
   const bindLayerInputs = () => {
     layerInputs.forEach((input) => {
       const key = input.dataset.layer;
       const handler = layerHandlers[key];
-      if (!handler) return;
-      handler(Boolean(input.checked));
-      input.addEventListener("change", () => handler(Boolean(input.checked)));
+      if (handler) handler(Boolean(input.checked));
+      input.addEventListener("change", () => {
+        const checked = Boolean(input.checked);
+        enforceLayerExclusivity(key, checked);
+        if (handler) handler(checked);
+      });
     });
   };
 
@@ -1300,6 +1851,7 @@ window.addEventListener("DOMContentLoaded", () => {
       if (key === "project-consequence-noise") {
         button.addEventListener("click", () => {
           const nextState = !button.classList.contains("active");
+          if (nextState) clearDiagnosticContext();
           setProjectNoiseButtonState(nextState);
         });
         setProjectNoiseButtonState(button.classList.contains("active"));
@@ -1307,6 +1859,10 @@ window.addEventListener("DOMContentLoaded", () => {
         button.addEventListener("click", () => {
           const active = button.classList.toggle("active");
           button.setAttribute("aria-pressed", active ? "true" : "false");
+          if (active) {
+            if (projectChecklistKeys.includes(key)) clearDiagnosticContext();
+            if (diagnosticChecklistKeys.includes(key)) clearProjectContext();
+          }
           consequenceHandlers[key]?.(active);
         });
         const initActive = button.classList.contains("active");
@@ -1351,8 +1907,10 @@ window.addEventListener("DOMContentLoaded", () => {
     map.addSource("diagnostic-auto-1", { type: "geojson", data: diagnosticAutoAxesPrimary });
     map.addSource("diagnostic-auto-2", { type: "geojson", data: diagnosticAutoAxesSecondary });
     map.addSource("diagnostic-auto-3", { type: "geojson", data: diagnosticAutoAxesTertiary });
+    map.addSource("project-auto", { type: "geojson", data: projectAutoAxes });
     map.addSource("diagnostic-parking", { type: "geojson", data: annotatedParking.data });
     map.addSource("diagnostic-private", { type: "geojson", data: annotatedPrivate.data });
+    map.addSource("project-parking", { type: "geojson", data: projectAnnotatedParking.data });
     map.addSource("diagnostic-lake", { type: "geojson", data: diagnosticLakeViews });
     Object.values(diagnosticPollutionConfigs).forEach((config) => {
       map.addSource(config.sourceId, {
@@ -1480,6 +2038,36 @@ window.addEventListener("DOMContentLoaded", () => {
       },
     });
     map.addLayer({
+      id: "project-auto-line-layer",
+      type: "line",
+      source: "project-auto",
+      layout: { visibility: "none" },
+      paint: {
+        "line-color": "#ff2d2d",
+        "line-width": 4,
+        "line-opacity": 0.9,
+      },
+    });
+    map.addLayer({
+      id: "project-auto-arrow-layer",
+      type: "symbol",
+      source: "project-auto",
+      layout: {
+        visibility: "none",
+        "symbol-placement": "line",
+        "symbol-spacing": 80,
+        "text-field": "▶",
+        "text-size": 14,
+        "text-keep-upright": false,
+        "text-rotation-alignment": "map",
+      },
+      paint: {
+        "text-color": "#ffe0e0",
+        "text-halo-color": "rgba(11, 23, 42, 0.75)",
+        "text-halo-width": 1,
+      },
+    });
+    map.addLayer({
       id: "diagnostic-parking-fill",
       type: "fill",
       source: "diagnostic-parking",
@@ -1496,6 +2084,26 @@ window.addEventListener("DOMContentLoaded", () => {
       layout: { visibility: "none" },
       paint: {
         "line-color": "#fbbf24",
+        "line-width": 1.2,
+      },
+    });
+    map.addLayer({
+      id: "project-parking-fill",
+      type: "fill",
+      source: "project-parking",
+      layout: { visibility: "none" },
+      paint: {
+        "fill-color": "#22d3ee",
+        "fill-opacity": 0.45,
+      },
+    });
+    map.addLayer({
+      id: "project-parking-outline",
+      type: "line",
+      source: "project-parking",
+      layout: { visibility: "none" },
+      paint: {
+        "line-color": "#0ea5e9",
         "line-width": 1.2,
       },
     });
@@ -1592,6 +2200,7 @@ window.addEventListener("DOMContentLoaded", () => {
     };
 
     registerSurfacePopup("diagnostic-parking-fill", annotatedParking.totalArea, "Espaces dédiés au stationnement");
+    registerSurfacePopup("project-parking-fill", projectAnnotatedParking.totalArea, "Espaces dédiés au stationnement (projet)");
     registerSurfacePopup("diagnostic-private-fill", annotatedPrivate.totalArea, "Espaces privés d’intérêt");
 
     const createLakePopupHtml = ({ title, description, image }) => `
