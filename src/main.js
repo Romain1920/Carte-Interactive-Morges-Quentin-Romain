@@ -2,6 +2,14 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 window.addEventListener("DOMContentLoaded", () => {
+  const noiseLegend = document.getElementById("noise-legend");
+  const noiseLegendTitle = document.getElementById("noise-legend-title");
+  const noiseLegendBody = document.getElementById("noise-legend-body");
+  const diagnosticPollutionSelect = document.getElementById("pollution-select-diagnostic");
+  const projectPollutionSelect = document.getElementById("pollution-select-project");
+  const projectNoiseButton = document.querySelector('.checklist-button[data-info="project-consequence-noise"]');
+  if (diagnosticPollutionSelect) diagnosticPollutionSelect.value = "none";
+  if (projectPollutionSelect) projectPollutionSelect.value = "none";
   const morgesCenter = [6.496, 46.509];
   const earthRadius = 6378137;
   const baseLatRad = (morgesCenter[1] * Math.PI) / 180;
@@ -40,40 +48,51 @@ window.addEventListener("DOMContentLoaded", () => {
   ];
 
   const zoneCoords = [
-    [6.496428089845968, 46.505720246977845],
-    [6.495422645545607, 46.506410726171772],
-    [6.496657911779806, 46.507311558309034],
-    [6.4961305547527, 46.50779493148643],
-    [6.496141534861831, 46.50825014673682],
-    [6.496132167552963, 46.508601123580739],
-    [6.495978805511734, 46.508840838349258],
-    [6.495893896186166, 46.508974219930295],
-    [6.49600857141811, 46.509061915756938],
-    [6.496177916700713, 46.50908212081503],
-    [6.496354206270263, 46.509471279461728],
-    [6.496679373990847, 46.510214752038422],
-    [6.497355327250958, 46.510788679214947],
-    [6.497890521361452, 46.511172793333039],
-    [6.498408477004381, 46.511273983402695],
-    [6.498907917965965, 46.511273945161371],
-    [6.499063645764654, 46.511367854131102],
-    [6.499332058888355, 46.511753567898104],
-    [6.499901468157285, 46.511584096852559],
-    [6.499910398748741, 46.511101285984132],
-    [6.501125922474875, 46.510911988004942],
-    [6.501225729251705, 46.511103102338197],
-    [6.501471609318094, 46.511428265125865],
-    [6.501905666676305, 46.511280985648682],
-    [6.502402586617334, 46.511000127254853],
-    [6.50250339800081, 46.510672989534228],
-    [6.50248831109936, 46.510396429407443],
-    [6.502117187827048, 46.509787911107736],
-    [6.501171045650843, 46.507966718445545],
-    [6.499748334702972, 46.506964924648635],
-    [6.499285242087422, 46.506007997693146],
-    [6.497913015033828, 46.505261414867121],
-    [6.496976580415872, 46.505219502004437],
-    [6.496428089845968, 46.505720246977845],
+    [6.501450412415291, 46.511292415945086],
+    [6.499424591895478, 46.51159613368384],
+    [6.497261352993151, 46.51151939444321],
+    [6.496758095499918, 46.511268297909396],
+    [6.4962254892134625, 46.510826295068476],
+    [6.495571369410231, 46.51000506091868],
+    [6.495226510898121, 46.509149342485536],
+    [6.495011584792374, 46.508113434212646],
+    [6.495337961993485, 46.50709626291264],
+    [6.495362662266068, 46.50627646339152],
+    [6.496114711894938, 46.505621501513424],
+    [6.496979003785363, 46.50521311116872],
+    [6.4985990680766905, 46.505691408172424],
+    [6.499519390541594, 46.5059110226022],
+    [6.500215671573158, 46.506672202208755],
+    [6.500300362680759, 46.50762913542213],
+    [6.501264950087629, 46.508240619707166],
+    [6.502390058702923, 46.50934288196913],
+    [6.5027034663427985, 46.510361741089454],
+    [6.502318737378544, 46.51109826086595],
+    [6.501450412415291, 46.511292415945086],
+  ];
+
+  const noiseMaskCoords = [
+    [6.501450412415291, 46.511292415945086],
+    [6.499424591895478, 46.51159613368384],
+    [6.497261352993151, 46.51151939444321],
+    [6.496758095499918, 46.511268297909396],
+    [6.4962254892134625, 46.510826295068476],
+    [6.495571369410231, 46.51000506091868],
+    [6.495226510898121, 46.509149342485536],
+    [6.495011584792374, 46.508113434212646],
+    [6.495337961993485, 46.50709626291264],
+    [6.495362662266068, 46.50627646339152],
+    [6.496114711894938, 46.505621501513424],
+    [6.496979003785363, 46.50521311116872],
+    [6.4985990680766905, 46.505691408172424],
+    [6.499519390541594, 46.5059110226022],
+    [6.500215671573158, 46.506672202208755],
+    [6.500300362680759, 46.50762913542213],
+    [6.501264950087629, 46.508240619707166],
+    [6.502390058702923, 46.50934288196913],
+    [6.5027034663427985, 46.510361741089454],
+    [6.502318737378544, 46.51109826086595],
+    [6.501450412415291, 46.511292415945086],
   ];
 
   const focusZone = {
@@ -81,7 +100,7 @@ window.addEventListener("DOMContentLoaded", () => {
     features: [
       {
         type: "Feature",
-        properties: { name: "Dessin" },
+        properties: { name: "Périmètre" },
         geometry: { type: "Polygon", coordinates: [zoneCoords] },
       },
     ],
@@ -93,22 +112,177 @@ window.addEventListener("DOMContentLoaded", () => {
       {
         type: "Feature",
         properties: {},
-        geometry: {
-          type: "Polygon",
-          coordinates: [
-            [
-              [-180, -90],
-              [180, -90],
-              [180, 90],
-              [-180, 90],
-              [-180, -90],
-            ],
-            zoneCoords.slice().reverse(),
-          ],
-        },
+        geometry: { type: "Polygon", coordinates: [noiseMaskCoords] },
       },
     ],
   };
+
+  const noiseBounds = (() => {
+    const lngs = noiseMaskCoords.map((c) => c[0]);
+    const lats = noiseMaskCoords.map((c) => c[1]);
+    return {
+      minLng: Math.min(...lngs),
+      maxLng: Math.max(...lngs),
+      minLat: Math.min(...lats),
+      maxLat: Math.max(...lats),
+    };
+  })();
+
+  const noiseCanvasWidth = 4096;
+  const lngSpan = noiseBounds.maxLng - noiseBounds.minLng || 1e-6;
+  const latSpan = noiseBounds.maxLat - noiseBounds.minLat || 1e-6;
+  const noiseCanvasHeight = Math.max(2048, Math.round((latSpan / lngSpan) * noiseCanvasWidth));
+  const noiseBbox = `${noiseBounds.minLng},${noiseBounds.minLat},${noiseBounds.maxLng},${noiseBounds.maxLat}`;
+
+  const createMaskedWmsRenderer = ({ layer, alpha = 0.85 }) => {
+    const canvas = document.createElement("canvas");
+    canvas.width = noiseCanvasWidth;
+    canvas.height = noiseCanvasHeight;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+    }
+
+    const draw = (mapInstance) => {
+      const image = new Image();
+      image.crossOrigin = "anonymous";
+      image.onload = () => {
+        ctx.clearRect(0, 0, noiseCanvasWidth, noiseCanvasHeight);
+        ctx.save();
+        ctx.beginPath();
+        noiseMaskCoords.forEach(([lng, lat], idx) => {
+          const x = ((lng - noiseBounds.minLng) / lngSpan) * noiseCanvasWidth;
+          const y = ((noiseBounds.maxLat - lat) / latSpan) * noiseCanvasHeight;
+          if (idx === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.closePath();
+        ctx.clip();
+        ctx.globalAlpha = alpha;
+        ctx.drawImage(image, 0, 0, noiseCanvasWidth, noiseCanvasHeight);
+        ctx.restore();
+        mapInstance?.triggerRepaint();
+      };
+      image.src = `https://wms.geo.admin.ch/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0x00000000&LAYERS=${layer}&SRS=EPSG:4326&BBOX=${noiseBbox}&WIDTH=${noiseCanvasWidth}&HEIGHT=${noiseCanvasHeight}`;
+    };
+
+    return { canvas, draw };
+  };
+
+  const pollutionLegendTemplates = {
+    noise: {
+      title: "Niveau sonore Lr [dB(A)]",
+      body: `
+        <div class="legend-description">
+          <strong>Impact du bruit sur la santé</strong>
+          <p>Le bruit routier est un facteur majeur de stress en milieu urbain. Au-delà de 55–60 dB(A) le jour, l’OMS relève des risques accrus de fatigue, de baisse de concentration et, à long terme, de troubles cardiovasculaires. Dans le périmètre étudié, les axes routiers oscillent surtout entre 55 et 65 dB(A) le jour et demeurent souvent &gt; 50 dB(A) la nuit, seuil susceptible de perturber le sommeil.</p>
+        </div>
+        <ul>
+          <li><span style="background:#1d4ed8"></span>&ge; 75</li>
+          <li><span style="background:#7c3aed"></span>70 – 74.9</li>
+          <li><span style="background:#b91c1c"></span>65 – 69.9</li>
+          <li><span style="background:#dc2626"></span>60 – 64.9 <small>(valeur limite)</small></li>
+          <li><span style="background:#ea580c"></span>55 – 59.9</li>
+          <li><span style="background:#f97316"></span>50 – 54.9</li>
+          <li><span style="background:#facc15"></span>45 – 49.9</li>
+          <li><span style="background:#16a34a"></span>40 – 44.9</li>
+          <li><span style="background:#f3f4f6;border:1px solid #cbd5f5"></span>&lt; 40</li>
+        </ul>
+        <div class="legend-sources">Sources : OMS (2018, 2021), OFEV, Office fédéral de la santé publique.</div>
+      `,
+    },
+    air: {
+      title: "Pollution de l'air (NO<sub>2</sub> annuel)",
+      body: `
+        <div class="legend-description">
+          <strong>Impact du dioxyde d’azote sur la santé</strong>
+          <p>Le NO₂ issu principalement du trafic routier irrite les voies respiratoires et aggrave les maladies cardio-respiratoires. L’OMS recommande de ne pas dépasser 10 µg/m³ en moyenne annuelle (25 µg/m³ sur 24 h), alors que la Suisse fixe une valeur limite de 30 µg/m³ par an. Dans le périmètre, les axes principaux se situent autour ou légèrement au-dessus de 30 µg/m³, au-delà des recommandations de l’OMS. Une exposition chronique à ces niveaux accentue les symptômes chez les personnes asthmatiques, limite la fonction pulmonaire des enfants et peut augmenter les hospitalisations lors de pics supplémentaires.</p>
+        </div>
+        <p>Concentration moyenne en µg/m³</p>
+        <ul>
+          <li><span style="background:#002f86"></span>0 – 3.0</li>
+          <li><span style="background:#0a4ec2"></span>3.1 – 6.0</li>
+          <li><span style="background:#1c74fc"></span>6.1 – 9.0</li>
+          <li><span style="background:#2894ff"></span>9.1 – 12.0</li>
+          <li><span style="background:#43baff"></span>12.1 – 15.0</li>
+          <li><span style="background:#73d8ff"></span>15.1 – 18.0</li>
+          <li><span style="background:#81e4ff"></span>18.1 – 21.0</li>
+          <li><span style="background:#49c769"></span>21.1 – 24.0</li>
+          <li><span style="background:#6ee33e"></span>24.1 – 27.0</li>
+          <li><span style="background:#9df02a"></span>27.1 – 30.0</li>
+          <li><span style="background:#f3f11d"></span>30.1 – 33.0</li>
+          <li><span style="background:#fbd31c"></span>33.1 – 36.0</li>
+          <li><span style="background:#fca71a"></span>36.1 – 39.0</li>
+          <li><span style="background:#fb7018"></span>39.1 – 42.0</li>
+          <li><span style="background:#ff3a19"></span>42.1 – 45.0</li>
+          <li><span style="background:#ff1171"></span>45.1 – 48.0</li>
+          <li><span style="background:#cc01a3"></span>48.1 – 51.0</li>
+          <li><span style="background:#9b02a5"></span>51.1 – 54.0</li>
+          <li><span style="background:#65038b"></span>&gt; 54.0</li>
+        </ul>
+        <p class="legend-note">Valeur limite annuelle (OPair) : 30 µg/m³</p>
+        <div class="legend-sources">Sources : OMS (2021), OFEV (2023).</div>
+      `,
+    },
+  };
+
+  const diagnosticPollutionConfigs = {
+    noise: {
+      key: "noise",
+      sourceId: "noise-diagnostic",
+      layerId: "noise-diagnostic-layer",
+      wmsLayer: "ch.bafu.laerm-strassenlaerm_tag",
+      alpha: 0.85,
+      paint: { "raster-opacity": 0.65 },
+      legend: pollutionLegendTemplates.noise,
+    },
+    air: {
+      key: "air",
+      sourceId: "air-diagnostic",
+      layerId: "air-diagnostic-layer",
+      wmsLayer: "ch.bafu.luftreinhaltung-stickstoffdioxid",
+      alpha: 0.9,
+      paint: { "raster-opacity": 0.75 },
+      legend: pollutionLegendTemplates.air,
+    },
+  };
+
+  const projectPollutionConfigs = {
+    noise: {
+      key: "noise",
+      sourceId: "project-noise",
+      layerId: "project-noise-layer",
+      wmsLayer: "ch.bafu.laerm-strassenlaerm_tag",
+      alpha: 0.65,
+      paint: { "raster-opacity": 0.65 },
+      legend: pollutionLegendTemplates.noise,
+    },
+    air: {
+      key: "air",
+      sourceId: "project-air",
+      layerId: "project-air-layer",
+      wmsLayer: "ch.bafu.luftreinhaltung-stickstoffdioxid",
+      alpha: 0.75,
+      paint: { "raster-opacity": 0.75 },
+      legend: pollutionLegendTemplates.air,
+    },
+  };
+
+  Object.values(diagnosticPollutionConfigs).forEach((config) => {
+    Object.assign(config, createMaskedWmsRenderer({ layer: config.wmsLayer, alpha: config.alpha }));
+  });
+
+  Object.values(projectPollutionConfigs).forEach((config) => {
+    Object.assign(config, createMaskedWmsRenderer({ layer: config.wmsLayer, alpha: config.alpha }));
+  });
+
+  const pollutionCanvasCoordinates = [
+    [noiseBounds.minLng, noiseBounds.maxLat],
+    [noiseBounds.maxLng, noiseBounds.maxLat],
+    [noiseBounds.maxLng, noiseBounds.minLat],
+    [noiseBounds.minLng, noiseBounds.minLat],
+  ];
 
   const cloneFeature = (feature, overrides = {}) => ({
     ...feature,
@@ -963,14 +1137,93 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  const noiseVisibilityState = { diagnosticMode: "none", projectMode: "none", projectEnabled: false };
+
+  const applyLegendTemplate = (mode, fromProject = false) => {
+    const template = (fromProject ? projectPollutionConfigs : diagnosticPollutionConfigs)[mode]?.legend;
+    if (!template || !noiseLegend || !noiseLegendTitle || !noiseLegendBody) return;
+    noiseLegendTitle.innerHTML = template.title;
+    noiseLegendBody.innerHTML = template.body;
+  };
+
+  const updateNoiseUI = () => {
+    const hasDiagnostic = noiseVisibilityState.diagnosticMode !== "none";
+    const hasProject = noiseVisibilityState.projectEnabled && noiseVisibilityState.projectMode !== "none";
+    const shouldShow = hasDiagnostic || hasProject;
+    if (map.getLayer("focus-mask-layer")) {
+      map.setLayoutProperty("focus-mask-layer", "visibility", shouldShow ? "visible" : "none");
+    }
+    if (noiseLegend) {
+      noiseLegend.classList.toggle("visible", shouldShow);
+      noiseLegend.setAttribute("aria-hidden", shouldShow ? "false" : "true");
+    }
+  };
+
+  const setDiagnosticPollutionMode = (mode) => {
+    if (mode !== "none" && noiseVisibilityState.projectMode !== "none") {
+      setProjectPollutionMode("none", { suppressLegendUpdate: true });
+      if (projectPollutionSelect) projectPollutionSelect.value = "none";
+      setProjectNoiseButtonState(false);
+    }
+    const nextMode = diagnosticPollutionConfigs[mode] ? mode : "none";
+    noiseVisibilityState.diagnosticMode = nextMode;
+    Object.values(diagnosticPollutionConfigs).forEach((config) => {
+      if (map.getLayer(config.layerId)) {
+        map.setLayoutProperty(config.layerId, "visibility", nextMode === config.key ? "visible" : "none");
+      }
+    });
+    if (nextMode !== "none") applyLegendTemplate(nextMode);
+    updateNoiseUI();
+  };
+
+  const applyProjectPollutionVisibility = ({ suppressLegendUpdate } = {}) => {
+    Object.values(projectPollutionConfigs).forEach((config) => {
+      if (map.getLayer(config.layerId)) {
+        const visible = noiseVisibilityState.projectEnabled && noiseVisibilityState.projectMode === config.key;
+        map.setLayoutProperty(config.layerId, "visibility", visible ? "visible" : "none");
+      }
+    });
+    if (!suppressLegendUpdate && noiseVisibilityState.projectEnabled && noiseVisibilityState.projectMode !== "none") {
+      applyLegendTemplate(noiseVisibilityState.projectMode, true);
+    }
+    setProjectAnnotationsVisibility();
+    updateNoiseUI();
+  };
+
+  const setProjectPollutionMode = (mode, { suppressLegendUpdate } = {}) => {
+    if (mode !== "none" && noiseVisibilityState.diagnosticMode !== "none") {
+      if (diagnosticPollutionSelect) diagnosticPollutionSelect.value = "none";
+      setDiagnosticPollutionMode("none");
+    }
+    const nextMode = projectPollutionConfigs[mode] ? mode : "none";
+    noiseVisibilityState.projectMode = nextMode;
+    applyProjectPollutionVisibility({ suppressLegendUpdate });
+  };
+
+  const setProjectNoiseVisibility = (visible) => {
+    noiseVisibilityState.projectEnabled = visible;
+    applyProjectPollutionVisibility();
+  };
+
+  const setProjectNoiseButtonState = (active) => {
+    if (projectNoiseButton) {
+      projectNoiseButton.classList.toggle("active", active);
+      projectNoiseButton.setAttribute("aria-pressed", active ? "true" : "false");
+    }
+    setProjectNoiseVisibility(active);
+  };
+
   const layerHandlers = {
     perimeter: (checked) => setPerimeterVisibility(checked),
     "diagnostic-axes": (checked) => setDiagnosticAutoVisibility(checked),
     "diagnostic-parking": (checked) => setDiagnosticParkingVisibility(checked),
     "diagnostic-private": (checked) => setDiagnosticPrivateVisibility(checked),
+    perimeter: (checked) => setPerimeterVisibility(checked),
     "diagnostic-lake": (checked) => setDiagnosticLakeVisibility(checked),
     "project-interventions": (checked) => setMarkersVisibility(checked),
   };
+
+  const consequenceHandlers = {};
 
   const bindLayerInputs = () => {
     layerInputs.forEach((input) => {
@@ -982,13 +1235,81 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  const projectNoiseAnnotations = [
+    {
+      coordinates: [6.4968751126029485, 46.510238317446294],
+      title: "Axe nord limité à 30 km/h",
+      description: "Réduction estimée de 2–3 dB : trafic plus calme, –25 % de personnes très gênées ou réveillées la nuit si la vitesse est respectée.",
+      offset: [0, 0],
+    },
+    {
+      coordinates: [6.49860163421879, 46.50937472296998],
+      title: "Rue Louis-de-Savoie piétonnisée",
+      description:
+        "Bruit ramené autour de 40–45 dB(A), ce qui réduit de 40 à 60 % la proportion de personnes fortement gênées et divise presque par deux les perturbations du sommeil (OMS / AEE). Cette baisse s’accompagne d’une diminution mesurable du risque cardiovasculaire lié au bruit, estimée entre 5 et 10 % selon l’exposition initiale.",
+      offset: [0, 90],
+    },
+  ];
+  const projectAnnotationMarkers = [];
+
+  const setProjectAnnotationsVisibility = () => {
+    const show = noiseVisibilityState.projectEnabled && noiseVisibilityState.projectMode === "noise";
+    projectAnnotationMarkers.forEach((marker) => {
+      const el = marker.getElement();
+      if (el) el.style.display = show ? "" : "none";
+    });
+  };
+
+  const createProjectAnnotationMarkers = () => {
+    projectNoiseAnnotations.forEach((annotation) => {
+      const el = document.createElement("div");
+      el.className = "project-annotation";
+      el.innerHTML = `<strong>${annotation.title}</strong><p>${annotation.description}</p>`;
+      const marker = new maplibregl.Marker({ element: el, anchor: "left", offset: annotation.offset || [0, 0] })
+        .setLngLat(annotation.coordinates)
+        .addTo(map);
+      projectAnnotationMarkers.push(marker);
+    });
+    setProjectAnnotationsVisibility();
+  };
+
   const bindChecklistButtons = () => {
     checklistButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const active = button.classList.toggle("active");
-        button.setAttribute("aria-pressed", active ? "true" : "false");
-      });
+      const key = button.dataset.info;
+      if (key === "project-consequence-noise") {
+        button.addEventListener("click", () => {
+          const nextState = !button.classList.contains("active");
+          setProjectNoiseButtonState(nextState);
+        });
+        setProjectNoiseButtonState(button.classList.contains("active"));
+      } else {
+        button.addEventListener("click", () => {
+          const active = button.classList.toggle("active");
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+          consequenceHandlers[key]?.(active);
+        });
+        const initActive = button.classList.contains("active");
+        button.setAttribute("aria-pressed", initActive ? "true" : "false");
+        consequenceHandlers[key]?.(initActive);
+      }
     });
+  };
+
+  const bindPollutionSelects = () => {
+    if (diagnosticPollutionSelect) {
+      const handleDiagnostic = () => setDiagnosticPollutionMode(diagnosticPollutionSelect.value);
+      diagnosticPollutionSelect.addEventListener("change", handleDiagnostic);
+      handleDiagnostic();
+    }
+    if (projectPollutionSelect) {
+      const handleProject = () => {
+        const value = projectPollutionSelect.value;
+        setProjectPollutionMode(value);
+        setProjectNoiseButtonState(value !== "none");
+      };
+      projectPollutionSelect.addEventListener("change", handleProject);
+      handleProject();
+    }
   };
 
   const hideBaseIcons = () => {
@@ -998,6 +1319,8 @@ window.addEventListener("DOMContentLoaded", () => {
       .filter((layer) => layer.type === "symbol" && layer.layout && layer.layout["icon-image"])
       .forEach((layer) => map.setLayoutProperty(layer.id, "visibility", "none"));
   };
+
+  bindPollutionSelects();
 
   map.on("load", () => {
     map.fitBounds(bounds, { padding: 40, duration: 0 });
@@ -1010,14 +1333,40 @@ window.addEventListener("DOMContentLoaded", () => {
     map.addSource("diagnostic-parking", { type: "geojson", data: annotatedParking.data });
     map.addSource("diagnostic-private", { type: "geojson", data: annotatedPrivate.data });
     map.addSource("diagnostic-lake", { type: "geojson", data: diagnosticLakeViews });
+    Object.values(diagnosticPollutionConfigs).forEach((config) => {
+      map.addSource(config.sourceId, {
+        type: "canvas",
+        canvas: config.canvas,
+        coordinates: pollutionCanvasCoordinates,
+      });
+    });
+    Object.values(projectPollutionConfigs).forEach((config) => {
+      map.addSource(config.sourceId, {
+        type: "canvas",
+        canvas: config.canvas,
+        coordinates: pollutionCanvasCoordinates,
+      });
+    });
+    map.addLayer({
+      id: "focus-zone-layer",
+      type: "line",
+      source: "focus-zone",
+      layout: { visibility: "none" },
+      paint: {
+        "line-color": "#ffffff",
+        "line-width": 2,
+        "line-dasharray": [2, 2],
+      },
+    });
     map.addLayer({
       id: "focus-mask-layer",
       type: "fill",
       source: "focus-mask",
       paint: {
-        "fill-color": "rgba(15, 23, 42, 0.75)",
-        "fill-opacity": 0.75,
+        "fill-color": "rgba(15, 23, 42, 0)",
+        "fill-opacity": 0,
       },
+      layout: { visibility: "none" },
     });
     map.addLayer({
       id: "diagnostic-auto-1-layer",
@@ -1171,6 +1520,34 @@ window.addEventListener("DOMContentLoaded", () => {
         "line-dasharray": [1, 1.5],
       },
     });
+    Object.values(diagnosticPollutionConfigs).forEach((config) => {
+      map.addLayer(
+        {
+          id: config.layerId,
+          type: "raster",
+          source: config.sourceId,
+          layout: { visibility: "none" },
+          paint: config.paint,
+        },
+        "focus-mask-layer",
+      );
+      config.draw(map);
+    });
+    Object.values(projectPollutionConfigs).forEach((config) => {
+      map.addLayer(
+        {
+          id: config.layerId,
+          type: "raster",
+          source: config.sourceId,
+          layout: { visibility: "none" },
+          paint: config.paint,
+        },
+        "focus-mask-layer",
+      );
+      config.draw(map);
+    });
+
+    setDiagnosticPollutionMode(noiseVisibilityState.diagnosticMode);
 
     const formatArea = (value) => new Intl.NumberFormat("fr-CH").format(Math.round(value));
     const registerSurfacePopup = (layerId, totalArea, label) => {
@@ -1225,6 +1602,8 @@ window.addEventListener("DOMContentLoaded", () => {
     };
 
     registerLakePopup("diagnostic-lake-fill");
+    createProjectAnnotationMarkers();
+    applyProjectPollutionVisibility();
 
     bindLayerInputs();
     bindChecklistButtons();

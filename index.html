@@ -22,6 +22,10 @@
     <div class="coord-display" id="coord-display" aria-live="polite">
       Lat 46.50900 · Lng 6.49600
     </div>
+    <div class="noise-legend" id="noise-legend" aria-hidden="true">
+      <div class="legend-title" id="noise-legend-title"></div>
+      <div class="legend-body" id="noise-legend-body"></div>
+    </div>
     <div class="map-source" id="map-source" aria-live="polite"></div>
     <div class="layer-toggle" role="region" aria-label="Affichage des couches">
       <h2>Affichage</h2>
@@ -74,9 +78,14 @@
 
         <div class="panel-subtitle">En conséquence</div>
         <div class="panel-checklist">
-          <button type="button" class="checklist-button" data-info="diagnostic-consequence-noise" aria-pressed="false">
-            Une pollution sonore et sanitaire
-          </button>
+          <div class="pollution-select-group">
+            <label for="pollution-select-diagnostic">Pollution sonore / air</label>
+            <select id="pollution-select-diagnostic">
+              <option value="none">Choisir un indicateur</option>
+              <option value="noise">Pollution sonore (jour)</option>
+              <option value="air">Pollution de l'air (NO₂)</option>
+            </select>
+          </div>
           <button type="button" class="checklist-button" data-info="diagnostic-consequence-vulnerable" aria-pressed="false">
             Un centre-ville vulnérable à l’horizon 2050
           </button>
@@ -151,6 +160,14 @@
 
         <div class="panel-subtitle">En conséquence</div>
         <div class="panel-checklist">
+          <div class="pollution-select-group">
+            <label for="pollution-select-project">Pollution sonore / air après projet</label>
+            <select id="pollution-select-project">
+              <option value="none">Choisir un indicateur</option>
+              <option value="noise">Pollution sonore (jour)</option>
+              <option value="air">Pollution de l'air (NO₂)</option>
+            </select>
+          </div>
           <button type="button" class="checklist-button" data-info="project-consequence-noise" aria-pressed="false">
             Une pollution sonore diminuée
           </button>
