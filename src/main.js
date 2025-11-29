@@ -908,6 +908,73 @@ window.addEventListener("DOMContentLoaded", () => {
   };
   const projectAnnotatedParking = annotatePolygonCollection(projectParkingSurfaces);
 
+  const parkingReportData = {
+    removedTotal: 284,
+    availableTotal: 339,
+    removed: [
+      { name: "Parking souterrain des Charpentiers", detail: "124 places libres / 574" },
+      { name: "Parking de la place de la Navigation", detail: "1 place libre / 43" },
+      { name: "Parking Louis-de-Savoie", detail: "4 places libres / 49" },
+      { name: "Parking de la place de l’église", detail: "0 place libre / 37" },
+      { name: "Parking du quai Lochmann", detail: "0 place libre / 155" },
+    ],
+    surfaceToRequalify: [
+      { name: "Parking de la place de la Navigation", detail: "1 place libre / 43" },
+      { name: "Parking Louis-de-Savoie", detail: "4 places libres / 49" },
+      { name: "Parking de la place de l’église", detail: "0 place libre / 37" },
+      { name: "Parking du quai Lochmann", detail: "0 place libre / 155" },
+    ],
+    absorbing: [
+      { name: "Parking souterrain des Charpentiers", detail: "124 places libres / 574" },
+      { name: "Parking souterrain de la gare", detail: "99 places libres / 144" },
+      { name: "Parking souterrain du Pont-neuf", detail: "46 places libres / 171" },
+      { name: "Parking du Parc des Sports", detail: "6 places libres / 446" },
+      { name: "Parking de la piscine", detail: "25 places libres / 174" },
+      { name: "Parking de la Blancherie", detail: "39 places libres / 87" },
+    ],
+  };
+  parkingReportData.netGain = parkingReportData.availableTotal - parkingReportData.removedTotal;
+
+  const parkingDemoSteps = [
+    {
+      id: "current",
+      label: "Constat",
+      title: "Constat : parkings en surface saturés",
+      description:
+        "Les parkings en surface du Bourg (Navigation, Louis-de-Savoie, Place de l’église, Quai Lochmann) saturent et coupent la relation au lac. Nous proposons de requalifier ces dalles minérales : cela représente 284 places à reloger.",
+      cards: [{ label: "Places concernées", value: `-${parkingReportData.removedTotal}`, tone: "negative" }],
+      listTitle: "Parkings en surface à requalifier",
+      list: parkingReportData.surfaceToRequalify,
+    },
+    {
+      id: "capacity",
+      label: "Capacité disponible",
+      title: "Parkings souterrains voisins sous-exploités",
+      description:
+        "Le même relevé (samedi 29 mai 2021, 11h30) montre que les parkings souterrains et de grande capacité alentour disposaient encore de plus de 330 places libres.",
+      cards: [{ label: "Capacité restante", value: `+${parkingReportData.availableTotal}`, tone: "positive" }],
+      listTitle: "Parkings de grande capacité à proximité",
+      list: parkingReportData.absorbing,
+    },
+    {
+      id: "summary",
+      label: "Conclusion",
+      title: "Conclusion : report crédible sans création",
+      description:
+        "En réaffectant la fréquentation vers ces parkings souterrains, le solde reste positif (+55 places nettes). Une signalétique dynamique et des abonnements visiteurs encadrent ce report tout en libérant l’espace public.",
+      cards: [
+        { label: "Places requalifiées", value: `-${parkingReportData.removedTotal}`, tone: "negative" },
+        { label: "Capacité disponible", value: `+${parkingReportData.availableTotal}`, tone: "positive" },
+        { label: "Solde net", value: `+${parkingReportData.netGain}`, tone: "positive" },
+      ],
+      bullets: [
+        "Les parkings souterrains restent sous-utilisés même en pointe.",
+        "Une communication en temps réel et des abonnements guident le report.",
+        "Les surfaces rendues au Bourg deviennent des espaces piétons/végétalisés.",
+      ],
+    },
+  ];
+
   const diagnosticAutoAxesTertiary = {
     type: "FeatureCollection",
     features: [
@@ -1536,6 +1603,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (event.key === "Escape") {
       closeDetailsPanel();
       closeLightbox();
+      closeParkingDemo();
     }
   });
 
@@ -1851,6 +1919,118 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     });
   };
+
+  const parkingDemoButton = document.querySelector('[data-action="parking-demo"]');
+  const parkingDemoOverlay = document.getElementById("parking-demo");
+  const parkingDemoTabs = document.getElementById("parking-demo-tabs");
+  const parkingDemoBody = document.getElementById("parking-demo-body");
+  const parkingDemoClose = document.getElementById("parking-demo-close");
+  const parkingDemoAction = document.getElementById("parking-demo-action");
+  let parkingDemoRendered = false;
+  let parkingDemoElements = null;
+  let parkingDemoActiveId = null;
+
+  const buildParkingList = (items = []) => items.map((item) => `<div class="parking-demo__item"><strong>${item.name}</strong><span>${item.detail}</span></div>`).join("");
+
+  const buildParkingCards = (cards = []) =>
+    cards
+      .map(
+        (card) => `
+      <div class="parking-demo__stat-card${card.tone ? ` ${card.tone}` : ""}">
+        <h5>${card.label}</h5>
+        <strong>${card.value}</strong>
+      </div>
+    `,
+      )
+      .join("");
+
+  const renderParkingDemoStructure = () => {
+    if (!parkingDemoTabs || !parkingDemoBody) return;
+    parkingDemoTabs.innerHTML = parkingDemoSteps.map((step) => `<button type="button" class="parking-demo__tab" data-step="${step.id}">${step.label}</button>`).join("");
+    parkingDemoBody.innerHTML = `
+      <div class="parking-demo__body">
+        <div class="parking-demo__text">
+          <h3 id="parking-demo-title"></h3>
+          <p id="parking-demo-desc"></p>
+        </div>
+        <div id="parking-demo-stats" class="parking-demo__stats"></div>
+        <div id="parking-demo-list-wrapper" class="parking-demo__list-wrapper">
+          <p id="parking-demo-list-title"></p>
+          <div id="parking-demo-list" class="parking-demo__list"></div>
+        </div>
+        <ul id="parking-demo-bullets"></ul>
+      </div>
+    `;
+    parkingDemoElements = {
+      title: document.getElementById("parking-demo-title"),
+      description: document.getElementById("parking-demo-desc"),
+      stats: document.getElementById("parking-demo-stats"),
+      listWrapper: document.getElementById("parking-demo-list-wrapper"),
+      listTitle: document.getElementById("parking-demo-list-title"),
+      list: document.getElementById("parking-demo-list"),
+      bullets: document.getElementById("parking-demo-bullets"),
+    };
+    parkingDemoTabs.querySelectorAll("button").forEach((button) => {
+      button.addEventListener("click", () => setParkingDemoStep(button.dataset.step));
+    });
+    parkingDemoRendered = true;
+  };
+
+  const updateParkingDemoContent = (step) => {
+    if (!parkingDemoElements || !step) return;
+    parkingDemoElements.title.textContent = step.title || "";
+    parkingDemoElements.description.textContent = step.description || "";
+    if (step.cards?.length) {
+      parkingDemoElements.stats.innerHTML = buildParkingCards(step.cards);
+      parkingDemoElements.stats.style.display = "flex";
+    } else {
+      parkingDemoElements.stats.innerHTML = "";
+      parkingDemoElements.stats.style.display = "none";
+    }
+    if (step.list?.length) {
+      parkingDemoElements.listWrapper.style.display = "block";
+      parkingDemoElements.listTitle.textContent = step.listTitle || "";
+      parkingDemoElements.list.innerHTML = buildParkingList(step.list);
+    } else {
+      parkingDemoElements.listWrapper.style.display = "none";
+      parkingDemoElements.list.innerHTML = "";
+    }
+    if (step.bullets?.length) {
+      parkingDemoElements.bullets.style.display = "block";
+      parkingDemoElements.bullets.innerHTML = step.bullets.map((item) => `<li>${item}</li>`).join("");
+    } else {
+      parkingDemoElements.bullets.style.display = "none";
+      parkingDemoElements.bullets.innerHTML = "";
+    }
+  };
+
+  const setParkingDemoStep = (stepId) => {
+    if (!parkingDemoTabs) return;
+    const step = parkingDemoSteps.find((item) => item.id === stepId) || parkingDemoSteps[0];
+    parkingDemoActiveId = step.id;
+    parkingDemoTabs.querySelectorAll("button").forEach((btn) => btn.classList.toggle("active", btn.dataset.step === parkingDemoActiveId));
+    updateParkingDemoContent(step);
+  };
+
+  const closeParkingDemo = () => {
+    parkingDemoOverlay?.classList.remove("visible");
+    parkingDemoOverlay?.setAttribute("aria-hidden", "true");
+  };
+
+  const startParkingDemo = () => {
+    if (!parkingDemoOverlay) return;
+    if (!parkingDemoRendered) renderParkingDemoStructure();
+    parkingDemoOverlay.classList.add("visible");
+    parkingDemoOverlay.setAttribute("aria-hidden", "false");
+    setParkingDemoStep(parkingDemoSteps[0].id);
+  };
+
+  parkingDemoButton?.addEventListener("click", () => startParkingDemo());
+  parkingDemoClose?.addEventListener("click", closeParkingDemo);
+  parkingDemoAction?.addEventListener("click", closeParkingDemo);
+  parkingDemoOverlay?.addEventListener("click", (event) => {
+    if (event.target === parkingDemoOverlay) closeParkingDemo();
+  });
 
   const projectAnnotations = {
     noise: [

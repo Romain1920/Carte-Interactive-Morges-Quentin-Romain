@@ -109,7 +109,7 @@
           </span>
           <input type="checkbox" data-layer="project-parking" />
         </label>
-        <button type="button" class="panel-link">Voir démonstration des reports de stationnements</button>
+        <button type="button" class="panel-link" data-action="parking-demo">Voir démonstration des reports de stationnements</button>
 
         <div class="panel-subtitle">2. Des espaces libres mis en valeur</div>
         <label class="toggle-item">
@@ -191,6 +191,23 @@
       <button class="lightbox-close" id="lightbox-close" aria-label="Fermer l'aperçu">&times;</button>
       <img id="lightbox-image" alt="" />
       <iframe id="lightbox-frame" title="Document"></iframe>
+    </div>
+  </div>
+
+  <div class="parking-demo" id="parking-demo" aria-hidden="true">
+    <div class="parking-demo__content" role="dialog" aria-modal="true" aria-label="Démonstration des reports de stationnement">
+      <button type="button" class="parking-demo__close" id="parking-demo-close" aria-label="Fermer la démonstration">&times;</button>
+      <div class="parking-demo__header">
+        <div>
+          <h4>Démonstration des reports de stationnements</h4>
+          <p>Comptage réalisé le samedi 29 mai 2021 à 11h30 (forte affluence, météo favorable).</p>
+        </div>
+      </div>
+      <div id="parking-demo-tabs" class="parking-demo__tabs" role="tablist"></div>
+      <div id="parking-demo-body" class="parking-demo__slides"></div>
+      <div class="parking-demo__footer">
+        <button type="button" id="parking-demo-action">Fermer</button>
+      </div>
     </div>
   </div>
 
