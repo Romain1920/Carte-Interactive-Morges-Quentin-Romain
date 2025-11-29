@@ -170,6 +170,22 @@ window.addEventListener("DOMContentLoaded", () => {
     return { canvas, draw };
   };
 
+  const heatFillExpression = [
+    "match",
+    ["round", ["coalesce", ["get", "T_WR"], 0]],
+    1,
+    "#0ea5e9",
+    2,
+    "#38bdf8",
+    3,
+    "#facc15",
+    4,
+    "#f97316",
+    5,
+    "#dc2626",
+    "#0ea5e9",
+  ];
+
   const pollutionLegendTemplates = {
     noise: {
       title: "Niveau sonore Lr [dB(A)]",
@@ -223,6 +239,23 @@ window.addEventListener("DOMContentLoaded", () => {
         </ul>
         <p class="legend-note">Valeur limite annuelle (OPair) : 30 µg/m³</p>
         <div class="legend-sources">Sources : OMS (2021), OFEV (2023).</div>
+      `,
+    },
+    heat: {
+      title: "Îlots de chaleur urbains – 14h (2 m du sol)",
+      body: `
+        <div class="legend-description">
+          <strong>Zones les plus exposées à la chaleur</strong>
+          <p>Cartographie des zones où la température ressentie à 14h reste la plus élevée en situation actuelle. Les secteurs notés 4–5 correspondent aux îlots les plus critiques (espaces minéralisés, faible végétation) et nécessitent des mesures de rafraîchissement prioritaires.</p>
+        </div>
+        <ul>
+          <li><span style="background:#0ea5e9"></span>1 – Faible contrainte thermique</li>
+          <li><span style="background:#38bdf8"></span>2 – Contraste modéré</li>
+          <li><span style="background:#facc15"></span>3 – Chaleur marquée</li>
+          <li><span style="background:#f97316"></span>4 – Îlot chaud</li>
+          <li><span style="background:#dc2626"></span>5 – Îlot très chaud</li>
+        </ul>
+        <div class="legend-sources">Sources : DGE – Cartes climatiques cantonales (2024).</div>
       `,
     },
   };
@@ -1540,7 +1573,8 @@ window.addEventListener("DOMContentLoaded", () => {
     "project-roofs",
     "project-interventions",
   ];
-  const diagnosticChecklistKeys = ["diagnostic-consequence-vulnerable", "diagnostic-consequence-attractivity"];
+  const diagnosticChecklistKeys = ["diagnostic-consequence-vulnerable"];
+  const heatChecklistKey = "diagnostic-consequence-vulnerable";
   const projectChecklistKeys = ["project-consequence-noise", "project-consequence-resilient", "project-consequence-attractivity"];
   const layerInputByKey = {};
   const checklistButtonByKey = {};
@@ -1640,9 +1674,11 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   const noiseVisibilityState = { diagnosticMode: "none", projectMode: "none", projectEnabled: false };
+  let heatLayerVisible = false;
 
   const applyLegendTemplate = (mode, fromProject = false) => {
-    const template = (fromProject ? projectPollutionConfigs : diagnosticPollutionConfigs)[mode]?.legend;
+    const source = fromProject ? projectPollutionConfigs : diagnosticPollutionConfigs;
+    const template = source[mode]?.legend ?? pollutionLegendTemplates[mode];
     if (!template || !noiseLegend || !noiseLegendTitle || !noiseLegendBody) return;
     noiseLegendTitle.innerHTML = template.title;
     noiseLegendBody.innerHTML = template.body;
@@ -1651,7 +1687,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const updateNoiseUI = () => {
     const hasDiagnostic = noiseVisibilityState.diagnosticMode !== "none";
     const hasProject = noiseVisibilityState.projectEnabled && noiseVisibilityState.projectMode !== "none";
-    const shouldShow = hasDiagnostic || hasProject;
+    const shouldShow = hasDiagnostic || hasProject || heatLayerVisible;
     if (map.getLayer("focus-mask-layer")) {
       map.setLayoutProperty("focus-mask-layer", "visibility", shouldShow ? "visible" : "none");
     }
@@ -1661,7 +1697,35 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  const setDiagnosticPollutionMode = (mode) => {
+  const setHeatLayerVisibility = (visible, { suppressLegendUpdate } = {}) => {
+    heatLayerVisible = Boolean(visible);
+    const heatButton = checklistButtonByKey[heatChecklistKey];
+    if (heatButton) {
+      heatButton.classList.toggle("active", heatLayerVisible);
+      heatButton.setAttribute("aria-pressed", heatLayerVisible ? "true" : "false");
+    }
+    if (map.getLayer("diagnostic-heat-layer")) {
+      map.setLayoutProperty("diagnostic-heat-layer", "visibility", heatLayerVisible ? "visible" : "none");
+    }
+    if (map.getLayer("diagnostic-heat-outline")) {
+      map.setLayoutProperty("diagnostic-heat-outline", "visibility", heatLayerVisible ? "visible" : "none");
+    }
+    if (heatLayerVisible) {
+      if (diagnosticPollutionSelect) diagnosticPollutionSelect.value = "none";
+      if (noiseVisibilityState.diagnosticMode !== "none") {
+        setDiagnosticPollutionMode("none", { suppressLegendUpdate: true });
+      }
+      const otherDiagKeys = diagnosticChecklistKeys.filter((key) => key !== heatChecklistKey);
+      resetChecklistButtons(otherDiagKeys);
+      if (!suppressLegendUpdate) applyLegendTemplate("heat");
+    }
+    updateNoiseUI();
+  };
+
+  const setDiagnosticPollutionMode = (mode, { suppressLegendUpdate } = {}) => {
+    if (mode !== "none" && heatLayerVisible) {
+      setHeatLayerVisibility(false, { suppressLegendUpdate: true });
+    }
     if (mode !== "none") {
       clearProjectContext();
     }
@@ -1672,7 +1736,7 @@ window.addEventListener("DOMContentLoaded", () => {
         map.setLayoutProperty(config.layerId, "visibility", nextMode === config.key ? "visible" : "none");
       }
     });
-    if (nextMode !== "none") applyLegendTemplate(nextMode);
+    if (nextMode !== "none" && !suppressLegendUpdate) applyLegendTemplate(nextMode);
     updateNoiseUI();
   };
 
@@ -1724,6 +1788,7 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   const consequenceHandlers = {};
+  consequenceHandlers["diagnostic-consequence-vulnerable"] = (active) => setHeatLayerVisibility(active);
 
   const resetChecklistButtons = (keys) => {
     keys.forEach((key) => {
@@ -1760,7 +1825,8 @@ window.addEventListener("DOMContentLoaded", () => {
   const clearDiagnosticContext = () => {
     deselectLayerGroup(diagnosticLayerKeys);
     if (diagnosticPollutionSelect) diagnosticPollutionSelect.value = "none";
-    setDiagnosticPollutionMode("none");
+    setDiagnosticPollutionMode("none", { suppressLegendUpdate: true });
+    setHeatLayerVisibility(false, { suppressLegendUpdate: true });
     resetChecklistButtons(diagnosticChecklistKeys);
   };
 
@@ -1910,6 +1976,7 @@ window.addEventListener("DOMContentLoaded", () => {
     map.addSource("project-auto", { type: "geojson", data: projectAutoAxes });
     map.addSource("diagnostic-parking", { type: "geojson", data: annotatedParking.data });
     map.addSource("diagnostic-private", { type: "geojson", data: annotatedPrivate.data });
+    map.addSource("diagnostic-heat", { type: "geojson", data: "/data/plan_climat_espace_action.geojson" });
     map.addSource("project-parking", { type: "geojson", data: projectAnnotatedParking.data });
     map.addSource("diagnostic-lake", { type: "geojson", data: diagnosticLakeViews });
     Object.values(diagnosticPollutionConfigs).forEach((config) => {
@@ -2035,6 +2102,26 @@ window.addEventListener("DOMContentLoaded", () => {
         "text-color": "#ffe0e0",
         "text-halo-color": "rgba(11, 23, 42, 0.75)",
         "text-halo-width": 1,
+      },
+    });
+    map.addLayer({
+      id: "diagnostic-heat-layer",
+      type: "fill",
+      source: "diagnostic-heat",
+      layout: { visibility: "none" },
+      paint: {
+        "fill-color": heatFillExpression,
+        "fill-opacity": 0.72,
+      },
+    });
+    map.addLayer({
+      id: "diagnostic-heat-outline",
+      type: "line",
+      source: "diagnostic-heat",
+      layout: { visibility: "none" },
+      paint: {
+        "line-color": "rgba(15, 23, 42, 0.4)",
+        "line-width": 0.5,
       },
     });
     map.addLayer({
