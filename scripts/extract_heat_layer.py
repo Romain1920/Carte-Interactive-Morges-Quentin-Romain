@@ -26,65 +26,34 @@ ZONE_COORDS = [
     [6.5027034663427985, 46.510361741089454],
     [6.502318737378544, 46.51109826086595],
 ]
-
 ZONE_RING = ZONE_COORDS + [ZONE_COORDS[0]]
-MARGIN_DEG = 0.0007  # ~70 m pour élargir légèrement la zone
-
+MARGIN_DEG = 0.0007
 
 def point_in_polygon(lng, lat, ring):
     inside = False
     for i in range(len(ring) - 1):
         x1, y1 = ring[i]
         x2, y2 = ring[i + 1]
-        if ((y1 > lat) != (y2 > lat)) and (
-            lng < (x2 - x1) * (lat - y1) / (y2 - y1 + 1e-12) + x1
-        ):
+        if ((y1 > lat) != (y2 > lat)) and (lng < (x2 - x1) * (lat - y1) / (y2 - y1 + 1e-12) + x1):
             inside = not inside
     return inside
 
 
-def polygon_centroid(coords):
-    ring = coords[0]
-    if ring[0] == ring[-1]:
-        pts = ring[:-1]
-    else:
-        pts = ring
-    area = 0.0
-    cx = 0.0
-    cy = 0.0
-    for i in range(len(pts)):
-        x1, y1 = pts[i]
-        x2, y2 = pts[(i + 1) % len(pts)]
-        cross = x1 * y2 - x2 * y1
-        area += cross
-        cx += (x1 + x2) * cross
-        cy += (y1 + y2) * cross
-    area *= 0.5
-    if abs(area) < 1e-12:
-        return pts[0]
-    cx /= 6 * area
-    cy /= 6 * area
-    return cx, cy
+def within_with_margin(lng, lat):
+    if point_in_polygon(lng, lat, ZONE_RING):
+        return True
+    min_lng = min(pt[0] for pt in ZONE_COORDS) - MARGIN_DEG
+    max_lng = max(pt[0] for pt in ZONE_COORDS) + MARGIN_DEG
+    min_lat = min(pt[1] for pt in ZONE_COORDS) - MARGIN_DEG
+    max_lat = max(pt[1] for pt in ZONE_COORDS) + MARGIN_DEG
+    return min_lng <= lng <= max_lng and min_lat <= lat <= max_lat
 
 
 def lv95_to_wgs84(easting, northing):
     e = (easting - 2600000) / 1_000_000
     n = (northing - 1200000) / 1_000_000
-    lat = (
-        16.9023892
-        + 3.238272 * n
-        - 0.270978 * e ** 2
-        - 0.002528 * n ** 2
-        - 0.0447 * e ** 2 * n
-        - 0.0140 * n ** 3
-    )
-    lon = (
-        2.6779094
-        + 4.728982 * e
-        + 0.791484 * e * n
-        + 0.1306 * e * n ** 2
-        - 0.0436 * e ** 3
-    )
+    lat = 16.9023892 + 3.238272 * n - 0.270978 * e ** 2 - 0.002528 * n ** 2 - 0.0447 * e ** 2 * n - 0.0140 * n ** 3
+    lon = 2.6779094 + 4.728982 * e + 0.791484 * e * n + 0.1306 * e * n ** 2 - 0.0436 * e ** 3
     lat = lat * 100 / 36
     lon = lon * 100 / 36
     return lon, lat
@@ -114,7 +83,7 @@ def parse_wkb(data, offset=0):
             pts.append([x, y])
         return pts
 
-    if geom_type == 3:  # Polygon
+    if geom_type == 3:
         (num_rings,) = struct.unpack(fmt + "I", data[offset : offset + 4])
         offset += 4
         rings = []
@@ -123,7 +92,7 @@ def parse_wkb(data, offset=0):
             offset += 4
             rings.append(read_points(num_points))
         return {"type": "Polygon", "coordinates": rings}, offset
-    if geom_type == 6:  # MultiPolygon
+    if geom_type == 6:
         (num_geoms,) = struct.unpack(fmt + "I", data[offset : offset + 4])
         offset += 4
         polys = []
@@ -131,7 +100,7 @@ def parse_wkb(data, offset=0):
             geom, offset = parse_wkb(data, offset)
             polys.append(geom["coordinates"])
         return {"type": "MultiPolygon", "coordinates": polys}, offset
-    raise ValueError(f"Unsupported geometry type: {geom_type}")
+    raise ValueError("Unsupported geometry type")
 
 
 def parse_geometry(blob):
@@ -147,21 +116,31 @@ def parse_geometry(blob):
 
 
 def centroid_of_geometry(geometry):
+    def polygon_centroid(coords):
+        ring = coords[0]
+        pts = ring[:-1] if ring[0] == ring[-1] else ring
+        area = 0.0
+        cx = 0.0
+        cy = 0.0
+        for i in range(len(pts)):
+            x1, y1 = pts[i]
+            x2, y2 = pts[(i + 1) % len(pts)]
+            cross = x1 * y2 - x2 * y1
+            area += cross
+            cx += (x1 + x2) * cross
+            cy += (y1 + y2) * cross
+        area *= 0.5
+        if abs(area) < 1e-12:
+            return pts[0]
+        cx /= 6 * area
+        cy /= 6 * area
+        return cx, cy
+
     if geometry["type"] == "Polygon":
         return polygon_centroid(geometry["coordinates"])
     if geometry["type"] == "MultiPolygon":
         return polygon_centroid(geometry["coordinates"][0])
     return None
-
-
-def within_with_margin(lng, lat):
-    if point_in_polygon(lng, lat, ZONE_RING):
-        return True
-    min_lng = min(pt[0] for pt in ZONE_COORDS) - MARGIN_DEG
-    max_lng = max(pt[0] for pt in ZONE_COORDS) + MARGIN_DEG
-    min_lat = min(pt[1] for pt in ZONE_COORDS) - MARGIN_DEG
-    max_lat = max(pt[1] for pt in ZONE_COORDS) + MARGIN_DEG
-    return min_lng <= lng <= max_lng and min_lat <= lat <= max_lat
 
 
 def main():
