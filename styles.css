@@ -396,16 +396,44 @@ header h1 {
   background: #f59e0b;
 }
 
+.legend-icon.parking.project {
+  background: #94a3b8;
+  box-shadow: 0 0 0 1px rgba(71, 85, 105, 0.45);
+}
+
 .legend-icon.green {
   background: #16a34a;
 }
 
 .legend-icon.blue {
   background: #2563eb;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.35);
+}
+
+.legend-icon.lake-open {
+  background: #0ea5e9;
+  box-shadow: 0 0 0 1px rgba(14, 165, 233, 0.45);
 }
 
 .legend-icon.density {
-  background: #ec4899;
+  background: transparent;
+  border: 2px dashed #f97316;
+  border-radius: 6px;
+}
+
+.legend-icon.project-spaces {
+  background: #f472b6;
+  box-shadow: 0 0 0 1px rgba(244, 114, 182, 0.35);
+}
+
+.legend-icon.lake-renature {
+  background: #34d399;
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.35);
+}
+
+.legend-icon.roofs {
+  background: #a3e635;
+  box-shadow: 0 0 0 1px rgba(132, 204, 22, 0.4);
 }
 
 .checklist-button {

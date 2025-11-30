@@ -12,7 +12,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const noiseLegendBody = document.getElementById("noise-legend-body");
   const diagnosticPollutionSelect = document.getElementById("pollution-select-diagnostic");
   const projectPollutionSelect = document.getElementById("pollution-select-project");
-  const projectNoiseButton = document.querySelector('.checklist-button[data-info="project-consequence-noise"]');
+  const projectIntentionsButton = document.querySelector('[data-action="project-intentions"]');
   if (diagnosticPollutionSelect) diagnosticPollutionSelect.value = "none";
   if (projectPollutionSelect) projectPollutionSelect.value = "none";
   const morgesCenter = [6.496, 46.509];
@@ -929,6 +929,313 @@ window.addEventListener("DOMContentLoaded", () => {
     ],
   };
   const projectAnnotatedParking = annotatePolygonCollection(projectParkingSurfaces);
+  const projectDensityOverlay = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764506454258" },
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [6.49634034860895, 46.508990002927604],
+              [6.496842674539247, 46.5087771188374],
+              [6.497060865890384, 46.50901363401565],
+              [6.4968339794181285, 46.50915245756312],
+              [6.49682146079734, 46.509142686166356],
+              [6.496584556741687, 46.50924497364675],
+              [6.49634034860895, 46.508990002927604],
+            ],
+          ],
+        },
+      },
+    ],
+  };
+  const projectRoofsOverlay = {
+    type: "FeatureCollection",
+    features: [
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505573001" }, geometry: { type: "Polygon", coordinates: [[[6.496983138283954, 46.50749641452886],[6.497153306077033, 46.50744999049578],[6.497217383634782, 46.50742346526031],[6.497193854605442, 46.5074008935349],[6.497146602022009, 46.50737736444365],[6.497096629541198, 46.50736614356588],[6.497039532568109, 46.5073668597348],[6.496984698021155, 46.50737901291815],[6.496934388094862, 46.50740677779753],[6.496882828371553, 46.50743863494427],[6.496871064593057, 46.50742857529],[6.496691487090754, 46.50754192082923],[6.496673785060709, 46.507561682594755],[6.496663506397245, 46.50757922843457],[6.496654282765976, 46.5076006993885],[6.496653228168495, 46.50762456898119],[6.496658175715812, 46.5076484618016],[6.496670393832373, 46.50767290549285],[6.496690721509807, 46.507693363288844],[6.496848934807868, 46.5077813158467],[6.496885408448549, 46.50770314330756],[6.497090273497445, 46.50759804159121],[6.497041456618777, 46.50756124090566],[6.49705625094707, 46.50755191123115],[6.496983138283954, 46.50749641452886]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505619234" }, geometry: { type: "Polygon", coordinates: [[[6.496379643221724, 46.50797958027169],[6.496416248441828, 46.50800885457234],[6.496440468994313, 46.508028179898645],[6.496363119192381, 46.508074745770394],[6.496311637172794, 46.508296416123066],[6.496263775227529, 46.50829726892325],[6.496208945872424, 46.508572021741585],[6.496235880107277, 46.5085763790126],[6.496390905421372, 46.508522548717444],[6.4963817612699035, 46.50851191929183],[6.4964376540481155, 46.50849294859642],[6.4966726537729835, 46.508415640748844],[6.496594518242218, 46.50827209549527],[6.496721996261357, 46.508229926386456],[6.496640049908738, 46.508102089451604],[6.496528787235308, 46.508087910008605],[6.496505505647616, 46.50806754183737],[6.49661188275465, 46.50799783632925],[6.496643187673917, 46.508017505020234],[6.4966751950555475, 46.507996555818295],[6.496764204516028, 46.50805725707802],[6.496907494844847, 46.507982743758916],[6.49677412790825, 46.5078858685097],[6.4967326418707465, 46.507908675335706],[6.496621407488122, 46.507826862644514],[6.496379643221724, 46.50797958027169]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505733004" }, geometry: { type: "Polygon", coordinates: [[[6.498458427873693, 46.50817799645075],[6.498899594160945, 46.50782696081746],[6.498801606194386, 46.50776587409732],[6.498381472481289, 46.508120882502325],[6.498458427873693, 46.50817799645075]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505773810" }, geometry: { type: "Polygon", coordinates: [[[6.498199309625175, 46.50846700028859],[6.498342662043601, 46.50836392350441],[6.498527812548297, 46.50849435053937],[6.498358971239534, 46.508601208365285],[6.498199309625175, 46.50846700028859]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505786927" }, geometry: { type: "Polygon", coordinates: [[[6.498419682815945, 46.50866126849146],[6.498612538894174, 46.508544959699584],[6.498699726980542, 46.50861984856117],[6.498512586787252, 46.50875195534456],[6.498419682815945, 46.50866126849146]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505799155" }, geometry: { type: "Polygon", coordinates: [[[6.498602564206465, 46.50883416630867],[6.49879182792027, 46.508696728417775],[6.4988553571931105, 46.508756222385],[6.498661280794506, 46.508892358918],[6.498602564206465, 46.50883416630867]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505824237" }, geometry: { type: "Polygon", coordinates: [[[6.4997673899734085, 46.509003943381686],[6.499774957491931, 46.50901601741635],[6.4998670306275095, 46.508981750282075],[6.49991281942035, 46.508988416045966],[6.499935982901664, 46.50900835379897],[6.500044727674298, 46.50896747377951],[6.499992999725248, 46.50891180666871],[6.4997673899734085, 46.509003943381686]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505840156" }, geometry: { type: "Polygon", coordinates: [[[6.499940199371743, 46.50905015800264],[6.49997342771329, 46.50908696618006],[6.499851306516605, 46.50913401523661],[6.4998610836484145, 46.50914282884001],[6.499837026156947, 46.509151517053176],[6.499879778289606, 46.50919648664614],[6.4996431431200055, 46.509294460268386],[6.499586916751638, 46.50922731362856],[6.499643669062313, 46.509204670789984],[6.499619710522007, 46.509178639869624],[6.499940199371743, 46.50905015800264]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505866170" }, geometry: { type: "Polygon", coordinates: [[[6.500219942569161, 46.509209818282855],[6.50041335556762, 46.50914724959663],[6.500453694092407, 46.50921137577876],[6.500263053530488, 46.50927402018188],[6.500219942569161, 46.509209818282855]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505872661" }, geometry: { type: "Polygon", coordinates: [[[6.500273008535056, 46.509348848720975],[6.500357338399484, 46.50947426734228],[6.500564732976781, 46.509410868730235],[6.500488773945523, 46.50930460489914],[6.500384011676448, 46.509333893444314],[6.500371489331851, 46.50931755093432],[6.500273008535056, 46.509348848720975]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505890505" }, geometry: { type: "Polygon", coordinates: [[[6.499994536978642, 46.51014745247949],[6.500015119517918, 46.51024720003376],[6.500153596240527, 46.51023361790529],[6.500291093186935, 46.510207271102644],[6.500259087244868, 46.510104076597486],[6.500122339784684, 46.510129484251124],[6.499994536978642, 46.51014745247949]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505911532" }, geometry: { type: "Polygon", coordinates: [[[6.499682806563531, 46.51053505337845],[6.499737276370771, 46.510604954574596],[6.499513061435987, 46.51067818565674],[6.499453823036691, 46.510617929897805],[6.499682806563531, 46.51053505337845]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505924709" }, geometry: { type: "Polygon", coordinates: [[[6.499219104209865, 46.51063273485817],[6.499153201178145, 46.510568804161714],[6.499237731089279, 46.510527386980314],[6.4993284325394045, 46.51047116296861],[6.499438302729299, 46.51056261150979],[6.499319684383422, 46.51060528226718],[6.499219104209865, 46.51063273485817]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505941544" }, geometry: { type: "Polygon", coordinates: [[[6.4987932183885455, 46.51025342229448],[6.498951018082648, 46.510399969835696],[6.498997667080127, 46.51044126108273],[6.499076199271103, 46.51050071400941],[6.499165373012777, 46.51046475418067],[6.499252365855997, 46.51040783182533],[6.499165673415203, 46.51035137227353],[6.499112507417216, 46.51030491753074],[6.4990982773864525, 46.5103124605434],[6.498930420537862, 46.51017232406481],[6.4987932183885455, 46.51025342229448]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505965878" }, geometry: { type: "Polygon", coordinates: [[[6.4978155656578975, 46.509679407517616],[6.497837288246106, 46.509715435639684],[6.4979163274424545, 46.509743856520444],[6.498175556975387, 46.509640581145234],[6.498248910983192, 46.50958763345326],[6.498185241886431, 46.509513041154946],[6.498082801767056, 46.5095682075564],[6.497998042045029, 46.50961731095431],[6.4978155656578975, 46.509679407517616]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764505984015" }, geometry: { type: "Polygon", coordinates: [[[6.498041044337649, 46.51002083578135],[6.497919844432413, 46.509830385828465],[6.49815745152906, 46.509737132788125],[6.498314807293006, 46.50991429293571],[6.498041044337649, 46.51002083578135]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764506003948" }, geometry: { type: "Polygon", coordinates: [[[6.49866065464468, 46.51028660674808],[6.49872301914065, 46.51034908167035],[6.498545638511315, 46.51042655743894],[6.498484843797917, 46.51036601767465],[6.49866065464468, 46.51028660674808]]] } },
+      { type: "Feature", properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764506026750" }, geometry: { type: "Polygon", coordinates: [[[6.4962397385751185, 46.50887625385413],[6.496694751731642, 46.50868363058599],[6.496794348783398, 46.508796467194344],[6.496681343357253, 46.50884263391043],[6.496770907490691, 46.50893965632389],[6.496429963351736, 46.50906776187676],[6.496336658086185, 46.508985346266925],[6.4962397385751185, 46.50887625385413]]] } },
+    ],
+  };
+  const projectAnnotatedRoofs = annotatePolygonCollection(projectRoofsOverlay);
+
+  const projectSpacesOverlay = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        properties: { name: "Dessin", type: "linepolygon" },
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [6.495890897623929, 46.50761069910587],
+              [6.495996027978302, 46.50769243912074],
+              [6.496110855692086, 46.50774141627851],
+              [6.496186197185288, 46.50778901753635],
+              [6.496225836177111, 46.507839278374],
+              [6.496248367503031, 46.507881517031436],
+              [6.496352356202259, 46.507910270932236],
+              [6.496372350278281, 46.50786998910658],
+              [6.496394737831875, 46.50782195041699],
+              [6.4964269104390295, 46.50778146969215],
+              [6.496461505510653, 46.50773688214297],
+              [6.496516716985932, 46.50766248526967],
+              [6.496597658260256, 46.507595990257485],
+              [6.496674488426237, 46.50753360274293],
+              [6.496756464381258, 46.507482940234546],
+              [6.4969319847485005, 46.507376329835246],
+              [6.497047024468837, 46.507343585614166],
+              [6.497111197297977, 46.50734444785377],
+              [6.497199279254021, 46.50737759431692],
+              [6.497251753099924, 46.50742027311328],
+              [6.497352970479291, 46.50753823149212],
+              [6.497443568250913, 46.50763192539255],
+              [6.497606725629981, 46.507756723131585],
+              [6.497823088822088, 46.50791782369437],
+              [6.4982511328962875, 46.50823629907442],
+              [6.498316928877601, 46.5082780823488],
+              [6.498295502088673, 46.50829390090584],
+              [6.498612265382403, 46.50852870703704],
+              [6.498883943510545, 46.50876260752129],
+              [6.498983492482244, 46.508855980795126],
+              [6.499227350989339, 46.50910037696698],
+              [6.499369173814983, 46.5092345281883],
+              [6.499566418286237, 46.50940678709511],
+              [6.4996802885855764, 46.50953878322803],
+              [6.499802121208248, 46.50974770252402],
+              [6.4998685994450085, 46.51009089840898],
+              [6.499939717914328, 46.51052320377019],
+              [6.499941471375714, 46.510619190396994],
+              [6.4998241899384155, 46.51070032565963],
+              [6.499879829274058, 46.510812524234304],
+              [6.499901000423049, 46.51090913392308],
+              [6.499851969552251, 46.51097970749774],
+              [6.49981222011255, 46.511000318177686],
+              [6.499939642213956, 46.5110577970337],
+              [6.500036057293789, 46.51110303190501],
+              [6.500128880695285, 46.51109701676407],
+              [6.500271513382005, 46.51107181411502],
+              [6.5002843014357605, 46.51101086701751],
+              [6.501398914168009, 46.510836256181875],
+              [6.501460156073581, 46.510819962251624],
+              [6.501523642440736, 46.51079517795771],
+              [6.501598406432919, 46.510749030929674],
+              [6.501653874099582, 46.510686420070634],
+              [6.5016831535936594, 46.51063267841289],
+              [6.501693658813822, 46.51056805589137],
+              [6.5016910350017305, 46.51052702760681],
+              [6.501666882446211, 46.510459133031375],
+              [6.500930843111551, 46.50936909157333],
+              [6.5005403782937945, 46.50881000273138],
+              [6.500483939454043, 46.508740005021615],
+              [6.500355417227584, 46.50863164272477],
+              [6.50023985965612, 46.508543138700325],
+              [6.498249350912378, 46.50732467621326],
+              [6.497974070008158, 46.50715454350187],
+              [6.497778269446169, 46.507033165818186],
+              [6.4976702938147, 46.50698817332692],
+              [6.497595776648294, 46.506916612908995],
+              [6.497655282571704, 46.50688798290791],
+              [6.497443226771076, 46.50663779607607],
+              [6.497418830189604, 46.50655500700126],
+              [6.497465147711652, 46.506538431001985],
+              [6.497452304120202, 46.506381656626544],
+              [6.497467739949148, 46.50626994150818],
+              [6.497112356534003, 46.50619167697876],
+              [6.497211107745724, 46.50634759555048],
+              [6.497065555338682, 46.50638947803809],
+              [6.497405899173866, 46.50689008812718],
+              [6.497452019724115, 46.50696972893238],
+              [6.497527634407515, 46.507023505070634],
+              [6.4976433799681, 46.50703877163249],
+              [6.497779338431593, 46.50711467363811],
+              [6.499915011398642, 46.508446970730695],
+              [6.500347188615688, 46.50872856582147],
+              [6.500476061347591, 46.50889623493754],
+              [6.500954624255735, 46.50959924039673],
+              [6.501381989053072, 46.51021287076271],
+              [6.5015539434355665, 46.510471711820465],
+              [6.5015726458962675, 46.51058562186325],
+              [6.501529404806329, 46.51069069738455],
+              [6.501424385724982, 46.51076704365804],
+              [6.501335763052585, 46.51077883557697],
+              [6.501310736462595, 46.51081044544642],
+              [6.500111731693554, 46.51100228711124],
+              [6.500057073000568, 46.51085464132165],
+              [6.500029800045874, 46.510729581006146],
+              [6.500033878468106, 46.51070270840044],
+              [6.500229917488298, 46.5106790066517],
+              [6.500218395755214, 46.510647002028946],
+              [6.500837548217773, 46.51054722224854],
+              [6.500677135374621, 46.51034605555791],
+              [6.501342707851339, 46.5101644339685],
+              [6.501307796808739, 46.51011302854029],
+              [6.500707582963727, 46.510290308034364],
+              [6.500041183647891, 46.510430289404944],
+              [6.499896094516735, 46.50972411841042],
+              [6.499862309500222, 46.50961876182259],
+              [6.499551509535447, 46.509192065241194],
+              [6.499301387070829, 46.50893045244717],
+              [6.499026521884233, 46.50870099604006],
+              [6.499027247713777, 46.508676213160385],
+              [6.498486289131382, 46.5082714504178],
+              [6.498510711151988, 46.50825730099212],
+              [6.4978599534906065, 46.50781174993604],
+              [6.497640524909632, 46.50767478572819],
+              [6.497556629123782, 46.50762057958387],
+              [6.497543277518116, 46.507563929460694],
+              [6.497930643372149, 46.50721461241315],
+              [6.497884819359297, 46.5071849102118],
+              [6.4974687140287966, 46.507511027116664],
+              [6.4972349792056505, 46.50734543279325],
+              [6.497175223974783, 46.507261426302016],
+              [6.49718011270155, 46.5072273584186],
+              [6.497511607346014, 46.507049006917605],
+              [6.497529831659434, 46.5070268642766],
+              [6.497445491840416, 46.50696928427388],
+              [6.496670837111821, 46.507426571145494],
+              [6.496436838380407, 46.50758540769646],
+              [6.496296684004749, 46.507635718907366],
+              [6.496225003950319, 46.507645223107964],
+              [6.49611308090976, 46.50763803797448],
+              [6.495890897623929, 46.50761069910587],
+            ],
+          ],
+        },
+      },
+      {
+        type: "Feature",
+        properties: { name: "Dessin", type: "linepolygon" },
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [6.496458096164247, 46.50930269004332],
+              [6.496504092521046, 46.50933623366402],
+              [6.496544494636567, 46.50934285831302],
+              [6.496597915709151, 46.50933603638472],
+              [6.496633453891105, 46.50930677128361],
+              [6.496623959914075, 46.50926095264794],
+              [6.496593136532889, 46.50922977324844],
+              [6.496813660797284, 46.50914137683619],
+              [6.496822103602536, 46.509151659645156],
+              [6.496950732886402, 46.509073008764595],
+              [6.497107062221214, 46.50898372186958],
+              [6.497249899128226, 46.5091066344003],
+              [6.496998337891146, 46.50920919116942],
+              [6.497073107677559, 46.50929916992435],
+              [6.497102212747829, 46.50928621231136],
+              [6.4971208117074415, 46.50931188652785],
+              [6.4972114410730235, 46.50927940176822],
+              [6.497257036107346, 46.50933812578981],
+              [6.497391021325083, 46.50929008152573],
+              [6.497459199900822, 46.509383023993486],
+              [6.497376123664117, 46.5094184391807],
+              [6.49747228419167, 46.50953752022122],
+              [6.497384967453702, 46.50956945284114],
+              [6.497298064160221, 46.50945395216547],
+              [6.497143614945514, 46.50951003204796],
+              [6.497152839638006, 46.50952365921843],
+              [6.4969507298768265, 46.509598397052656],
+              [6.49692699689642, 46.50957146077395],
+              [6.49665451401125, 46.50967692152331],
+              [6.496458096164247, 46.50930269004332],
+            ],
+          ],
+        },
+      },
+    ],
+  };
+
+  const projectLakeOpenOverlay = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [6.499182831999206, 46.507523445430486],
+              [6.499266267072467, 46.50743818803357],
+              [6.499343759376604, 46.50754536886718],
+              [6.499432779632309, 46.50763818209108],
+              [6.499564903918534, 46.50773134724316],
+              [6.500504394194448, 46.50833943511475],
+              [6.500416647127505, 46.50840027781508],
+              [6.500012352417324, 46.50814233384329],
+              [6.499790560436155, 46.508001962111116],
+              [6.49964671562018, 46.50791397889118],
+              [6.499532991848648, 46.507842391412964],
+              [6.4993852923474, 46.50774254742613],
+              [6.499267683216869, 46.507640633307396],
+              [6.499182831999206, 46.507523445430486],
+            ],
+          ],
+        },
+      },
+    ],
+  };
+
+  const projectLakeRenatureOverlay = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [6.500454462549974, 46.508426903457014],
+              [6.500538604683611, 46.50837474055297],
+              [6.5006706247822805, 46.5084835193047],
+              [6.500768140095553, 46.50857238142042],
+              [6.500858635276247, 46.50868013905106],
+              [6.501011567323242, 46.50890165572613],
+              [6.501260963091319, 46.509241557785934],
+              [6.501714257263292, 46.50989214289213],
+              [6.501918149517284, 46.51011626994558],
+              [6.502037137601975, 46.51026016807153],
+              [6.502164061235801, 46.510445309203156],
+              [6.502198536286014, 46.510509383887495],
+              [6.501984511905669, 46.51056863350806],
+              [6.501960612565256, 46.51048966747279],
+              [6.501940410807864, 46.51045596592097],
+              [6.501860588483452, 46.51034477402457],
+              [6.501752307989174, 46.510188194384085],
+              [6.501450096894488, 46.509754717053184],
+              [6.501080088108059, 46.509226938306085],
+              [6.500781737836701, 46.508804038466785],
+              [6.500688411164354, 46.508662632271886],
+              [6.500630483225462, 46.50859451010286],
+              [6.500454462549974, 46.508426903457014],
+            ],
+          ],
+        },
+      },
+    ],
+  };
 
   const parkingReportData = {
     removedTotal: 284,
@@ -1665,7 +1972,7 @@ window.addEventListener("DOMContentLoaded", () => {
   ];
   const diagnosticChecklistKeys = ["diagnostic-consequence-vulnerable"];
   const heatChecklistKey = "diagnostic-consequence-vulnerable";
-  const projectChecklistKeys = ["project-consequence-noise", "project-consequence-resilient", "project-consequence-attractivity"];
+  const projectChecklistKeys = ["project-consequence-resilient", "project-consequence-attractivity"];
   const layerInputByKey = {};
   const checklistButtonByKey = {};
   layerInputs.forEach((input) => {
@@ -1711,6 +2018,11 @@ window.addEventListener("DOMContentLoaded", () => {
   const projectAutoLineLayerIds = ["project-auto-line-layer"];
   const projectAutoArrowLayerIds = ["project-auto-arrow-layer"];
   const projectParkingLayerIds = ["project-parking-fill", "project-parking-outline"];
+  const projectSpacesLayerIds = ["project-spaces-fill", "project-spaces-outline"];
+  const projectLakeOpenLayerIds = ["project-lake-open-fill", "project-lake-open-outline"];
+  const projectLakeRenatureLayerIds = ["project-lake-renature-fill", "project-lake-renature-outline"];
+  const projectRoofsLayerIds = ["project-roofs-fill", "project-roofs-outline"];
+  const projectDensityLayerIds = ["project-density-outline"];
 
   const setDiagnosticAutoVisibility = (visible) => {
     [...diagnosticAutoLineLayerIds, ...diagnosticAutoArrowLayerIds].forEach((layerId) => {
@@ -1730,6 +2042,46 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const setProjectParkingVisibility = (visible) => {
     projectParkingLayerIds.forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
+      }
+    });
+  };
+
+  const setProjectSpacesVisibility = (visible) => {
+    projectSpacesLayerIds.forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
+      }
+    });
+  };
+
+  const setProjectLakeOpenVisibility = (visible) => {
+    projectLakeOpenLayerIds.forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
+      }
+    });
+  };
+
+  const setProjectLakeRenatureVisibility = (visible) => {
+    projectLakeRenatureLayerIds.forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
+      }
+    });
+  };
+
+  const setProjectRoofsVisibility = (visible) => {
+    projectRoofsLayerIds.forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
+      }
+    });
+  };
+
+  const setProjectDensityVisibility = (visible) => {
+    projectDensityLayerIds.forEach((layerId) => {
       if (map.getLayer(layerId)) {
         map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
       }
@@ -1850,20 +2202,8 @@ window.addEventListener("DOMContentLoaded", () => {
     }
     const nextMode = projectPollutionConfigs[mode] ? mode : "none";
     noiseVisibilityState.projectMode = nextMode;
+    noiseVisibilityState.projectEnabled = nextMode !== "none";
     applyProjectPollutionVisibility({ suppressLegendUpdate });
-  };
-
-  const setProjectNoiseVisibility = (visible) => {
-    noiseVisibilityState.projectEnabled = visible;
-    applyProjectPollutionVisibility();
-  };
-
-  const setProjectNoiseButtonState = (active) => {
-    if (projectNoiseButton) {
-      projectNoiseButton.classList.toggle("active", active);
-      projectNoiseButton.setAttribute("aria-pressed", active ? "true" : "false");
-    }
-    setProjectNoiseVisibility(active);
   };
 
   const layerHandlers = {
@@ -1874,6 +2214,11 @@ window.addEventListener("DOMContentLoaded", () => {
     "diagnostic-lake": (checked) => setDiagnosticLakeVisibility(checked),
     "project-axes": (checked) => setProjectAutoVisibility(checked),
     "project-parking": (checked) => setProjectParkingVisibility(checked),
+    "project-spaces": (checked) => setProjectSpacesVisibility(checked),
+    "project-lake-open": (checked) => setProjectLakeOpenVisibility(checked),
+    "project-lake-renature": (checked) => setProjectLakeRenatureVisibility(checked),
+    "project-roofs": (checked) => setProjectRoofsVisibility(checked),
+    "project-density": (checked) => setProjectDensityVisibility(checked),
     "project-interventions": (checked) => setMarkersVisibility(checked),
   };
 
@@ -1882,10 +2227,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const resetChecklistButtons = (keys) => {
     keys.forEach((key) => {
-      if (key === "project-consequence-noise") {
-        setProjectNoiseButtonState(false);
-        return;
-      }
       const button = checklistButtonByKey[key];
       if (!button || !button.classList.contains("active")) return;
       button.classList.remove("active");
@@ -1908,7 +2249,6 @@ window.addEventListener("DOMContentLoaded", () => {
     deselectLayerGroup(projectLayerKeys);
     if (projectPollutionSelect) projectPollutionSelect.value = "none";
     setProjectPollutionMode("none", { suppressLegendUpdate: true });
-    setProjectNoiseButtonState(false);
     resetChecklistButtons(projectChecklistKeys);
   };
 
@@ -2116,27 +2456,18 @@ window.addEventListener("DOMContentLoaded", () => {
   const bindChecklistButtons = () => {
     checklistButtons.forEach((button) => {
       const key = button.dataset.info;
-      if (key === "project-consequence-noise") {
-        button.addEventListener("click", () => {
-          const nextState = !button.classList.contains("active");
-          if (nextState) clearDiagnosticContext();
-          setProjectNoiseButtonState(nextState);
-        });
-        setProjectNoiseButtonState(button.classList.contains("active"));
-      } else {
-        button.addEventListener("click", () => {
-          const active = button.classList.toggle("active");
-          button.setAttribute("aria-pressed", active ? "true" : "false");
-          if (active) {
-            if (projectChecklistKeys.includes(key)) clearDiagnosticContext();
-            if (diagnosticChecklistKeys.includes(key)) clearProjectContext();
-          }
-          consequenceHandlers[key]?.(active);
-        });
-        const initActive = button.classList.contains("active");
-        button.setAttribute("aria-pressed", initActive ? "true" : "false");
-        consequenceHandlers[key]?.(initActive);
-      }
+      button.addEventListener("click", () => {
+        const active = button.classList.toggle("active");
+        button.setAttribute("aria-pressed", active ? "true" : "false");
+        if (active) {
+          if (projectChecklistKeys.includes(key)) clearDiagnosticContext();
+          if (diagnosticChecklistKeys.includes(key)) clearProjectContext();
+        }
+        consequenceHandlers[key]?.(active);
+      });
+      const initActive = button.classList.contains("active");
+      button.setAttribute("aria-pressed", initActive ? "true" : "false");
+      consequenceHandlers[key]?.(initActive);
     });
   };
 
@@ -2150,7 +2481,6 @@ window.addEventListener("DOMContentLoaded", () => {
       const handleProject = () => {
         const value = projectPollutionSelect.value;
         setProjectPollutionMode(value);
-        setProjectNoiseButtonState(value !== "none");
       };
       projectPollutionSelect.addEventListener("change", handleProject);
       handleProject();
@@ -2180,6 +2510,11 @@ window.addEventListener("DOMContentLoaded", () => {
     map.addSource("diagnostic-private", { type: "geojson", data: annotatedPrivate.data });
     map.addSource("diagnostic-heat", { type: "geojson", data: "/data/plan_climat_espace_action.geojson" });
     map.addSource("project-parking", { type: "geojson", data: projectAnnotatedParking.data });
+    map.addSource("project-spaces-overlay", { type: "geojson", data: projectSpacesOverlay });
+    map.addSource("project-lake-open", { type: "geojson", data: projectLakeOpenOverlay });
+    map.addSource("project-lake-renature", { type: "geojson", data: projectLakeRenatureOverlay });
+    map.addSource("project-roofs", { type: "geojson", data: projectAnnotatedRoofs.data });
+    map.addSource("project-density", { type: "geojson", data: projectDensityOverlay });
     map.addSource("diagnostic-lake", { type: "geojson", data: diagnosticLakeViews });
     Object.values(diagnosticPollutionConfigs).forEach((config) => {
       map.addSource(config.sourceId, {
@@ -2382,8 +2717,8 @@ window.addEventListener("DOMContentLoaded", () => {
       source: "project-parking",
       layout: { visibility: "none" },
       paint: {
-        "fill-color": "#22d3ee",
-        "fill-opacity": 0.45,
+        "fill-color": "#94a3b8",
+        "fill-opacity": 0.5,
       },
     });
     map.addLayer({
@@ -2392,8 +2727,99 @@ window.addEventListener("DOMContentLoaded", () => {
       source: "project-parking",
       layout: { visibility: "none" },
       paint: {
-        "line-color": "#0ea5e9",
+        "line-color": "#475569",
+        "line-width": 1.4,
+      },
+    });
+    map.addLayer({
+      id: "project-spaces-fill",
+      type: "fill",
+      source: "project-spaces-overlay",
+      layout: { visibility: "none" },
+      paint: {
+        "fill-color": "#f472b6",
+        "fill-opacity": 0.45,
+      },
+    });
+    map.addLayer({
+      id: "project-spaces-outline",
+      type: "line",
+      source: "project-spaces-overlay",
+      layout: { visibility: "none" },
+      paint: {
+        "line-color": "#be185d",
+        "line-width": 2.5,
+      },
+    });
+    map.addLayer({
+      id: "project-lake-open-fill",
+      type: "fill",
+      source: "project-lake-open",
+      layout: { visibility: "none" },
+      paint: {
+        "fill-color": "#0ea5e9",
+        "fill-opacity": 0.4,
+      },
+    });
+    map.addLayer({
+      id: "project-lake-open-outline",
+      type: "line",
+      source: "project-lake-open",
+      layout: { visibility: "none" },
+      paint: {
+        "line-color": "#06b6d4",
+        "line-width": 1.8,
+      },
+    });
+    map.addLayer({
+      id: "project-lake-renature-fill",
+      type: "fill",
+      source: "project-lake-renature",
+      layout: { visibility: "none" },
+      paint: {
+        "fill-color": "#34d399",
+        "fill-opacity": 0.45,
+      },
+    });
+    map.addLayer({
+      id: "project-lake-renature-outline",
+      type: "line",
+      source: "project-lake-renature",
+      layout: { visibility: "none" },
+      paint: {
+        "line-color": "#10b981",
+        "line-width": 1.8,
+      },
+    });
+    map.addLayer({
+      id: "project-roofs-fill",
+      type: "fill",
+      source: "project-roofs",
+      layout: { visibility: "none" },
+      paint: {
+        "fill-color": "#a3e635",
+        "fill-opacity": 0.45,
+      },
+    });
+    map.addLayer({
+      id: "project-roofs-outline",
+      type: "line",
+      source: "project-roofs",
+      layout: { visibility: "none" },
+      paint: {
+        "line-color": "#65a30d",
         "line-width": 1.2,
+      },
+    });
+    map.addLayer({
+      id: "project-density-outline",
+      type: "line",
+      source: "project-density",
+      layout: { visibility: "none" },
+      paint: {
+        "line-color": "#f97316",
+        "line-width": 2,
+        "line-dasharray": [1.5, 1.5],
       },
     });
     map.addLayer({
@@ -2491,6 +2917,7 @@ window.addEventListener("DOMContentLoaded", () => {
     registerSurfacePopup("diagnostic-parking-fill", annotatedParking.totalArea, "Espaces dédiés au stationnement");
     registerSurfacePopup("project-parking-fill", projectAnnotatedParking.totalArea, "Espaces dédiés au stationnement (projet)");
     registerSurfacePopup("diagnostic-private-fill", annotatedPrivate.totalArea, "Espaces privés d’intérêt");
+    registerSurfacePopup("project-roofs-fill", projectAnnotatedRoofs.totalArea, "Toitures végétalisables (projet)");
 
     const createLakePopupHtml = ({ title, description, image }) => `
       <div class="panel-popup">
@@ -2526,7 +2953,25 @@ window.addEventListener("DOMContentLoaded", () => {
 
     bindLayerInputs();
     bindChecklistButtons();
-    hideBaseIcons();
-    map.on("styledata", hideBaseIcons);
+    const refreshStyleOverlays = () => {
+      hideBaseIcons();
+      const projectSpacesInput = layerInputByKey["project-spaces"];
+      const visible = Boolean(projectSpacesInput?.checked);
+      setProjectSpacesVisibility(visible);
+      const lakeOpenInput = layerInputByKey["project-lake-open"];
+      setProjectLakeOpenVisibility(Boolean(lakeOpenInput?.checked));
+      const lakeRenatureInput = layerInputByKey["project-lake-renature"];
+      setProjectLakeRenatureVisibility(Boolean(lakeRenatureInput?.checked));
+      const roofInput = layerInputByKey["project-roofs"];
+      setProjectRoofsVisibility(Boolean(roofInput?.checked));
+      const densityInput = layerInputByKey["project-density"];
+      setProjectDensityVisibility(Boolean(densityInput?.checked));
+    };
+    refreshStyleOverlays();
+    map.on("styledata", refreshStyleOverlays);
+  });
+
+  projectIntentionsButton?.addEventListener("click", () => {
+    console.info("Bouton intentions cliqué — contenu à définir.");
   });
 });
