@@ -139,7 +139,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const noiseCanvasHeight = Math.max(2048, Math.round((latSpan / lngSpan) * noiseCanvasWidth));
   const noiseBbox = `${noiseBounds.minLng},${noiseBounds.minLat},${noiseBounds.maxLng},${noiseBounds.maxLat}`;
 
-  const createMaskedWmsRenderer = ({ layer, alpha = 0.85 }) => {
+  const createMaskedImageRenderer = ({ alpha = 0.85, resolveSrc }) => {
     const canvas = document.createElement("canvas");
     canvas.width = noiseCanvasWidth;
     canvas.height = noiseCanvasHeight;
@@ -169,11 +169,24 @@ window.addEventListener("DOMContentLoaded", () => {
         ctx.restore();
         mapInstance?.triggerRepaint();
       };
-      image.src = `https://wms.geo.admin.ch/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0x00000000&LAYERS=${layer}&SRS=EPSG:4326&BBOX=${noiseBbox}&WIDTH=${noiseCanvasWidth}&HEIGHT=${noiseCanvasHeight}`;
+      image.src = resolveSrc();
     };
 
     return { canvas, draw };
   };
+
+  const createMaskedWmsRenderer = ({ layer, alpha = 0.85 }) =>
+    createMaskedImageRenderer({
+      alpha,
+      resolveSrc: () =>
+        `https://wms.geo.admin.ch/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0x00000000&LAYERS=${layer}&SRS=EPSG:4326&BBOX=${noiseBbox}&WIDTH=${noiseCanvasWidth}&HEIGHT=${noiseCanvasHeight}`,
+    });
+
+  const createMaskedLocalImageRenderer = ({ imagePath, alpha = 0.85 }) =>
+    createMaskedImageRenderer({
+      alpha,
+      resolveSrc: () => imagePath,
+    });
 
   const heatFillExpression = [
     "match",
@@ -247,20 +260,61 @@ window.addEventListener("DOMContentLoaded", () => {
       `,
     },
     heat: {
-      title: "Îlots de chaleur urbains – 14h (2 m du sol)",
+      title: "Température de l’air à 14h (situation actuelle)",
       body: `
         <div class="legend-description">
-          <strong>Zones les plus exposées à la chaleur</strong>
-          <p>Cartographie des zones où la température ressentie à 14h reste la plus élevée en situation actuelle. Les secteurs notés 4–5 correspondent aux îlots les plus critiques (espaces minéralisés, faible végétation) et nécessitent des mesures de rafraîchissement prioritaires.</p>
+          <strong>Zones actuellement les plus chaudes</strong>
+          <p>Température de l’air à 2 m du sol à 14h (données DGE – cartes climatiques actuelles). Les classes les plus élevées signalent des îlots minéralisés où des mesures de rafraîchissement sont prioritaires.</p>
         </div>
         <ul>
-          <li><span style="background:#0ea5e9"></span>1 – Faible contrainte thermique</li>
-          <li><span style="background:#38bdf8"></span>2 – Contraste modéré</li>
-          <li><span style="background:#facc15"></span>3 – Chaleur marquée</li>
-          <li><span style="background:#f97316"></span>4 – Îlot chaud</li>
-          <li><span style="background:#dc2626"></span>5 – Îlot très chaud</li>
+          <li><span style="background:#0b5e17"></span>&le; 21 °C</li>
+          <li><span style="background:#167824"></span>&gt; 21 – 22 °C</li>
+          <li><span style="background:#2a942f"></span>&gt; 22 – 23 °C</li>
+          <li><span style="background:#4ab132"></span>&gt; 23 – 24 °C</li>
+          <li><span style="background:#7dd422"></span>&gt; 24 – 25 °C</li>
+          <li><span style="background:#b4e11f"></span>&gt; 25 – 26 °C</li>
+          <li><span style="background:#f1dd18"></span>&gt; 26 – 27 °C</li>
+          <li><span style="background:#f6b616"></span>&gt; 27 – 28 °C</li>
+          <li><span style="background:#f58911"></span>&gt; 28 – 29 °C</li>
+          <li><span style="background:#f5540f"></span>&gt; 29 – 30 °C</li>
+          <li><span style="background:#df2116"></span>&gt; 30 – 31 °C</li>
+          <li><span style="background:#b51036"></span>&gt; 31 – 32 °C</li>
+          <li><span style="background:#900050"></span>&gt; 32 – 33 °C</li>
+          <li><span style="background:#a00092"></span>&gt; 33 – 34 °C</li>
+          <li><span style="background:#6501a5"></span>&gt; 34 – 35 °C</li>
+          <li><span style="background:#46176b"></span>&gt; 35 – 36 °C</li>
+          <li><span style="background:#2b153d"></span>&gt; 36 °C</li>
         </ul>
-        <div class="legend-sources">Sources : DGE – Cartes climatiques cantonales (2024).</div>
+        <div class="legend-sources">Sources : DGE – Atmosphère/Climatologie, cartes climatiques actuelles.</div>
+      `,
+    },
+    heat2050: {
+      title: "Température de l’air à 14h (2060)",
+      body: `
+        <div class="legend-description">
+          <strong>Situation future (scénario chaud)</strong>
+          <p>Température de l’air à 2 m du sol à 14h, projection 2060. Plus la classe est élevée, plus l’excès de chaleur est marqué et sollicite des dispositifs de résilience (canopées, désimperméabilisation, ventilation naturelle).</p>
+        </div>
+        <ul>
+          <li><span style="background:#0b5e17"></span>&le; 21 °C</li>
+          <li><span style="background:#167824"></span>&gt; 21 – 22 °C</li>
+          <li><span style="background:#2a942f"></span>&gt; 22 – 23 °C</li>
+          <li><span style="background:#4ab132"></span>&gt; 23 – 24 °C</li>
+          <li><span style="background:#7dd422"></span>&gt; 24 – 25 °C</li>
+          <li><span style="background:#b4e11f"></span>&gt; 25 – 26 °C</li>
+          <li><span style="background:#f1dd18"></span>&gt; 26 – 27 °C</li>
+          <li><span style="background:#f6b616"></span>&gt; 27 – 28 °C</li>
+          <li><span style="background:#f58911"></span>&gt; 28 – 29 °C</li>
+          <li><span style="background:#f5540f"></span>&gt; 29 – 30 °C</li>
+          <li><span style="background:#df2116"></span>&gt; 30 – 31 °C</li>
+          <li><span style="background:#b51036"></span>&gt; 31 – 32 °C</li>
+          <li><span style="background:#900050"></span>&gt; 32 – 33 °C</li>
+          <li><span style="background:#a00092"></span>&gt; 33 – 34 °C</li>
+          <li><span style="background:#6501a5"></span>&gt; 34 – 35 °C</li>
+          <li><span style="background:#46176b"></span>&gt; 35 – 36 °C</li>
+          <li><span style="background:#2b153d"></span>&gt; 36 °C</li>
+        </ul>
+        <div class="legend-sources">Sources : DGE – Atmosphère/Climatologie, cartes climatiques 2060.</div>
       `,
     },
   };
@@ -307,12 +361,24 @@ window.addEventListener("DOMContentLoaded", () => {
     },
   };
 
+  const diagnosticHeatRenderer = createMaskedLocalImageRenderer({
+    imagePath: "/data/temperature_air_2m_14h_actuel.png",
+    alpha: 0.85,
+  });
+
+  const projectHeat2050Renderer = createMaskedLocalImageRenderer({
+    imagePath: "/data/temperature_air_2m_14h_2060.png",
+    alpha: 0.8,
+  });
+
   Object.values(diagnosticPollutionConfigs).forEach((config) => {
-    Object.assign(config, createMaskedWmsRenderer({ layer: config.wmsLayer, alpha: config.alpha }));
+    if (config.wmsLayer) Object.assign(config, createMaskedWmsRenderer({ layer: config.wmsLayer, alpha: config.alpha }));
   });
 
   Object.values(projectPollutionConfigs).forEach((config) => {
-    Object.assign(config, createMaskedWmsRenderer({ layer: config.wmsLayer, alpha: config.alpha }));
+    if (config.wmsLayer) {
+      Object.assign(config, createMaskedWmsRenderer({ layer: config.wmsLayer, alpha: config.alpha }));
+    }
   });
 
   const pollutionCanvasCoordinates = [
@@ -2088,6 +2154,12 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  const setProjectHeat2050Visibility = (visible) => {
+    if (map.getLayer("project-heat2050-layer")) {
+      map.setLayoutProperty("project-heat2050-layer", "visibility", visible ? "visible" : "none");
+    }
+  };
+
   const diagnosticParkingLayerIds = ["diagnostic-parking-fill", "diagnostic-parking-outline"];
   const setDiagnosticParkingVisibility = (visible) => {
     diagnosticParkingLayerIds.forEach((layerId) => {
@@ -2146,11 +2218,8 @@ window.addEventListener("DOMContentLoaded", () => {
       heatButton.classList.toggle("active", heatLayerVisible);
       heatButton.setAttribute("aria-pressed", heatLayerVisible ? "true" : "false");
     }
-    if (map.getLayer("diagnostic-heat-layer")) {
-      map.setLayoutProperty("diagnostic-heat-layer", "visibility", heatLayerVisible ? "visible" : "none");
-    }
-    if (map.getLayer("diagnostic-heat-outline")) {
-      map.setLayoutProperty("diagnostic-heat-outline", "visibility", heatLayerVisible ? "visible" : "none");
+    if (map.getLayer("diagnostic-heat-raster-layer")) {
+      map.setLayoutProperty("diagnostic-heat-raster-layer", "visibility", heatLayerVisible ? "visible" : "none");
     }
     if (heatLayerVisible) {
       if (diagnosticPollutionSelect) diagnosticPollutionSelect.value = "none";
@@ -2196,7 +2265,12 @@ window.addEventListener("DOMContentLoaded", () => {
     updateNoiseUI();
   };
 
+  let suppressResilienceCleanup = false;
+
   const setProjectPollutionMode = (mode, { suppressLegendUpdate } = {}) => {
+    if (projectResilienceActive && !suppressResilienceCleanup) {
+      setProjectResilienceState(false);
+    }
     if (mode !== "none") {
       clearDiagnosticContext();
     }
@@ -2245,11 +2319,40 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+
+  let projectResilienceActive = false;
+  const setProjectResilienceState = (active) => {
+    projectResilienceActive = active;
+    const button = checklistButtonByKey["project-consequence-resilient"];
+    if (button) {
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", active ? "true" : "false");
+    }
+    if (active) {
+      if (projectPollutionSelect && projectPollutionSelect.value !== "none") {
+        projectPollutionSelect.value = "none";
+        suppressResilienceCleanup = true;
+        setProjectPollutionMode("none");
+        suppressResilienceCleanup = false;
+      }
+      noiseVisibilityState.projectEnabled = true;
+      noiseVisibilityState.projectMode = "heat2050";
+      applyLegendTemplate("heat2050", true);
+    } else {
+      noiseVisibilityState.projectEnabled = false;
+      noiseVisibilityState.projectMode = "none";
+    }
+    updateNoiseUI();
+    setProjectAnnotationsVisibility();
+    setProjectHeat2050Visibility(active);
+  };
+
   const clearProjectContext = () => {
     deselectLayerGroup(projectLayerKeys);
     if (projectPollutionSelect) projectPollutionSelect.value = "none";
     setProjectPollutionMode("none", { suppressLegendUpdate: true });
     resetChecklistButtons(projectChecklistKeys);
+    if (projectResilienceActive) setProjectResilienceState(false);
   };
 
   const clearDiagnosticContext = () => {
@@ -2426,6 +2529,20 @@ window.addEventListener("DOMContentLoaded", () => {
         offset: [0, 80],
       },
     ],
+    heat2050: [
+      {
+        coordinates: [6.4972, 46.5095],
+        title: "Hotspot 2050",
+        description: "Texte à compléter pour le scénario de résilience.",
+        offset: [0, -60],
+      },
+      {
+        coordinates: [6.4984, 46.5086],
+        title: "Rue ombragée",
+        description: "Texte à compléter.",
+        offset: [0, 80],
+      },
+    ],
   };
   const projectAnnotationMarkers = [];
 
@@ -2456,6 +2573,15 @@ window.addEventListener("DOMContentLoaded", () => {
   const bindChecklistButtons = () => {
     checklistButtons.forEach((button) => {
       const key = button.dataset.info;
+      if (key === "project-consequence-resilient") {
+        button.addEventListener("click", () => {
+          const nextState = !projectResilienceActive;
+          if (nextState) clearDiagnosticContext();
+          setProjectResilienceState(nextState);
+        });
+        setProjectResilienceState(button.classList.contains("active"));
+        return;
+      }
       button.addEventListener("click", () => {
         const active = button.classList.toggle("active");
         button.setAttribute("aria-pressed", active ? "true" : "false");
@@ -2508,7 +2634,6 @@ window.addEventListener("DOMContentLoaded", () => {
     map.addSource("project-auto", { type: "geojson", data: projectAutoAxes });
     map.addSource("diagnostic-parking", { type: "geojson", data: annotatedParking.data });
     map.addSource("diagnostic-private", { type: "geojson", data: annotatedPrivate.data });
-    map.addSource("diagnostic-heat", { type: "geojson", data: "/data/plan_climat_espace_action.geojson" });
     map.addSource("project-parking", { type: "geojson", data: projectAnnotatedParking.data });
     map.addSource("project-spaces-overlay", { type: "geojson", data: projectSpacesOverlay });
     map.addSource("project-lake-open", { type: "geojson", data: projectLakeOpenOverlay });
@@ -2516,6 +2641,16 @@ window.addEventListener("DOMContentLoaded", () => {
     map.addSource("project-roofs", { type: "geojson", data: projectAnnotatedRoofs.data });
     map.addSource("project-density", { type: "geojson", data: projectDensityOverlay });
     map.addSource("diagnostic-lake", { type: "geojson", data: diagnosticLakeViews });
+    map.addSource("diagnostic-heat-raster", {
+      type: "canvas",
+      canvas: diagnosticHeatRenderer.canvas,
+      coordinates: pollutionCanvasCoordinates,
+    });
+    map.addSource("project-heat2050", {
+      type: "canvas",
+      canvas: projectHeat2050Renderer.canvas,
+      coordinates: pollutionCanvasCoordinates,
+    });
     Object.values(diagnosticPollutionConfigs).forEach((config) => {
       map.addSource(config.sourceId, {
         type: "canvas",
@@ -2530,6 +2665,8 @@ window.addEventListener("DOMContentLoaded", () => {
         coordinates: pollutionCanvasCoordinates,
       });
     });
+    diagnosticHeatRenderer.draw(map);
+    projectHeat2050Renderer.draw(map);
     map.addLayer({
       id: "focus-zone-layer",
       type: "line",
@@ -2642,23 +2779,21 @@ window.addEventListener("DOMContentLoaded", () => {
       },
     });
     map.addLayer({
-      id: "diagnostic-heat-layer",
-      type: "fill",
-      source: "diagnostic-heat",
+      id: "diagnostic-heat-raster-layer",
+      type: "raster",
+      source: "diagnostic-heat-raster",
       layout: { visibility: "none" },
       paint: {
-        "fill-color": heatFillExpression,
-        "fill-opacity": 0.72,
+        "raster-opacity": 0.8,
       },
     });
     map.addLayer({
-      id: "diagnostic-heat-outline",
-      type: "line",
-      source: "diagnostic-heat",
+      id: "project-heat2050-layer",
+      type: "raster",
+      source: "project-heat2050",
       layout: { visibility: "none" },
       paint: {
-        "line-color": "rgba(15, 23, 42, 0.4)",
-        "line-width": 0.5,
+        "raster-opacity": 0.8,
       },
     });
     map.addLayer({
