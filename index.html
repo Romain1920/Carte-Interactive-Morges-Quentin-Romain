@@ -29,13 +29,13 @@
     <div class="map-source" id="map-source" aria-live="polite"></div>
     <div class="layer-slider" id="heat-slider" aria-hidden="true">
       <div class="layer-slider__header">
-        <span>Comparer le scénario 2060</span>
+        <span id="heat-slider-title">Comparer le scénario 2060</span>
         <span id="heat-slider-value">2060 + projet</span>
       </div>
-      <input type="range" min="0" max="100" value="100" id="heat-slider-input" aria-label="Comparer 2060 tendanciel et 2060 avec projet" />
+      <input type="range" min="0" max="100" value="100" id="heat-slider-input" aria-label="Comparer deux scénarios" />
       <div class="layer-slider__labels">
-        <span>Scénario 2060</span>
-        <span>2060 + projet</span>
+        <span id="heat-slider-min-label">Scénario 2060</span>
+        <span id="heat-slider-max-label">2060 + projet</span>
       </div>
     </div>
     <div class="layer-toggle" role="region" aria-label="Affichage des couches">

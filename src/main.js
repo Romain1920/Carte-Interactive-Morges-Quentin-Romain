@@ -12,6 +12,9 @@ window.addEventListener("DOMContentLoaded", () => {
   const noiseLegendBody = document.getElementById("noise-legend-body");
   const projectIntentionsButton = document.querySelector('[data-action="project-intentions"]');
   const heatSliderContainer = document.getElementById("heat-slider");
+  const heatSliderTitle = document.getElementById("heat-slider-title");
+  const heatSliderMinLabel = document.getElementById("heat-slider-min-label");
+  const heatSliderMaxLabel = document.getElementById("heat-slider-max-label");
   const heatSliderInput = document.getElementById("heat-slider-input");
   const heatSliderValueLabel = document.getElementById("heat-slider-value");
   const filterButtons = Array.from(document.querySelectorAll(".filter-button"));
@@ -358,15 +361,6 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   const projectPollutionConfigs = {
-    noise: {
-      key: "noise",
-      sourceId: "project-noise",
-      layerId: "project-noise-layer",
-      wmsLayer: "ch.bafu.laerm-strassenlaerm_tag",
-      alpha: 0.65,
-      paint: { "raster-opacity": 0.65 },
-      legend: pollutionLegendTemplates.noise,
-    },
     air: {
       key: "air",
       sourceId: "project-air",
@@ -390,6 +384,16 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const projectHeat2050ImprovedRenderer = createMaskedLocalImageRenderer({
     imagePath: "/data/temperature_air_2m_14h_2060_project.png",
+    alpha: 0.8,
+  });
+
+  const projectNoiseBeforeRenderer = createMaskedLocalImageRenderer({
+    imagePath: "/data/noise_scenario_base.png",
+    alpha: 0.8,
+  });
+
+  const projectNoiseAfterRenderer = createMaskedLocalImageRenderer({
+    imagePath: "/data/noise_scenario_project.png",
     alpha: 0.8,
   });
 
@@ -2242,7 +2246,23 @@ window.addEventListener("DOMContentLoaded", () => {
       if (map.getLayer(layerId)) {
         map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
         if (!visible) {
-          map.setPaintProperty(layerId, "raster-opacity", HEAT_RASTER_MAX_OPACITY);
+          map.setPaintProperty(layerId, "raster-opacity", layerId.endsWith("improved-layer") ? 0 : RASTER_MAX_OPACITY);
+        }
+      }
+    });
+  };
+
+  const projectNoiseLayerIds = ["project-noise-before-layer", "project-noise-after-layer"];
+  const setProjectNoiseLayerVisibility = (visible) => {
+    projectNoiseLayerIds.forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
+        if (!visible) {
+          map.setPaintProperty(layerId, "raster-opacity", 0);
+        } else if (layerId.endsWith("before-layer")) {
+          map.setPaintProperty(layerId, "raster-opacity", RASTER_MAX_OPACITY);
+        } else {
+          map.setPaintProperty(layerId, "raster-opacity", 0);
         }
       }
     });
@@ -2276,12 +2296,106 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   const noiseVisibilityState = { diagnosticMode: "none", projectMode: "none", projectEnabled: false };
-  const HEAT_RASTER_MAX_OPACITY = 0.8;
+  const RASTER_MAX_OPACITY = 0.8;
   let heatLayerVisible = false;
-  let heatSliderEnabled = false;
-  let heatSliderValue = 100;
+  let sliderMode = null;
+  let sliderValue = 100;
   let activeDiagnosticFilter = "none";
   let activeProjectFilter = "none";
+
+  const sliderConfigs = {
+    heat: {
+      title: "Comparer le scénario 2060",
+      minLabel: "Scénario 2060",
+      maxLabel: "2060 + projet",
+      initialValue: 100,
+      formatLabel: (value) => {
+        if (value <= 5) return "Scénario 2060";
+        if (value >= 95) return "2060 + projet";
+        return `${value}% vers le projet`;
+      },
+      apply: (ratio) => {
+        if (map.getLayer("project-heat2050-layer")) {
+          map.setPaintProperty("project-heat2050-layer", "raster-opacity", RASTER_MAX_OPACITY);
+        }
+        if (map.getLayer("project-heat2050-improved-layer")) {
+          map.setPaintProperty("project-heat2050-improved-layer", "raster-opacity", RASTER_MAX_OPACITY * ratio);
+        }
+      },
+      reset: () => {
+        if (map.getLayer("project-heat2050-layer")) {
+          map.setPaintProperty("project-heat2050-layer", "raster-opacity", RASTER_MAX_OPACITY);
+        }
+        if (map.getLayer("project-heat2050-improved-layer")) {
+          map.setPaintProperty("project-heat2050-improved-layer", "raster-opacity", 0);
+        }
+      },
+    },
+    noise: {
+      title: "Pollution sonore : avant / après",
+      minLabel: "Sans mesures",
+      maxLabel: "Avec les mesures",
+      initialValue: 0,
+      formatLabel: (value) => {
+        if (value <= 5) return "Sans mesures";
+        if (value >= 95) return "Avec les mesures";
+        return `${value}% vers nos mesures`;
+      },
+      apply: (ratio) => {
+        if (map.getLayer("project-noise-before-layer")) {
+          map.setPaintProperty("project-noise-before-layer", "raster-opacity", RASTER_MAX_OPACITY * (1 - ratio));
+        }
+        if (map.getLayer("project-noise-after-layer")) {
+          map.setPaintProperty("project-noise-after-layer", "raster-opacity", RASTER_MAX_OPACITY * ratio);
+        }
+      },
+      reset: () => {
+        if (map.getLayer("project-noise-before-layer")) {
+          map.setPaintProperty("project-noise-before-layer", "raster-opacity", RASTER_MAX_OPACITY);
+        }
+        if (map.getLayer("project-noise-after-layer")) {
+          map.setPaintProperty("project-noise-after-layer", "raster-opacity", 0);
+        }
+      },
+    },
+  };
+
+  const setSliderMode = (mode) => {
+    if (sliderMode === mode) return;
+    if (sliderMode && sliderConfigs[sliderMode]?.reset) {
+      sliderConfigs[sliderMode].reset();
+    }
+    sliderMode = mode;
+    if (!mode) {
+      if (heatSliderContainer) {
+        heatSliderContainer.classList.remove("visible");
+        heatSliderContainer.setAttribute("aria-hidden", "true");
+      }
+      if (heatSliderValueLabel) heatSliderValueLabel.textContent = "";
+      return;
+    }
+    const config = sliderConfigs[mode];
+    if (heatSliderContainer) {
+      heatSliderContainer.classList.add("visible");
+      heatSliderContainer.setAttribute("aria-hidden", "false");
+    }
+    sliderValue = config.initialValue ?? 100;
+    if (heatSliderInput) heatSliderInput.value = `${sliderValue}`;
+    if (heatSliderTitle) heatSliderTitle.textContent = config.title;
+    if (heatSliderMinLabel) heatSliderMinLabel.textContent = config.minLabel;
+    if (heatSliderMaxLabel) heatSliderMaxLabel.textContent = config.maxLabel;
+    applySliderBlend(sliderValue);
+  };
+
+  const applySliderBlend = (value = sliderValue) => {
+    if (!sliderMode) return;
+    const numeric = Number(value);
+    sliderValue = Number.isFinite(numeric) ? Math.min(100, Math.max(0, Math.round(numeric))) : sliderValue;
+    const ratio = sliderValue / 100;
+    sliderConfigs[sliderMode].apply(ratio);
+    if (heatSliderInput && heatSliderInput.value !== `${sliderValue}`) heatSliderInput.value = `${sliderValue}`;
+    if (heatSliderValueLabel) heatSliderValueLabel.textContent = sliderConfigs[sliderMode].formatLabel(sliderValue);
+  };
 
   const updateDiagnosticHeatLayerVisibility = () => {
     const shouldShow = heatLayerVisible;
@@ -2304,7 +2418,8 @@ window.addEventListener("DOMContentLoaded", () => {
   const updateNoiseUI = () => {
     const hasDiagnostic = noiseVisibilityState.diagnosticMode !== "none";
     const hasProject = noiseVisibilityState.projectEnabled && noiseVisibilityState.projectMode !== "none";
-    const shouldShow = hasDiagnostic || hasProject || heatLayerVisible || projectAttractivityActive;
+    const hasSlider = sliderMode !== null;
+    const shouldShow = hasDiagnostic || hasProject || heatLayerVisible || projectAttractivityActive || hasSlider;
     if (map.getLayer("focus-mask-layer")) {
       map.setLayoutProperty("focus-mask-layer", "visibility", shouldShow ? "visible" : "none");
     }
@@ -2316,78 +2431,22 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const setHeatLayerVisibility = (visible, { suppressLegendUpdate } = {}) => {
     heatLayerVisible = Boolean(visible);
-    if (heatLayerVisible && heatSliderEnabled) {
-      setHeatSliderEnabled(false);
+    if (heatLayerVisible && sliderMode === "heat") {
+      setSliderMode(null);
     }
     if (heatLayerVisible && noiseVisibilityState.diagnosticMode !== "none") {
       setDiagnosticPollutionMode("none", { suppressLegendUpdate: true });
     }
     updateDiagnosticHeatLayerVisibility();
-    if (heatLayerVisible && map.getLayer("diagnostic-heat-raster-layer")) {
-      map.setPaintProperty("diagnostic-heat-raster-layer", "raster-opacity", HEAT_RASTER_MAX_OPACITY);
-    }
-    if (map.getLayer("project-heat2050-layer")) {
-      map.setPaintProperty("project-heat2050-layer", "raster-opacity", HEAT_RASTER_MAX_OPACITY);
-    }
-    if (!heatSliderEnabled && map.getLayer("project-heat2050-improved-layer")) {
-      map.setPaintProperty("project-heat2050-improved-layer", "raster-opacity", 0);
-    }
     if (heatLayerVisible && !suppressLegendUpdate) {
       applyLegendTemplate("heat");
     }
     updateNoiseUI();
   };
 
-  const applyHeatSliderBlend = (value = heatSliderValue) => {
-    const numeric = Number(value);
-    heatSliderValue = Number.isFinite(numeric) ? Math.min(100, Math.max(0, Math.round(numeric))) : heatSliderValue;
-    const ratio = heatSliderValue / 100;
-    if (map.getLayer("project-heat2050-layer")) {
-      map.setPaintProperty("project-heat2050-layer", "raster-opacity", HEAT_RASTER_MAX_OPACITY);
-    }
-    if (map.getLayer("project-heat2050-improved-layer")) {
-      map.setPaintProperty("project-heat2050-improved-layer", "raster-opacity", HEAT_RASTER_MAX_OPACITY * ratio);
-    }
-    if (heatSliderInput && heatSliderInput.value !== `${heatSliderValue}`) {
-      heatSliderInput.value = `${heatSliderValue}`;
-    }
-    if (heatSliderValueLabel) {
-      let label = "2060 + projet";
-      if (heatSliderValue <= 5) label = "Scénario 2060";
-      else if (heatSliderValue >= 95) label = "2060 + projet";
-      else label = `${heatSliderValue}% vers le projet`;
-      heatSliderValueLabel.textContent = label;
-    }
-  };
-
-  const setHeatSliderEnabled = (enabled) => {
-    heatSliderEnabled = Boolean(enabled);
-    if (heatSliderContainer) {
-      heatSliderContainer.classList.toggle("visible", heatSliderEnabled);
-      heatSliderContainer.setAttribute("aria-hidden", heatSliderEnabled ? "false" : "true");
-    }
-    updateDiagnosticHeatLayerVisibility();
-    if (heatSliderEnabled) {
-      if (heatSliderInput && heatSliderInput.value !== `${heatSliderValue}`) {
-        heatSliderInput.value = `${heatSliderValue}`;
-      }
-      applyHeatSliderBlend(heatSliderValue);
-    } else {
-      if (map.getLayer("project-heat2050-layer")) {
-        map.setPaintProperty("project-heat2050-layer", "raster-opacity", HEAT_RASTER_MAX_OPACITY);
-      }
-      if (map.getLayer("project-heat2050-improved-layer")) {
-        map.setPaintProperty("project-heat2050-improved-layer", "raster-opacity", 0);
-      }
-      if (heatSliderValueLabel) {
-        heatSliderValueLabel.textContent = "2060 + projet";
-      }
-    }
-  };
-
   heatSliderInput?.addEventListener("input", () => {
-    if (!heatSliderEnabled) return;
-    applyHeatSliderBlend(heatSliderInput.value);
+    if (!sliderMode) return;
+    applySliderBlend(heatSliderInput.value);
   });
 
   const setDiagnosticPollutionMode = (mode, { suppressLegendUpdate } = {}) => {
@@ -2471,6 +2530,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
   let projectResilienceActive = false;
+  let projectNoiseActive = false;
   let projectAttractivityActive = false;
   const setProjectResilienceState = (active) => {
     projectResilienceActive = active;
@@ -2488,7 +2548,27 @@ window.addEventListener("DOMContentLoaded", () => {
     updateNoiseUI();
     setProjectAnnotationsVisibility();
     setProjectHeat2050Visibility(active);
-    setHeatSliderEnabled(active);
+    if (active) {
+      setSliderMode("heat");
+    } else if (sliderMode === "heat") {
+      setSliderMode(null);
+    }
+  };
+
+  const setProjectNoiseState = (active) => {
+    projectNoiseActive = active;
+    if (active) {
+      setProjectHeat2050Visibility(false);
+      setProjectNoiseLayerVisibility(true);
+      setSliderMode("noise");
+      noiseVisibilityState.projectEnabled = false;
+      noiseVisibilityState.projectMode = "none";
+      applyLegendTemplate("noise", true);
+    } else {
+      setProjectNoiseLayerVisibility(false);
+      if (sliderMode === "noise") setSliderMode(null);
+    }
+    updateNoiseUI();
   };
 
   const setProjectAttractivityState = (active) => {
@@ -2517,8 +2597,8 @@ window.addEventListener("DOMContentLoaded", () => {
     },
     "project-noise": {
       group: "project",
-      activate: () => setProjectPollutionMode("noise"),
-      deactivate: () => setProjectPollutionMode("none", { suppressLegendUpdate: true }),
+      activate: () => setProjectNoiseState(true),
+      deactivate: () => setProjectNoiseState(false),
     },
     "project-air": {
       group: "project",
@@ -2607,6 +2687,9 @@ window.addEventListener("DOMContentLoaded", () => {
   const clearProjectContext = ({ skipFilterReset = false } = {}) => {
     deselectLayerGroup(projectLayerKeys);
     if (!skipFilterReset) resetFiltersForGroup("project");
+    if (projectResilienceActive) setProjectResilienceState(false);
+    if (projectNoiseActive) setProjectNoiseState(false);
+    if (projectAttractivityActive) setProjectAttractivityState(false);
   };
 
   const clearDiagnosticContext = ({ skipFilterReset = false } = {}) => {
@@ -2851,6 +2934,16 @@ window.addEventListener("DOMContentLoaded", () => {
       canvas: projectHeat2050ImprovedRenderer.canvas,
       coordinates: pollutionCanvasCoordinates,
     });
+    map.addSource("project-noise-before", {
+      type: "canvas",
+      canvas: projectNoiseBeforeRenderer.canvas,
+      coordinates: pollutionCanvasCoordinates,
+    });
+    map.addSource("project-noise-after", {
+      type: "canvas",
+      canvas: projectNoiseAfterRenderer.canvas,
+      coordinates: pollutionCanvasCoordinates,
+    });
     Object.values(diagnosticPollutionConfigs).forEach((config) => {
       map.addSource(config.sourceId, {
         type: "canvas",
@@ -2868,6 +2961,8 @@ window.addEventListener("DOMContentLoaded", () => {
     diagnosticHeatRenderer.draw(map);
     projectHeat2050Renderer.draw(map);
     projectHeat2050ImprovedRenderer.draw(map);
+    projectNoiseBeforeRenderer.draw(map);
+    projectNoiseAfterRenderer.draw(map);
     map.addLayer({
       id: "focus-zone-layer",
       type: "line",
@@ -3001,6 +3096,24 @@ window.addEventListener("DOMContentLoaded", () => {
       id: "project-heat2050-improved-layer",
       type: "raster",
       source: "project-heat2050-improved",
+      layout: { visibility: "none" },
+      paint: {
+        "raster-opacity": 0.8,
+      },
+    });
+    map.addLayer({
+      id: "project-noise-before-layer",
+      type: "raster",
+      source: "project-noise-before",
+      layout: { visibility: "none" },
+      paint: {
+        "raster-opacity": 0.8,
+      },
+    });
+    map.addLayer({
+      id: "project-noise-after-layer",
+      type: "raster",
+      source: "project-noise-after",
       layout: { visibility: "none" },
       paint: {
         "raster-opacity": 0.8,
@@ -3237,9 +3350,6 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     updateDiagnosticHeatLayerVisibility();
-    if (heatSliderEnabled) {
-      applyHeatSliderBlend(heatSliderValue);
-    }
     setDiagnosticPollutionMode(noiseVisibilityState.diagnosticMode);
 
     const formatArea = (value) => new Intl.NumberFormat("fr-CH").format(Math.round(value));
