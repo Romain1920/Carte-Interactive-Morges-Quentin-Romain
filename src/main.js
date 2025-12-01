@@ -2308,7 +2308,7 @@ window.addEventListener("DOMContentLoaded", () => {
       title: "Comparer le scénario 2060",
       minLabel: "Scénario 2060",
       maxLabel: "2060 + projet",
-      initialValue: 100,
+      initialValue: 0,
       formatLabel: (value) => {
         if (value <= 5) return "Scénario 2060";
         if (value >= 95) return "2060 + projet";
