@@ -27,6 +27,17 @@
       <div class="legend-body" id="noise-legend-body"></div>
     </div>
     <div class="map-source" id="map-source" aria-live="polite"></div>
+    <div class="layer-slider" id="heat-slider" aria-hidden="true">
+      <div class="layer-slider__header">
+        <span>Comparer le scénario 2060</span>
+        <span id="heat-slider-value">2060 + projet</span>
+      </div>
+      <input type="range" min="0" max="100" value="100" id="heat-slider-input" aria-label="Comparer 2060 tendanciel et 2060 avec projet" />
+      <div class="layer-slider__labels">
+        <span>Scénario 2060</span>
+        <span>2060 + projet</span>
+      </div>
+    </div>
     <div class="layer-toggle" role="region" aria-label="Affichage des couches">
       <h2>Affichage</h2>
       <section class="panel-section">
@@ -76,19 +87,32 @@
           <input type="checkbox" data-layer="diagnostic-lake" />
         </label>
 
-        <div class="panel-subtitle">En conséquence</div>
-        <div class="panel-checklist">
-          <div class="pollution-select-group">
-            <label for="pollution-select-diagnostic">Pollution sonore / air</label>
-            <select id="pollution-select-diagnostic">
-              <option value="none">Choisir un indicateur</option>
-              <option value="noise">Pollution sonore (jour)</option>
-              <option value="air">Pollution de l'air (NO₂)</option>
-            </select>
+        <div class="panel-subtitle panel-subtitle-consequence">En conséquence</div>
+        <div class="filter-panel" aria-label="Filtres disponibles pour le diagnostic">
+          <div class="filter-panel-header">
+            <div class="filter-panel-title">Filtres disponibles</div>
+            <p>Sélectionne l’indicateur environnemental à afficher : un seul à la fois pour plus de clarté.</p>
           </div>
-          <button type="button" class="checklist-button" data-info="diagnostic-consequence-vulnerable" aria-pressed="false">
-            Un centre-ville vulnérable à la chaleur
-          </button>
+          <div class="filter-button-grid">
+            <button type="button" class="filter-button" data-filter="diagnostic-noise" aria-pressed="false">
+              <span class="filter-swatch" aria-hidden="true"></span>
+              <span class="filter-label">
+                <strong>Pollution sonore (jour)</strong>
+              </span>
+            </button>
+            <button type="button" class="filter-button" data-filter="diagnostic-air" aria-pressed="false">
+              <span class="filter-swatch" aria-hidden="true"></span>
+              <span class="filter-label">
+                <strong>Pollution de l’air (NO₂)</strong>
+              </span>
+            </button>
+            <button type="button" class="filter-button" data-filter="diagnostic-heat" aria-pressed="false">
+              <span class="filter-swatch" aria-hidden="true"></span>
+              <span class="filter-label">
+                <strong>Un centre-ville vulnérable à la chaleur</strong>
+              </span>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -155,22 +179,38 @@
         </label>
         <button type="button" class="panel-link">Afficher les intentions de densification et de végétalisation</button>
 
-        <div class="panel-subtitle">En conséquence</div>
-        <div class="panel-checklist">
-          <div class="pollution-select-group">
-            <label for="pollution-select-project">Pollution sonore / air après projet</label>
-            <select id="pollution-select-project">
-              <option value="none">Choisir un indicateur</option>
-              <option value="noise">Pollution sonore (jour)</option>
-              <option value="air">Pollution de l'air (NO₂)</option>
-            </select>
+        <div class="panel-subtitle panel-subtitle-consequence">En conséquence</div>
+        <div class="filter-panel" aria-label="Filtres disponibles pour le projet">
+          <div class="filter-panel-header">
+            <div class="filter-panel-title">Filtres disponibles</div>
+            <p>Visualise l’effet du projet sur les nuisances ou les gains attendus.</p>
           </div>
-          <button type="button" class="checklist-button" data-info="project-consequence-resilient" aria-pressed="false">
-            Un centre-ville plus résilient face au changement climatique
-          </button>
-          <button type="button" class="checklist-button" data-info="project-consequence-attractivity" aria-pressed="false">
-            Un potentiel d’attractivité développé
-          </button>
+          <div class="filter-button-grid">
+            <button type="button" class="filter-button" data-filter="project-noise" aria-pressed="false">
+              <span class="filter-swatch" aria-hidden="true"></span>
+              <span class="filter-label">
+                <strong>Pollution sonore (jour)</strong>
+              </span>
+            </button>
+            <button type="button" class="filter-button" data-filter="project-air" aria-pressed="false">
+              <span class="filter-swatch" aria-hidden="true"></span>
+              <span class="filter-label">
+                <strong>Pollution de l’air (NO₂)</strong>
+              </span>
+            </button>
+            <button type="button" class="filter-button" data-filter="project-heat" aria-pressed="false">
+              <span class="filter-swatch" aria-hidden="true"></span>
+              <span class="filter-label">
+                <strong>Un centre-ville plus résilient</strong>
+              </span>
+            </button>
+            <button type="button" class="filter-button" data-filter="project-attractivity" aria-pressed="false">
+              <span class="filter-swatch" aria-hidden="true"></span>
+              <span class="filter-label">
+                <strong>Un potentiel d’attractivité développé</strong>
+              </span>
+            </button>
+          </div>
         </div>
       </section>
     </div>

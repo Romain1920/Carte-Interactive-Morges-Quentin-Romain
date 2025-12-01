@@ -10,11 +10,13 @@ window.addEventListener("DOMContentLoaded", () => {
   const noiseLegend = document.getElementById("noise-legend");
   const noiseLegendTitle = document.getElementById("noise-legend-title");
   const noiseLegendBody = document.getElementById("noise-legend-body");
-  const diagnosticPollutionSelect = document.getElementById("pollution-select-diagnostic");
-  const projectPollutionSelect = document.getElementById("pollution-select-project");
   const projectIntentionsButton = document.querySelector('[data-action="project-intentions"]');
-  if (diagnosticPollutionSelect) diagnosticPollutionSelect.value = "none";
-  if (projectPollutionSelect) projectPollutionSelect.value = "none";
+  const heatSliderContainer = document.getElementById("heat-slider");
+  const heatSliderInput = document.getElementById("heat-slider-input");
+  const heatSliderValueLabel = document.getElementById("heat-slider-value");
+  const filterButtons = Array.from(document.querySelectorAll(".filter-button"));
+  const filterButtonByKey = {};
+  const activeFilterByGroup = { diagnostic: null, project: null };
   const morgesCenter = [6.496, 46.509];
   const earthRadius = 6378137;
   const baseLatRad = (morgesCenter[1] * Math.PI) / 180;
@@ -312,9 +314,24 @@ window.addEventListener("DOMContentLoaded", () => {
           <li><span style="background:#a00092"></span>&gt; 33 – 34 °C</li>
           <li><span style="background:#6501a5"></span>&gt; 34 – 35 °C</li>
           <li><span style="background:#46176b"></span>&gt; 35 – 36 °C</li>
-          <li><span style="background:#2b153d"></span>&gt; 36 °C</li>
+        <li><span style="background:#2b153d"></span>&gt; 36 °C</li>
         </ul>
         <div class="legend-sources">Sources : DGE – Atmosphère/Climatologie, cartes climatiques 2060.</div>
+      `,
+    },
+    attractivity: {
+      title: "Un potentiel d’attractivité développé",
+      body: `
+        <div class="legend-description">
+          <strong>Animation à intégrer</strong>
+          <p>Ce filtre présentera prochainement la narration complète : report des activités vers les places libérées, activation du littoral et itinéraires confortables reliant les polarités du centre.</p>
+        </div>
+        <ul>
+          <li>Réaffectation des surfaces de stationnement en espaces publics.</li>
+          <li>Nouvelles continuités piétonnes vers le parc et les quais.</li>
+          <li>Valorisation du front lacustre et des commerces de proximité.</li>
+        </ul>
+        <p>Le rendu cartographique est en préparation ; le filtre rappelle simplement ce scénario dans l’interface.</p>
       `,
     },
   };
@@ -368,6 +385,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const projectHeat2050Renderer = createMaskedLocalImageRenderer({
     imagePath: "/data/temperature_air_2m_14h_2060.png",
+    alpha: 0.8,
+  });
+
+  const projectHeat2050ImprovedRenderer = createMaskedLocalImageRenderer({
+    imagePath: "/data/temperature_air_2m_14h_2060_project.png",
     alpha: 0.8,
   });
 
@@ -1229,6 +1251,76 @@ window.addEventListener("DOMContentLoaded", () => {
           ],
         },
       },
+      {
+        type: "Feature",
+        properties: { name: "Dessin", type: "linepolygon" },
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [6.496337155644847, 46.50794158611465],
+              [6.496447270578704, 46.507733745659316],
+              [6.496528516635417, 46.50764213122069],
+              [6.4966018876677625, 46.50760877178865],
+              [6.496972193887255, 46.50784404718611],
+              [6.497505341960537, 46.50825393493043],
+              [6.497846637274584, 46.50851739586166],
+              [6.497850899441621, 46.50857500000177],
+              [6.497906212217401, 46.508628157189136],
+              [6.498009479105638, 46.50867056069077],
+              [6.498905260349584, 46.509519161115556],
+              [6.4993287105464566, 46.5099158884439],
+              [6.499818983581898, 46.51045328448073],
+              [6.499929363349994, 46.51063176427114],
+              [6.499852931231826, 46.51072535673636],
+              [6.499796646709071, 46.51066952565184],
+              [6.499686460132268, 46.510497976998266],
+              [6.499670263376246, 46.51045248603276],
+              [6.498916717383119, 46.50980816048096],
+              [6.4989233271360325, 46.509769365835275],
+              [6.498594070764037, 46.50945431865681],
+              [6.49823801321501, 46.50969272184058],
+              [6.49776955111765, 46.509867587817666],
+              [6.49706618747404, 46.51013209142784],
+              [6.49699095057356, 46.51006516652479],
+              [6.497750596498474, 46.5097689942554],
+              [6.498182181235828, 46.50962989193404],
+              [6.498519219027023, 46.50939349360344],
+              [6.49830127769784, 46.50918492967224],
+              [6.498043236732629, 46.508929182877196],
+              [6.497757361864303, 46.508667057485475],
+              [6.497332495316072, 46.508331495280665],
+              [6.4970607167148575, 46.50809267319562],
+              [6.4969567456894275, 46.50794094299903],
+              [6.4969011612668925, 46.507974553296364],
+              [6.496760982482368, 46.50787332618321],
+              [6.496728140257636, 46.50790180184083],
+              [6.496610487290813, 46.507817308365375],
+              [6.496337155644847, 46.50794158611465],
+            ],
+          ],
+        },
+      },
+      {
+        type: "Feature",
+        properties: { name: "Dessin", type: "linepolygon" },
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [6.496554381279969, 46.507099376143515],
+              [6.496756058915287, 46.50703102315409],
+              [6.496820497911535, 46.50692221763601],
+              [6.4972606268000925, 46.506620090322315],
+              [6.497411912727455, 46.506872996893094],
+              [6.49747523627259, 46.50694301468621],
+              [6.4969143727927285, 46.507226255200166],
+              [6.496875254851974, 46.50730513258433],
+              [6.496554381279969, 46.507099376143515],
+            ],
+          ],
+        },
+      },
     ],
   };
 
@@ -2024,8 +2116,7 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   const layerInputs = Array.from(document.querySelectorAll("[data-layer]"));
-  const checklistButtons = Array.from(document.querySelectorAll(".checklist-button"));
-  const diagnosticLayerKeys = ["perimeter", "diagnostic-axes", "diagnostic-parking", "diagnostic-private", "diagnostic-lake"];
+  const diagnosticLayerKeys = ["diagnostic-axes", "diagnostic-parking", "diagnostic-private", "diagnostic-lake"];
   const projectLayerKeys = [
     "project-axes",
     "project-parking",
@@ -2036,18 +2127,10 @@ window.addEventListener("DOMContentLoaded", () => {
     "project-roofs",
     "project-interventions",
   ];
-  const diagnosticChecklistKeys = ["diagnostic-consequence-vulnerable"];
-  const heatChecklistKey = "diagnostic-consequence-vulnerable";
-  const projectChecklistKeys = ["project-consequence-resilient", "project-consequence-attractivity"];
   const layerInputByKey = {};
-  const checklistButtonByKey = {};
   layerInputs.forEach((input) => {
     const key = input.dataset.layer;
     if (key) layerInputByKey[key] = input;
-  });
-  checklistButtons.forEach((button) => {
-    const key = button.dataset.info;
-    if (key) checklistButtonByKey[key] = button;
   });
 
   const poiMarkers = [];
@@ -2155,9 +2238,14 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   const setProjectHeat2050Visibility = (visible) => {
-    if (map.getLayer("project-heat2050-layer")) {
-      map.setLayoutProperty("project-heat2050-layer", "visibility", visible ? "visible" : "none");
-    }
+    ["project-heat2050-layer", "project-heat2050-improved-layer"].forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
+        if (!visible) {
+          map.setPaintProperty(layerId, "raster-opacity", HEAT_RASTER_MAX_OPACITY);
+        }
+      }
+    });
   };
 
   const diagnosticParkingLayerIds = ["diagnostic-parking-fill", "diagnostic-parking-outline"];
@@ -2188,7 +2276,22 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   const noiseVisibilityState = { diagnosticMode: "none", projectMode: "none", projectEnabled: false };
+  const HEAT_RASTER_MAX_OPACITY = 0.8;
   let heatLayerVisible = false;
+  let heatSliderEnabled = false;
+  let heatSliderValue = 100;
+  let activeDiagnosticFilter = "none";
+  let activeProjectFilter = "none";
+
+  const updateDiagnosticHeatLayerVisibility = () => {
+    const shouldShow = heatLayerVisible;
+    if (map.getLayer("diagnostic-heat-raster-layer")) {
+      map.setLayoutProperty("diagnostic-heat-raster-layer", "visibility", shouldShow ? "visible" : "none");
+      if (!shouldShow) {
+        map.setPaintProperty("diagnostic-heat-raster-layer", "raster-opacity", 1);
+      }
+    }
+  };
 
   const applyLegendTemplate = (mode, fromProject = false) => {
     const source = fromProject ? projectPollutionConfigs : diagnosticPollutionConfigs;
@@ -2201,7 +2304,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const updateNoiseUI = () => {
     const hasDiagnostic = noiseVisibilityState.diagnosticMode !== "none";
     const hasProject = noiseVisibilityState.projectEnabled && noiseVisibilityState.projectMode !== "none";
-    const shouldShow = hasDiagnostic || hasProject || heatLayerVisible;
+    const shouldShow = hasDiagnostic || hasProject || heatLayerVisible || projectAttractivityActive;
     if (map.getLayer("focus-mask-layer")) {
       map.setLayoutProperty("focus-mask-layer", "visibility", shouldShow ? "visible" : "none");
     }
@@ -2213,25 +2316,79 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const setHeatLayerVisibility = (visible, { suppressLegendUpdate } = {}) => {
     heatLayerVisible = Boolean(visible);
-    const heatButton = checklistButtonByKey[heatChecklistKey];
-    if (heatButton) {
-      heatButton.classList.toggle("active", heatLayerVisible);
-      heatButton.setAttribute("aria-pressed", heatLayerVisible ? "true" : "false");
+    if (heatLayerVisible && heatSliderEnabled) {
+      setHeatSliderEnabled(false);
     }
-    if (map.getLayer("diagnostic-heat-raster-layer")) {
-      map.setLayoutProperty("diagnostic-heat-raster-layer", "visibility", heatLayerVisible ? "visible" : "none");
+    if (heatLayerVisible && noiseVisibilityState.diagnosticMode !== "none") {
+      setDiagnosticPollutionMode("none", { suppressLegendUpdate: true });
     }
-    if (heatLayerVisible) {
-      if (diagnosticPollutionSelect) diagnosticPollutionSelect.value = "none";
-      if (noiseVisibilityState.diagnosticMode !== "none") {
-        setDiagnosticPollutionMode("none", { suppressLegendUpdate: true });
-      }
-      const otherDiagKeys = diagnosticChecklistKeys.filter((key) => key !== heatChecklistKey);
-      resetChecklistButtons(otherDiagKeys);
-      if (!suppressLegendUpdate) applyLegendTemplate("heat");
+    updateDiagnosticHeatLayerVisibility();
+    if (heatLayerVisible && map.getLayer("diagnostic-heat-raster-layer")) {
+      map.setPaintProperty("diagnostic-heat-raster-layer", "raster-opacity", HEAT_RASTER_MAX_OPACITY);
+    }
+    if (map.getLayer("project-heat2050-layer")) {
+      map.setPaintProperty("project-heat2050-layer", "raster-opacity", HEAT_RASTER_MAX_OPACITY);
+    }
+    if (!heatSliderEnabled && map.getLayer("project-heat2050-improved-layer")) {
+      map.setPaintProperty("project-heat2050-improved-layer", "raster-opacity", 0);
+    }
+    if (heatLayerVisible && !suppressLegendUpdate) {
+      applyLegendTemplate("heat");
     }
     updateNoiseUI();
   };
+
+  const applyHeatSliderBlend = (value = heatSliderValue) => {
+    const numeric = Number(value);
+    heatSliderValue = Number.isFinite(numeric) ? Math.min(100, Math.max(0, Math.round(numeric))) : heatSliderValue;
+    const ratio = heatSliderValue / 100;
+    if (map.getLayer("project-heat2050-layer")) {
+      map.setPaintProperty("project-heat2050-layer", "raster-opacity", HEAT_RASTER_MAX_OPACITY);
+    }
+    if (map.getLayer("project-heat2050-improved-layer")) {
+      map.setPaintProperty("project-heat2050-improved-layer", "raster-opacity", HEAT_RASTER_MAX_OPACITY * ratio);
+    }
+    if (heatSliderInput && heatSliderInput.value !== `${heatSliderValue}`) {
+      heatSliderInput.value = `${heatSliderValue}`;
+    }
+    if (heatSliderValueLabel) {
+      let label = "2060 + projet";
+      if (heatSliderValue <= 5) label = "Scénario 2060";
+      else if (heatSliderValue >= 95) label = "2060 + projet";
+      else label = `${heatSliderValue}% vers le projet`;
+      heatSliderValueLabel.textContent = label;
+    }
+  };
+
+  const setHeatSliderEnabled = (enabled) => {
+    heatSliderEnabled = Boolean(enabled);
+    if (heatSliderContainer) {
+      heatSliderContainer.classList.toggle("visible", heatSliderEnabled);
+      heatSliderContainer.setAttribute("aria-hidden", heatSliderEnabled ? "false" : "true");
+    }
+    updateDiagnosticHeatLayerVisibility();
+    if (heatSliderEnabled) {
+      if (heatSliderInput && heatSliderInput.value !== `${heatSliderValue}`) {
+        heatSliderInput.value = `${heatSliderValue}`;
+      }
+      applyHeatSliderBlend(heatSliderValue);
+    } else {
+      if (map.getLayer("project-heat2050-layer")) {
+        map.setPaintProperty("project-heat2050-layer", "raster-opacity", HEAT_RASTER_MAX_OPACITY);
+      }
+      if (map.getLayer("project-heat2050-improved-layer")) {
+        map.setPaintProperty("project-heat2050-improved-layer", "raster-opacity", 0);
+      }
+      if (heatSliderValueLabel) {
+        heatSliderValueLabel.textContent = "2060 + projet";
+      }
+    }
+  };
+
+  heatSliderInput?.addEventListener("input", () => {
+    if (!heatSliderEnabled) return;
+    applyHeatSliderBlend(heatSliderInput.value);
+  });
 
   const setDiagnosticPollutionMode = (mode, { suppressLegendUpdate } = {}) => {
     if (mode !== "none" && heatLayerVisible) {
@@ -2271,6 +2428,12 @@ window.addEventListener("DOMContentLoaded", () => {
     if (projectResilienceActive && !suppressResilienceCleanup) {
       setProjectResilienceState(false);
     }
+    if (mode !== "none" && projectAttractivityActive) {
+      setProjectAttractivityState(false);
+      if (activeFilterByGroup.project === "project-attractivity") {
+        activeFilterByGroup.project = null;
+      }
+    }
     if (mode !== "none") {
       clearDiagnosticContext();
     }
@@ -2296,19 +2459,6 @@ window.addEventListener("DOMContentLoaded", () => {
     "project-interventions": (checked) => setMarkersVisibility(checked),
   };
 
-  const consequenceHandlers = {};
-  consequenceHandlers["diagnostic-consequence-vulnerable"] = (active) => setHeatLayerVisibility(active);
-
-  const resetChecklistButtons = (keys) => {
-    keys.forEach((key) => {
-      const button = checklistButtonByKey[key];
-      if (!button || !button.classList.contains("active")) return;
-      button.classList.remove("active");
-      button.setAttribute("aria-pressed", "false");
-      consequenceHandlers[key]?.(false);
-    });
-  };
-
   const deselectLayerGroup = (keys) => {
     keys.forEach((targetKey) => {
       const targetInput = layerInputByKey[targetKey];
@@ -2321,20 +2471,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
   let projectResilienceActive = false;
+  let projectAttractivityActive = false;
   const setProjectResilienceState = (active) => {
     projectResilienceActive = active;
-    const button = checklistButtonByKey["project-consequence-resilient"];
-    if (button) {
-      button.classList.toggle("active", active);
-      button.setAttribute("aria-pressed", active ? "true" : "false");
-    }
     if (active) {
-      if (projectPollutionSelect && projectPollutionSelect.value !== "none") {
-        projectPollutionSelect.value = "none";
-        suppressResilienceCleanup = true;
-        setProjectPollutionMode("none");
-        suppressResilienceCleanup = false;
-      }
+      suppressResilienceCleanup = true;
+      setProjectPollutionMode("none", { suppressLegendUpdate: true });
+      suppressResilienceCleanup = false;
       noiseVisibilityState.projectEnabled = true;
       noiseVisibilityState.projectMode = "heat2050";
       applyLegendTemplate("heat2050", true);
@@ -2345,26 +2488,134 @@ window.addEventListener("DOMContentLoaded", () => {
     updateNoiseUI();
     setProjectAnnotationsVisibility();
     setProjectHeat2050Visibility(active);
+    setHeatSliderEnabled(active);
   };
 
-  const clearProjectContext = () => {
+  const setProjectAttractivityState = (active) => {
+    projectAttractivityActive = active;
+    if (active) {
+      applyLegendTemplate("attractivity", true);
+    }
+    updateNoiseUI();
+  };
+
+  const filterDefinitions = {
+    "diagnostic-noise": {
+      group: "diagnostic",
+      activate: () => setDiagnosticPollutionMode("noise"),
+      deactivate: () => setDiagnosticPollutionMode("none"),
+    },
+    "diagnostic-air": {
+      group: "diagnostic",
+      activate: () => setDiagnosticPollutionMode("air"),
+      deactivate: () => setDiagnosticPollutionMode("none"),
+    },
+    "diagnostic-heat": {
+      group: "diagnostic",
+      activate: () => setHeatLayerVisibility(true),
+      deactivate: () => setHeatLayerVisibility(false, { suppressLegendUpdate: true }),
+    },
+    "project-noise": {
+      group: "project",
+      activate: () => setProjectPollutionMode("noise"),
+      deactivate: () => setProjectPollutionMode("none", { suppressLegendUpdate: true }),
+    },
+    "project-air": {
+      group: "project",
+      activate: () => setProjectPollutionMode("air"),
+      deactivate: () => setProjectPollutionMode("none", { suppressLegendUpdate: true }),
+    },
+    "project-heat": {
+      group: "project",
+      activate: () => setProjectResilienceState(true),
+      deactivate: () => setProjectResilienceState(false),
+    },
+    "project-attractivity": {
+      group: "project",
+      activate: () => setProjectAttractivityState(true),
+      deactivate: () => setProjectAttractivityState(false),
+    },
+  };
+
+  const setFilterButtonState = (filterKey, isActive) => {
+    const button = filterButtonByKey[filterKey];
+    if (!button) return;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  };
+
+  const deactivateFilter = (filterKey) => {
+    const definition = filterDefinitions[filterKey];
+    if (!definition) return;
+    definition.deactivate?.();
+    setFilterButtonState(filterKey, false);
+    if (activeFilterByGroup[definition.group] === filterKey) {
+      activeFilterByGroup[definition.group] = null;
+    }
+  };
+
+  const resetFiltersForGroup = (group) => {
+    const currentKey = activeFilterByGroup[group];
+    if (!currentKey) return;
+    deactivateFilter(currentKey);
+  };
+
+  const activateFilter = (filterKey) => {
+    const definition = filterDefinitions[filterKey];
+    if (!definition) return;
+    const group = definition.group;
+    const otherGroup = group === "diagnostic" ? "project" : "diagnostic";
+    resetFiltersForGroup(group);
+    if (group === "diagnostic") {
+      resetFiltersForGroup("project");
+      clearProjectContext({ skipFilterReset: true });
+    } else {
+      resetFiltersForGroup("diagnostic");
+      clearDiagnosticContext({ skipFilterReset: true });
+    }
+    definition.activate?.();
+    setFilterButtonState(filterKey, true);
+    activeFilterByGroup[group] = filterKey;
+  };
+
+  const toggleFilter = (filterKey) => {
+    const definition = filterDefinitions[filterKey];
+    if (!definition) return;
+    const group = definition.group;
+    const isAlreadyActive = activeFilterByGroup[group] === filterKey;
+    if (isAlreadyActive) {
+      deactivateFilter(filterKey);
+      return;
+    }
+    activateFilter(filterKey);
+  };
+
+  const bindFilterButtons = () => {
+    filterButtons.forEach((button) => {
+      const filterKey = button.dataset.filter;
+      if (!filterKey || !filterDefinitions[filterKey]) return;
+      filterButtonByKey[filterKey] = button;
+      const presetActive = button.classList.contains("active");
+      button.setAttribute("aria-pressed", presetActive ? "true" : "false");
+      if (presetActive) {
+        activeFilterByGroup[filterDefinitions[filterKey].group] = filterKey;
+      }
+      button.addEventListener("click", () => toggleFilter(filterKey));
+    });
+  };
+
+  const clearProjectContext = ({ skipFilterReset = false } = {}) => {
     deselectLayerGroup(projectLayerKeys);
-    if (projectPollutionSelect) projectPollutionSelect.value = "none";
-    setProjectPollutionMode("none", { suppressLegendUpdate: true });
-    resetChecklistButtons(projectChecklistKeys);
-    if (projectResilienceActive) setProjectResilienceState(false);
+    if (!skipFilterReset) resetFiltersForGroup("project");
   };
 
-  const clearDiagnosticContext = () => {
+  const clearDiagnosticContext = ({ skipFilterReset = false } = {}) => {
     deselectLayerGroup(diagnosticLayerKeys);
-    if (diagnosticPollutionSelect) diagnosticPollutionSelect.value = "none";
-    setDiagnosticPollutionMode("none", { suppressLegendUpdate: true });
-    setHeatLayerVisibility(false, { suppressLegendUpdate: true });
-    resetChecklistButtons(diagnosticChecklistKeys);
+    if (!skipFilterReset) resetFiltersForGroup("diagnostic");
   };
 
   const enforceLayerExclusivity = (key, checked) => {
-    if (!checked) return;
+    if (!checked || key === "perimeter") return;
     if (diagnosticLayerKeys.includes(key)) {
       clearProjectContext();
     } else if (projectLayerKeys.includes(key)) {
@@ -2529,20 +2780,7 @@ window.addEventListener("DOMContentLoaded", () => {
         offset: [0, 80],
       },
     ],
-    heat2050: [
-      {
-        coordinates: [6.4972, 46.5095],
-        title: "Hotspot 2050",
-        description: "Texte à compléter pour le scénario de résilience.",
-        offset: [0, -60],
-      },
-      {
-        coordinates: [6.4984, 46.5086],
-        title: "Rue ombragée",
-        description: "Texte à compléter.",
-        offset: [0, 80],
-      },
-    ],
+    heat2050: [],
   };
   const projectAnnotationMarkers = [];
 
@@ -2570,49 +2808,6 @@ window.addEventListener("DOMContentLoaded", () => {
     setProjectAnnotationsVisibility();
   };
 
-  const bindChecklistButtons = () => {
-    checklistButtons.forEach((button) => {
-      const key = button.dataset.info;
-      if (key === "project-consequence-resilient") {
-        button.addEventListener("click", () => {
-          const nextState = !projectResilienceActive;
-          if (nextState) clearDiagnosticContext();
-          setProjectResilienceState(nextState);
-        });
-        setProjectResilienceState(button.classList.contains("active"));
-        return;
-      }
-      button.addEventListener("click", () => {
-        const active = button.classList.toggle("active");
-        button.setAttribute("aria-pressed", active ? "true" : "false");
-        if (active) {
-          if (projectChecklistKeys.includes(key)) clearDiagnosticContext();
-          if (diagnosticChecklistKeys.includes(key)) clearProjectContext();
-        }
-        consequenceHandlers[key]?.(active);
-      });
-      const initActive = button.classList.contains("active");
-      button.setAttribute("aria-pressed", initActive ? "true" : "false");
-      consequenceHandlers[key]?.(initActive);
-    });
-  };
-
-  const bindPollutionSelects = () => {
-    if (diagnosticPollutionSelect) {
-      const handleDiagnostic = () => setDiagnosticPollutionMode(diagnosticPollutionSelect.value);
-      diagnosticPollutionSelect.addEventListener("change", handleDiagnostic);
-      handleDiagnostic();
-    }
-    if (projectPollutionSelect) {
-      const handleProject = () => {
-        const value = projectPollutionSelect.value;
-        setProjectPollutionMode(value);
-      };
-      projectPollutionSelect.addEventListener("change", handleProject);
-      handleProject();
-    }
-  };
-
   const hideBaseIcons = () => {
     const style = map.getStyle();
     if (!style?.layers) return;
@@ -2621,7 +2816,7 @@ window.addEventListener("DOMContentLoaded", () => {
       .forEach((layer) => map.setLayoutProperty(layer.id, "visibility", "none"));
   };
 
-  bindPollutionSelects();
+  bindFilterButtons();
 
   map.on("load", () => {
     map.fitBounds(bounds, { padding: 40, duration: 0 });
@@ -2651,6 +2846,11 @@ window.addEventListener("DOMContentLoaded", () => {
       canvas: projectHeat2050Renderer.canvas,
       coordinates: pollutionCanvasCoordinates,
     });
+    map.addSource("project-heat2050-improved", {
+      type: "canvas",
+      canvas: projectHeat2050ImprovedRenderer.canvas,
+      coordinates: pollutionCanvasCoordinates,
+    });
     Object.values(diagnosticPollutionConfigs).forEach((config) => {
       map.addSource(config.sourceId, {
         type: "canvas",
@@ -2667,6 +2867,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
     diagnosticHeatRenderer.draw(map);
     projectHeat2050Renderer.draw(map);
+    projectHeat2050ImprovedRenderer.draw(map);
     map.addLayer({
       id: "focus-zone-layer",
       type: "line",
@@ -2791,6 +2992,15 @@ window.addEventListener("DOMContentLoaded", () => {
       id: "project-heat2050-layer",
       type: "raster",
       source: "project-heat2050",
+      layout: { visibility: "none" },
+      paint: {
+        "raster-opacity": 0.8,
+      },
+    });
+    map.addLayer({
+      id: "project-heat2050-improved-layer",
+      type: "raster",
+      source: "project-heat2050-improved",
       layout: { visibility: "none" },
       paint: {
         "raster-opacity": 0.8,
@@ -3026,6 +3236,10 @@ window.addEventListener("DOMContentLoaded", () => {
       config.draw(map);
     });
 
+    updateDiagnosticHeatLayerVisibility();
+    if (heatSliderEnabled) {
+      applyHeatSliderBlend(heatSliderValue);
+    }
     setDiagnosticPollutionMode(noiseVisibilityState.diagnosticMode);
 
     const formatArea = (value) => new Intl.NumberFormat("fr-CH").format(Math.round(value));
@@ -3087,7 +3301,6 @@ window.addEventListener("DOMContentLoaded", () => {
     applyProjectPollutionVisibility();
 
     bindLayerInputs();
-    bindChecklistButtons();
     const refreshStyleOverlays = () => {
       hideBaseIcons();
       const projectSpacesInput = layerInputByKey["project-spaces"];
