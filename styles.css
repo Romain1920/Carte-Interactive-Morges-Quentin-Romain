@@ -522,9 +522,10 @@ header h1 {
 
 .layer-slider {
   position: absolute;
-  top: 90px;
-  left: 20px;
-  width: min(320px, 60vw);
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(420px, 80vw);
   padding: 12px 14px;
   border-radius: 10px;
   background: rgba(15, 23, 42, 0.92);
@@ -538,6 +539,15 @@ header h1 {
 .layer-slider.visible {
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 780px) {
+  .layer-slider {
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(320px, 92vw);
+  }
 }
 
 .layer-slider__header {

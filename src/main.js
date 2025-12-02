@@ -397,6 +397,16 @@ window.addEventListener("DOMContentLoaded", () => {
     alpha: 0.8,
   });
 
+  const projectAirBeforeRenderer = createMaskedLocalImageRenderer({
+    imagePath: "/data/no2_scenario_base.png",
+    alpha: 0.85,
+  });
+
+  const projectAirAfterRenderer = createMaskedLocalImageRenderer({
+    imagePath: "/data/no2_scenario_project.png",
+    alpha: 0.85,
+  });
+
   Object.values(diagnosticPollutionConfigs).forEach((config) => {
     if (config.wmsLayer) Object.assign(config, createMaskedWmsRenderer({ layer: config.wmsLayer, alpha: config.alpha }));
   });
@@ -2268,6 +2278,22 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  const projectAirLayerIds = ["project-air-before-layer", "project-air-after-layer"];
+  const setProjectAirLayerVisibility = (visible) => {
+    projectAirLayerIds.forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
+        if (!visible) {
+          map.setPaintProperty(layerId, "raster-opacity", layerId.endsWith("after-layer") ? 0 : RASTER_MAX_OPACITY);
+        } else if (layerId.endsWith("before-layer")) {
+          map.setPaintProperty(layerId, "raster-opacity", RASTER_MAX_OPACITY);
+        } else {
+          map.setPaintProperty(layerId, "raster-opacity", 0);
+        }
+      }
+    });
+  };
+
   const diagnosticParkingLayerIds = ["diagnostic-parking-fill", "diagnostic-parking-outline"];
   const setDiagnosticParkingVisibility = (visible) => {
     diagnosticParkingLayerIds.forEach((layerId) => {
@@ -2355,6 +2381,33 @@ window.addEventListener("DOMContentLoaded", () => {
         }
         if (map.getLayer("project-noise-after-layer")) {
           map.setPaintProperty("project-noise-after-layer", "raster-opacity", 0);
+        }
+      },
+    },
+    air: {
+      title: "Pollution de l'air : avant / après",
+      minLabel: "Sans mesures",
+      maxLabel: "Avec les mesures",
+      initialValue: 0,
+      formatLabel: (value) => {
+        if (value <= 5) return "Sans mesures";
+        if (value >= 95) return "Avec les mesures";
+        return `${value}% vers nos mesures`;
+      },
+      apply: (ratio) => {
+        if (map.getLayer("project-air-before-layer")) {
+          map.setPaintProperty("project-air-before-layer", "raster-opacity", RASTER_MAX_OPACITY * (1 - ratio));
+        }
+        if (map.getLayer("project-air-after-layer")) {
+          map.setPaintProperty("project-air-after-layer", "raster-opacity", RASTER_MAX_OPACITY * ratio);
+        }
+      },
+      reset: () => {
+        if (map.getLayer("project-air-before-layer")) {
+          map.setPaintProperty("project-air-before-layer", "raster-opacity", RASTER_MAX_OPACITY);
+        }
+        if (map.getLayer("project-air-after-layer")) {
+          map.setPaintProperty("project-air-after-layer", "raster-opacity", 0);
         }
       },
     },
@@ -2531,6 +2584,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   let projectResilienceActive = false;
   let projectNoiseActive = false;
+  let projectAirActive = false;
   let projectAttractivityActive = false;
   const setProjectResilienceState = (active) => {
     projectResilienceActive = active;
@@ -2559,6 +2613,7 @@ window.addEventListener("DOMContentLoaded", () => {
     projectNoiseActive = active;
     if (active) {
       setProjectHeat2050Visibility(false);
+      setProjectAirLayerVisibility(false);
       setProjectNoiseLayerVisibility(true);
       setSliderMode("noise");
       noiseVisibilityState.projectEnabled = false;
@@ -2567,6 +2622,23 @@ window.addEventListener("DOMContentLoaded", () => {
     } else {
       setProjectNoiseLayerVisibility(false);
       if (sliderMode === "noise") setSliderMode(null);
+    }
+    updateNoiseUI();
+  };
+
+  const setProjectAirState = (active) => {
+    projectAirActive = active;
+    if (active) {
+      setProjectHeat2050Visibility(false);
+      setProjectNoiseLayerVisibility(false);
+      setProjectAirLayerVisibility(true);
+      setSliderMode("air");
+      noiseVisibilityState.projectEnabled = false;
+      noiseVisibilityState.projectMode = "none";
+      applyLegendTemplate("air", true);
+    } else {
+      setProjectAirLayerVisibility(false);
+      if (sliderMode === "air") setSliderMode(null);
     }
     updateNoiseUI();
   };
@@ -2602,8 +2674,8 @@ window.addEventListener("DOMContentLoaded", () => {
     },
     "project-air": {
       group: "project",
-      activate: () => setProjectPollutionMode("air"),
-      deactivate: () => setProjectPollutionMode("none", { suppressLegendUpdate: true }),
+      activate: () => setProjectAirState(true),
+      deactivate: () => setProjectAirState(false),
     },
     "project-heat": {
       group: "project",
@@ -2689,6 +2761,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (!skipFilterReset) resetFiltersForGroup("project");
     if (projectResilienceActive) setProjectResilienceState(false);
     if (projectNoiseActive) setProjectNoiseState(false);
+    if (projectAirActive) setProjectAirState(false);
     if (projectAttractivityActive) setProjectAttractivityState(false);
   };
 
@@ -2944,6 +3017,16 @@ window.addEventListener("DOMContentLoaded", () => {
       canvas: projectNoiseAfterRenderer.canvas,
       coordinates: pollutionCanvasCoordinates,
     });
+    map.addSource("project-air-before", {
+      type: "canvas",
+      canvas: projectAirBeforeRenderer.canvas,
+      coordinates: pollutionCanvasCoordinates,
+    });
+    map.addSource("project-air-after", {
+      type: "canvas",
+      canvas: projectAirAfterRenderer.canvas,
+      coordinates: pollutionCanvasCoordinates,
+    });
     Object.values(diagnosticPollutionConfigs).forEach((config) => {
       map.addSource(config.sourceId, {
         type: "canvas",
@@ -2963,6 +3046,8 @@ window.addEventListener("DOMContentLoaded", () => {
     projectHeat2050ImprovedRenderer.draw(map);
     projectNoiseBeforeRenderer.draw(map);
     projectNoiseAfterRenderer.draw(map);
+    projectAirBeforeRenderer.draw(map);
+    projectAirAfterRenderer.draw(map);
     map.addLayer({
       id: "focus-zone-layer",
       type: "line",
@@ -3114,6 +3199,24 @@ window.addEventListener("DOMContentLoaded", () => {
       id: "project-noise-after-layer",
       type: "raster",
       source: "project-noise-after",
+      layout: { visibility: "none" },
+      paint: {
+        "raster-opacity": 0.8,
+      },
+    });
+    map.addLayer({
+      id: "project-air-before-layer",
+      type: "raster",
+      source: "project-air-before",
+      layout: { visibility: "none" },
+      paint: {
+        "raster-opacity": 0.8,
+      },
+    });
+    map.addLayer({
+      id: "project-air-after-layer",
+      type: "raster",
+      source: "project-air-after",
       layout: { visibility: "none" },
       paint: {
         "raster-opacity": 0.8,
