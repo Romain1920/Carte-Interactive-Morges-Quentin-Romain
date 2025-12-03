@@ -16,7 +16,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const {
     zoneCoords,
     focusZone,
-    noiseMaskCoords,
     maskGeoJson,
     diagnosticAutoAxesPrimary,
     diagnosticAutoAxesSecondary,

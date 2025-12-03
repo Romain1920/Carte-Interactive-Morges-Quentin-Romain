@@ -911,4 +911,4 @@ const projectAutoAxes = {
     ],
   };
 
-export const diagnosticGeojson = { zoneCoords, focusZone, noiseMaskCoords, maskGeoJson, diagnosticAutoAxesPrimary, diagnosticAutoAxesSecondary, diagnosticAutoAxesTertiary, diagnosticLakeViews, diagnosticParkingSurfaces, diagnosticPrivateSpaces, projectAutoWestEast, projectAutoEastWest, projectAutoAxes };
+export const diagnosticGeojson = { zoneCoords, focusZone, noiseMaskCoords, maskGeoJson, diagnosticAutoAxesPrimary, diagnosticAutoAxesSecondary, diagnosticAutoAxesTertiary, diagnosticLakeViews, diagnosticParkingSurfaces, diagnosticPrivateSpaces, projectAutoAxes };

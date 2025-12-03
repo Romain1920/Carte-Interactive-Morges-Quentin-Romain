@@ -62,14 +62,6 @@ const createMaskedImageRenderer = ({ alpha = 0.85, resolveSrc }) => {
   };
 };
 
-// Variante pour les couches WMS fédérales (pollution bruit/air diagnostic).
-const createMaskedWmsRenderer = ({ layer, alpha = 0.85 }) =>
-  createMaskedImageRenderer({
-    alpha,
-    resolveSrc: () =>
-      `https://wms.geo.admin.ch/?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=TRUE&BGCOLOR=0x00000000&LAYERS=${layer}&SRS=EPSG:4326&BBOX=${noiseBbox}&WIDTH=${noiseCanvasWidth}&HEIGHT=${noiseCanvasHeight}`,
-  });
-
 // Et la variante pour les PNG locaux générés avec GDAL.
 const createMaskedLocalImageRenderer = ({ imagePath, alpha = 0.85 }) =>
   createMaskedImageRenderer({
@@ -88,7 +80,6 @@ const pollutionCanvasCoordinates = [
 export {
   createMaskedImageRenderer,
   createMaskedLocalImageRenderer,
-  createMaskedWmsRenderer,
   noiseMaskCoords,
   noiseBounds,
   noiseCanvasWidth,
