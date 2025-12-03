@@ -1817,7 +1817,7 @@ window.addEventListener("DOMContentLoaded", () => {
       source: "project-parking",
       layout: { visibility: "none" },
       paint: {
-        "fill-color": "#94a3b8",
+        "fill-color": "#006affff",
         "fill-opacity": 0.5,
       },
     });
@@ -1827,7 +1827,7 @@ window.addEventListener("DOMContentLoaded", () => {
       source: "project-parking",
       layout: { visibility: "none" },
       paint: {
-        "line-color": "#475569",
+        "line-color": "#006affff",
         "line-width": 1.4,
       },
     });
