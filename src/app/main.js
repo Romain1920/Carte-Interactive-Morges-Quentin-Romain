@@ -4,7 +4,7 @@ import { injectSpeedInsights } from "@vercel/speed-insights";
 import { inject as injectAnalytics } from "@vercel/analytics";
 import { projectGeojson } from "../data/geojson/projectGeojson";
 import { diagnosticGeojson } from "../data/geojson/diagnosticGeojson";
-import { createMaskedLocalImageRenderer, createMaskedWmsRenderer, pollutionCanvasCoordinates } from "../masks/maskRenderer";
+import { createMaskedLocalImageRenderer, pollutionCanvasCoordinates } from "../masks/maskRenderer";
 
 // Petit bootstrap analytics, histoire de garder les mêmes stats que dans le projet Vite d’origine.
 
@@ -219,19 +219,23 @@ window.addEventListener("DOMContentLoaded", () => {
       key: "noise",
       sourceId: "noise-diagnostic",
       layerId: "noise-diagnostic-layer",
-      wmsLayer: "ch.bafu.laerm-strassenlaerm_tag",
-      alpha: 0.85,
-      paint: { "raster-opacity": 0.65 },
+      paint: { "raster-opacity": 0.8 },
       legend: pollutionLegendTemplates.noise,
+      ...createMaskedLocalImageRenderer({
+        imagePath: "/data/noise_scenario_base.png",
+        alpha: 0.8,
+      }),
     },
     air: {
       key: "air",
       sourceId: "air-diagnostic",
       layerId: "air-diagnostic-layer",
-      wmsLayer: "ch.bafu.luftreinhaltung-stickstoffdioxid",
-      alpha: 0.9,
-      paint: { "raster-opacity": 0.75 },
+      paint: { "raster-opacity": 0.8 },
       legend: pollutionLegendTemplates.air,
+      ...createMaskedLocalImageRenderer({
+        imagePath: "/data/no2_scenario_base.png",
+        alpha: 0.85,
+      }),
     },
   };
 
@@ -268,10 +272,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const projectAirAfterRenderer = createMaskedLocalImageRenderer({
     imagePath: "/data/no2_scenario_project.png",
     alpha: 0.85,
-  });
-
-  Object.values(diagnosticPollutionConfigs).forEach((config) => {
-    if (config.wmsLayer) Object.assign(config, createMaskedWmsRenderer({ layer: config.wmsLayer, alpha: config.alpha }));
   });
 
   // Quelques helpers pour éviter de modifier les objets GeoJSON d’origine.
