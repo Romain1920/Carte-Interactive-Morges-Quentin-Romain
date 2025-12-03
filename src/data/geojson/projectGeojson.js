@@ -401,6 +401,68 @@ export const projectGeojson = {
       },
     ],
   },
+  projectSpacesArrows: {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764769553906" },
+        geometry: {
+          type: "LineString",
+          coordinates: [
+            [6.501030577268386, 46.509780870231886],
+            [6.500673259967895, 46.50988547470959],
+            [6.500680016898624, 46.50982594841686],
+            [6.500673881300962, 46.50988566805085],
+            [6.500739961684181, 46.509921690824264],
+            [6.500681777589906, 46.509826110360954],
+          ],
+        },
+      },
+      {
+        type: "Feature",
+        properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764769580495" },
+        geometry: {
+          type: "LineString",
+          coordinates: [
+            [6.5005167772541395, 46.50899848988944],
+            [6.500301294849395, 46.50908777664301],
+            [6.50030153912045, 46.50900784590747],
+            [6.5003675364099704, 46.50911579660701],
+            [6.500299151280265, 46.50908607747804],
+          ],
+        },
+      },
+      {
+        type: "Feature",
+        properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764769588128" },
+        geometry: {
+          type: "LineString",
+          coordinates: [
+            [6.4993281472105116, 46.50808429681192],
+            [6.499179783146544, 46.508185635613394],
+            [6.4991674861381155, 46.508117099415756],
+            [6.499274021033917, 46.508187140362324],
+            [6.499178383299996, 46.508182105943135],
+          ],
+        },
+      },
+      {
+        type: "Feature",
+        properties: { name: "Dessin", type: "linepolygon", id: "drawing_feature_1764769598659" },
+        geometry: {
+          type: "LineString",
+          coordinates: [
+            [6.498341468739768, 46.50748365005597],
+            [6.498228431788334, 46.5075955705518],
+            [6.498211666659885, 46.50754539471657],
+            [6.498307425718146, 46.50760264303374],
+            [6.498228628786788, 46.50760049064341],
+          ],
+        },
+      },
+    ],
+  },
   // Ligne qui illustre l’ouverture du front lacustre.
   projectLakeOpenOverlay: {
     type: "FeatureCollection",

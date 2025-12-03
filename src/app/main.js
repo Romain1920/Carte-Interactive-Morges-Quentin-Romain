@@ -327,6 +327,7 @@ window.addEventListener("DOMContentLoaded", () => {
     projectParkingSurfaces,
     projectRoofsOverlay,
     projectSpacesOverlay,
+    projectSpacesArrows,
     projectLakeOpenOverlay,
     projectLakeRenatureOverlay,
     projectDensityOverlay,
@@ -726,7 +727,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const projectAutoLineLayerIds = ["project-auto-line-layer"];
   const projectAutoArrowLayerIds = ["project-auto-arrow-layer"];
   const projectParkingLayerIds = ["project-parking-fill", "project-parking-outline"];
-  const projectSpacesLayerIds = ["project-spaces-fill", "project-spaces-outline"];
+  const projectSpacesLayerIds = ["project-spaces-fill", "project-spaces-outline", "project-space-arrows"];
   const projectLakeOpenLayerIds = ["project-lake-open-fill", "project-lake-open-outline"];
   const projectLakeRenatureLayerIds = ["project-lake-renature-fill", "project-lake-renature-outline"];
   const projectRoofsLayerIds = ["project-roofs-fill", "project-roofs-outline"];
@@ -1533,6 +1534,7 @@ window.addEventListener("DOMContentLoaded", () => {
     map.addSource("diagnostic-private", { type: "geojson", data: annotatedPrivate.data });
     map.addSource("project-parking", { type: "geojson", data: projectAnnotatedParking.data });
     map.addSource("project-spaces-overlay", { type: "geojson", data: projectSpacesOverlay });
+    map.addSource("project-space-arrows", { type: "geojson", data: projectSpacesArrows });
     map.addSource("project-lake-open", { type: "geojson", data: projectLakeOpenOverlay });
     map.addSource("project-lake-renature", { type: "geojson", data: projectLakeRenatureOverlay });
     map.addSource("project-roofs", { type: "geojson", data: projectAnnotatedRoofs.data });
@@ -1849,6 +1851,16 @@ window.addEventListener("DOMContentLoaded", () => {
       paint: {
         "line-color": "#be185d",
         "line-width": 2.5,
+      },
+    });
+    map.addLayer({
+      id: "project-space-arrows",
+      type: "line",
+      source: "project-space-arrows",
+      layout: { visibility: "none", "line-cap": "round", "line-join": "round" },
+      paint: {
+        "line-color": "#f472b6",
+        "line-width": 5,
       },
     });
     map.addLayer({
