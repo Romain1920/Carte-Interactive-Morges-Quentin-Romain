@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Carte interactive - Morges</title>
 
-  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <!-- Bandeau principal : titre et toggles Diagnostic/Projet -->
   <header>
     <div class="header-top">
       <h1>Groupe 3 - Vielle ville de Morges</h1>
@@ -17,6 +17,7 @@
       </div>
     </div>
   </header>
+  <!-- Bloc carte + overlays (slider, légende, panneau latéral) -->
   <div class="map-wrapper">
     <div id="map" role="application" aria-label="Carte interactive centrée sur Morges"></div>
     <div class="coord-display" id="coord-display" aria-live="polite">
@@ -38,8 +39,10 @@
         <span id="heat-slider-max-label">2060 + projet</span>
       </div>
     </div>
+    <!-- Panneau latéral avec toutes les couches activables -->
     <div class="layer-toggle" role="region" aria-label="Affichage des couches">
       <h2>Affichage</h2>
+      <!-- Section avec les données communes aux deux scénarios -->
       <section class="panel-section">
         <h3>Données de base</h3>
         <label class="toggle-item">
@@ -50,7 +53,7 @@
           <input type="checkbox" data-layer="perimeter" />
         </label>
       </section>
-
+      <!-- Section Diagnostic : couches + filtres environnementaux -->
       <section class="panel-section" data-section="diagnostic">
         <h3>Données du diagnostic</h3>
         <div class="panel-subtitle">1. Un centre-ville enclavé par les infrastructures de transport</div>
@@ -115,7 +118,7 @@
           </div>
         </div>
       </section>
-
+      <!-- Section Projet : mêmes contrôles mais pour les interventions -->
       <section class="panel-section" data-section="projet">
         <h3>Données du projet</h3>
         <div class="panel-subtitle">1. Un centre-ville libéré des flux de transit</div>
@@ -216,6 +219,7 @@
     </div>
   </div>
 
+  <!-- Panneau latéral pour afficher les fiches projet -->
   <div class="details-panel" id="details-panel" aria-hidden="true">
     <div class="details-content" role="dialog" aria-modal="true" aria-label="Informations détaillées">
       <button class="details-close" id="details-close" aria-label="Fermer">&times;</button>
@@ -223,6 +227,7 @@
     </div>
   </div>
 
+  <!-- Lightbox plein écran pour zoomer une image ou montrer un PDF -->
   <div class="lightbox" id="media-lightbox" aria-hidden="true">
     <div class="lightbox-content" role="dialog" aria-modal="true" aria-label="Média en plein écran">
       <button class="lightbox-close" id="lightbox-close" aria-label="Fermer l'aperçu">&times;</button>
@@ -231,6 +236,7 @@
     </div>
   </div>
 
+  <!-- Modale utilisée par la démonstration des reports de stationnement -->
   <div class="parking-demo" id="parking-demo" aria-hidden="true">
     <div class="parking-demo__content" role="dialog" aria-modal="true" aria-label="Démonstration des reports de stationnement">
       <button type="button" class="parking-demo__close" id="parking-demo-close" aria-label="Fermer la démonstration">&times;</button>
@@ -248,6 +254,6 @@
     </div>
   </div>
 
-  <script type="module" src="/src/main.js"></script>
+  <script type="module" src="/src/bootstrap.js"></script>
 </body>
 </html>

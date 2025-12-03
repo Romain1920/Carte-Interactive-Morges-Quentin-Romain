@@ -1,3 +1,4 @@
+/* === Structure générale et typographies === */
 html,
 body {
   height: 100%;
@@ -32,6 +33,7 @@ header h1 {
   letter-spacing: 0.5px;
 }
 
+/* Boutons permettant d’afficher Diagnostic / Projet */
 .scenario-switch {
   display: flex;
   flex-direction: row;
@@ -62,6 +64,7 @@ header h1 {
   outline-offset: 2px;
 }
 
+/* === Carte principale et overlays immédiats === */
 .map-wrapper {
   flex: 1;
   position: relative;
@@ -74,6 +77,7 @@ header h1 {
   min-height: 400px;
 }
 
+/* Popups affichées sur la carte */
 .popup-content h3 {
   margin: 0 0 6px;
   font-size: 18px;
@@ -185,6 +189,7 @@ header h1 {
   cursor: pointer;
 }
 
+/* === Panneau latéral des couches === */
 .layer-toggle {
   position: absolute;
   right: 10px;
@@ -222,6 +227,7 @@ header h1 {
   line-height: 1.45;
 }
 
+/* Titres et sous-titres internes au panneau */
 .panel-section h3 {
   margin: 0 0 6px;
   font-size: 14px;
@@ -254,6 +260,7 @@ header h1 {
   line-height: 1.35;
 }
 
+/* Grille de boutons “En conséquence” */
 .filter-panel {
   border: 1px dashed rgba(148, 163, 184, 0.4);
   border-radius: 10px;
@@ -382,6 +389,7 @@ header h1 {
   margin-bottom: 4px;
 }
 
+/* Cases à cocher stylisées */
 .toggle-item {
   display: flex;
   align-items: center;
@@ -520,6 +528,7 @@ header h1 {
   white-space: nowrap;
 }
 
+/* === Slider de comparaison avant/après === */
 .layer-slider {
   position: absolute;
   top: 20px;
@@ -541,6 +550,7 @@ header h1 {
   flex-direction: column;
 }
 
+/* Variante responsive : slider un peu plus compact sur mobile */
 @media (max-width: 780px) {
   .layer-slider {
     top: 14px;
@@ -626,6 +636,7 @@ header h1 {
   line-height: 1.4;
 }
 
+/* === Modale démonstration des reports de stationnement === */
 .parking-demo {
   position: fixed;
   inset: 0;
@@ -712,15 +723,20 @@ header h1 {
   flex: 1;
   position: relative;
   overflow-y: auto;
-  min-height: 520px;
+  max-height: calc(80vh - 220px);
   padding-right: 6px;
 }
 
 .parking-demo__body {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 28px;
   min-height: 100%;
+}
+
+.parking-demo__body--single {
+  gap: 32px;
+  padding-bottom: 14px;
 }
 
 .parking-demo__text h3 {
@@ -745,6 +761,47 @@ header h1 {
   padding-left: 18px;
   color: rgba(255, 255, 255, 0.78);
   line-height: 1.5;
+}
+
+.parking-demo__note {
+  font-size: 12px;
+  color: rgba(226, 232, 240, 0.8);
+  margin-top: 6px;
+}
+
+.parking-demo__context {
+  font-size: 14px;
+  color: #f8fafc;
+  margin: 0 0 6px;
+}
+
+.parking-demo__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 18px 0 6px;
+}
+
+.parking-chip {
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(15, 23, 42, 0.2);
+  color: #e2e8f0;
+  border-radius: 999px;
+  padding: 6px 14px;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.parking-chip strong {
+  font-size: 14px;
+}
+
+.parking-chip.active {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
 }
 
 .parking-demo__stats {
@@ -789,7 +846,6 @@ header h1 {
 }
 
 .parking-demo__list-wrapper {
-  display: none;
   max-height: 320px;
   overflow-y: auto;
   padding-right: 6px;
@@ -855,7 +911,7 @@ header h1 {
 }
 
 .parking-demo__content {
-  width: min(960px, 92vw);
+  width: min(1100px, 94vw);
   max-height: 90vh;
   background: #0b1731;
   border-radius: 22px;
@@ -919,7 +975,9 @@ header h1 {
 .parking-demo__slides {
   flex: 1;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  min-height: 520px;
+  padding-right: 6px;
 }
 
 .parking-demo__slide {
@@ -1015,6 +1073,7 @@ header h1 {
   background: rgba(255, 255, 255, 0.12);
 }
 
+/* === Légende bruit/air/chaleur à droite de la carte === */
 .noise-legend {
   position: absolute;
   bottom: 110px;
@@ -1120,6 +1179,7 @@ header h1 {
   letter-spacing: 0.03em;
 }
 
+/* === Lightbox pour zoom image / PDF === */
 .lightbox {
   position: fixed;
   inset: 0;
@@ -1175,6 +1235,7 @@ header h1 {
   cursor: pointer;
 }
 
+/* === Panneau latéral des détails projet === */
 .details-panel {
   position: fixed;
   inset: 0;
@@ -1218,6 +1279,7 @@ header h1 {
   cursor: pointer;
 }
 
+/* Détail latéral en plein écran sur mobile */
 @media (max-width: 768px) {
   .details-panel {
     padding: env(safe-area-inset-top, 0) env(safe-area-inset-left, 0) env(safe-area-inset-bottom, 0);
@@ -1246,8 +1308,17 @@ header h1 {
   #map {
     min-height: 100vh;
   }
+
+  .parking-demo__lists {
+    flex-direction: column;
+  }
+
+  .parking-demo__chips {
+    flex-direction: column;
+  }
 }
 
+/* Position du panneau de couches quand l’écran est petit */
 @media (max-width: 720px) {
   .layer-toggle {
     position: fixed;
@@ -1261,6 +1332,7 @@ header h1 {
     backdrop-filter: blur(12px);
   }
 }
+/* Harmonisation des popups MapLibre avec le dark theme */
 .maplibregl-popup {
   max-width: 280px;
   background: transparent;
