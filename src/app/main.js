@@ -76,6 +76,80 @@ function setupMobilePanelDrawer({ panel, toggleButton, overlay }) {
   mobileQuery.addEventListener("change", handleBreakpointChange);
 }
 
+function setupMobileLegendDrawer({ legend, toggleButton, overlay, closeButton }) {
+  if (!legend || !toggleButton || !overlay) return null;
+
+  const mobileQuery = window.matchMedia("(max-width: 800px)");
+  let isMobile = mobileQuery.matches;
+  let legendAvailable = false;
+  let isOpen = false;
+
+  const applyState = () => {
+    const showToggle = isMobile && legendAvailable;
+    toggleButton.hidden = !showToggle;
+
+    if (!showToggle) {
+      isOpen = false;
+    }
+
+    const shouldOpen = showToggle && isOpen;
+    legend.classList.toggle("is-mobile-open", shouldOpen);
+    overlay.hidden = !shouldOpen;
+    overlay.classList.toggle("is-visible", shouldOpen);
+    toggleButton.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+    document.body.classList.toggle("legend-panel-open", shouldOpen);
+  };
+
+  const closeLegend = () => {
+    if (!isOpen) return;
+    isOpen = false;
+    applyState();
+  };
+
+  const handleBreakpointChange = (event) => {
+    isMobile = event.matches;
+    if (!isMobile) {
+      isOpen = false;
+      toggleButton.hidden = true;
+      overlay.hidden = true;
+      overlay.classList.remove("is-visible");
+      legend.classList.remove("is-mobile-open");
+      document.body.classList.remove("legend-panel-open");
+    } else {
+      applyState();
+    }
+  };
+
+  toggleButton.addEventListener("click", () => {
+    if (!isMobile || !legendAvailable) return;
+    isOpen = !isOpen;
+    applyState();
+  });
+
+  overlay.addEventListener("click", closeLegend);
+  closeButton?.addEventListener("click", closeLegend);
+  document.addEventListener("keydown", (event) => {
+    if (!isMobile) return;
+    if (event.key === "Escape") {
+      closeLegend();
+    }
+  });
+
+  mobileQuery.addEventListener("change", handleBreakpointChange);
+  applyState();
+
+  return {
+    handleLegendVisibility: (visible) => {
+      legendAvailable = Boolean(visible);
+      if (!legendAvailable) {
+        isOpen = false;
+      }
+      applyState();
+    },
+    close: closeLegend,
+  };
+}
+
 // Toute la logique reste encapsulée ici pour éviter les soucis de timing avec MapLibre.
 window.addEventListener("DOMContentLoaded", () => {
   const {
@@ -96,10 +170,19 @@ window.addEventListener("DOMContentLoaded", () => {
   const noiseLegend = document.getElementById("noise-legend");
   const noiseLegendTitle = document.getElementById("noise-legend-title");
   const noiseLegendBody = document.getElementById("noise-legend-body");
+  const legendToggleButton = document.getElementById("legend-toggle");
+  const legendOverlay = document.getElementById("mobile-legend-overlay");
+  const legendCloseButton = document.getElementById("noise-legend-close");
   const layerPanel = document.getElementById("layer-panel");
   const mobilePanelToggle = document.getElementById("mobile-panel-toggle");
   const mobilePanelOverlay = document.getElementById("mobile-panel-overlay");
   setupMobilePanelDrawer({ panel: layerPanel, toggleButton: mobilePanelToggle, overlay: mobilePanelOverlay });
+  const mobileLegendDrawer = setupMobileLegendDrawer({
+    legend: noiseLegend,
+    toggleButton: legendToggleButton,
+    overlay: legendOverlay,
+    closeButton: legendCloseButton,
+  });
   const projectIntentionsButton = document.querySelector('[data-action="project-intentions"]');
   const heatSliderContainer = document.getElementById("heat-slider");
   const heatSliderTitle = document.getElementById("heat-slider-title");
@@ -118,6 +201,14 @@ window.addEventListener("DOMContentLoaded", () => {
     sliderValueLabel: heatSliderValueLabel,
     sliderInput: heatSliderInput,
   });
+  if (mobileLegendDrawer) {
+    const baseSetLegendVisibility = environmentPanel.setLegendVisibility;
+    environmentPanel.setLegendVisibility = (visible) => {
+      baseSetLegendVisibility(visible);
+      mobileLegendDrawer.handleLegendVisibility(visible);
+    };
+    mobileLegendDrawer.handleLegendVisibility(false);
+  }
   // Ces boutons gèrent les filtres “en conséquence” pour diagnostic et projet.
   const filterButtons = Array.from(document.querySelectorAll(".filter-button"));
   const filterPanel = createFilterPanel({

@@ -24,6 +24,7 @@
       Lat 46.50900 · Lng 6.49600
     </div>
     <div class="noise-legend" id="noise-legend" aria-hidden="true">
+      <button type="button" class="noise-legend__close" id="noise-legend-close" aria-label="Fermer la légende">&times;</button>
       <div class="legend-title" id="noise-legend-title"></div>
       <div class="legend-body" id="noise-legend-body"></div>
     </div>
@@ -39,6 +40,17 @@
         <span id="heat-slider-max-label">2060 + projet</span>
       </div>
     </div>
+    <button
+      type="button"
+      id="legend-toggle"
+      class="legend-toggle-button"
+      aria-controls="noise-legend"
+      aria-expanded="false"
+      hidden
+    >
+      Légende active
+    </button>
+    <div class="mobile-legend-overlay" id="mobile-legend-overlay" hidden></div>
     <button
       type="button"
       id="mobile-panel-toggle"
