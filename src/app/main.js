@@ -26,6 +26,56 @@ import { renderProjectDetailsPanel, bindProjectDetailsPanel } from "../ui/organi
 injectSpeedInsights();
 injectAnalytics();
 
+function setupMobilePanelDrawer({ panel, toggleButton, overlay }) {
+  if (!panel || !toggleButton || !overlay) return;
+
+  const mobileQuery = window.matchMedia("(max-width: 900px)");
+  let isMobile = mobileQuery.matches;
+
+  const updateState = (open) => {
+    if (!isMobile) return;
+    panel.classList.toggle("is-mobile-open", open);
+    overlay.hidden = !open;
+    overlay.classList.toggle("is-visible", open);
+    toggleButton.setAttribute("aria-expanded", open ? "true" : "false");
+    panel.setAttribute("aria-hidden", open ? "false" : "true");
+    document.body.classList.toggle("mobile-panel-open", open);
+  };
+
+  const closePanel = () => updateState(false);
+
+  const handleBreakpointChange = (event) => {
+    isMobile = event.matches;
+    if (!isMobile) {
+      panel.classList.remove("is-mobile-open");
+      panel.removeAttribute("aria-hidden");
+      overlay.hidden = true;
+      overlay.classList.remove("is-visible");
+      toggleButton.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("mobile-panel-open");
+    } else {
+      updateState(false);
+    }
+  };
+
+  toggleButton.addEventListener("click", () => {
+    if (!isMobile) return;
+    const isOpen = panel.classList.contains("is-mobile-open");
+    updateState(!isOpen);
+  });
+
+  overlay.addEventListener("click", closePanel);
+  document.addEventListener("keydown", (event) => {
+    if (!isMobile) return;
+    if (event.key === "Escape") {
+      closePanel();
+    }
+  });
+
+  handleBreakpointChange(mobileQuery);
+  mobileQuery.addEventListener("change", handleBreakpointChange);
+}
+
 // Toute la logique reste encapsulée ici pour éviter les soucis de timing avec MapLibre.
 window.addEventListener("DOMContentLoaded", () => {
   const {
@@ -46,6 +96,10 @@ window.addEventListener("DOMContentLoaded", () => {
   const noiseLegend = document.getElementById("noise-legend");
   const noiseLegendTitle = document.getElementById("noise-legend-title");
   const noiseLegendBody = document.getElementById("noise-legend-body");
+  const layerPanel = document.getElementById("layer-panel");
+  const mobilePanelToggle = document.getElementById("mobile-panel-toggle");
+  const mobilePanelOverlay = document.getElementById("mobile-panel-overlay");
+  setupMobilePanelDrawer({ panel: layerPanel, toggleButton: mobilePanelToggle, overlay: mobilePanelOverlay });
   const projectIntentionsButton = document.querySelector('[data-action="project-intentions"]');
   const heatSliderContainer = document.getElementById("heat-slider");
   const heatSliderTitle = document.getElementById("heat-slider-title");

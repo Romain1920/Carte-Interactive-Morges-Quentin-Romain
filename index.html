@@ -39,8 +39,20 @@
         <span id="heat-slider-max-label">2060 + projet</span>
       </div>
     </div>
+    <button
+      type="button"
+      id="mobile-panel-toggle"
+      class="mobile-panel-toggle"
+      aria-controls="layer-panel"
+      aria-expanded="false"
+      aria-label="Ouvrir le panneau de filtres"
+    >
+      <span class="mobile-panel-toggle__icon" aria-hidden="true"></span>
+      <span>Filtres &amp; couches</span>
+    </button>
+    <div class="mobile-panel-overlay" id="mobile-panel-overlay" hidden></div>
     <!-- Panneau latéral avec toutes les couches activables -->
-    <div class="layer-toggle" role="region" aria-label="Affichage des couches">
+    <div class="layer-toggle" id="layer-panel" role="region" aria-label="Affichage des couches">
       <h2>Affichage</h2>
       <!-- Section avec les données communes aux deux scénarios -->
       <section class="panel-section">
