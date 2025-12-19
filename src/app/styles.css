@@ -33,6 +33,22 @@ header h1 {
   letter-spacing: 0.5px;
 }
 
+@media (max-width: 640px) {
+  header {
+    padding: 10px 12px;
+  }
+
+  .header-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  header h1 {
+    display: none;
+  }
+}
+
 /* Boutons permettant d’afficher Diagnostic / Projet */
 .scenario-switch {
   display: flex;
@@ -1251,6 +1267,28 @@ body.mobile-panel-open {
   font-size: 10px;
   color: rgba(148, 163, 184, 0.9);
   letter-spacing: 0.03em;
+}
+
+@media (max-width: 640px) {
+  .noise-legend {
+    width: min(240px, calc(100vw - 24px));
+    max-width: calc(100vw - 24px);
+    padding: 8px 10px;
+    font-size: 11px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 90px;
+  }
+
+  .noise-legend .legend-title {
+    font-size: 11px;
+  }
+
+  .noise-legend .legend-description,
+  .noise-legend .legend-body li,
+  .noise-legend .legend-body p {
+    font-size: 10px;
+  }
 }
 
 /* === Lightbox pour zoom image / PDF === */
