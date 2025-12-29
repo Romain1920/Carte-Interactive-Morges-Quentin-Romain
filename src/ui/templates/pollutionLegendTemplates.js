@@ -111,19 +111,4 @@ export const pollutionLegendTemplates = {
         <div class="legend-sources">Sources : DGE – Atmosphère/Climatologie, cartes climatiques 2060.</div>
       `,
   },
-  attractivity: {
-    title: "Un potentiel d’attractivité développé",
-    body: `
-        <div class="legend-description">
-          <strong>Animation à intégrer</strong>
-          <p>Ce filtre présentera prochainement la narration complète : report des activités vers les places libérées, activation du littoral et itinéraires confortables reliant les polarités du centre.</p>
-        </div>
-        <ul>
-          <li>Réaffectation des surfaces de stationnement en espaces publics.</li>
-          <li>Nouvelles continuités piétonnes vers le parc et les quais.</li>
-          <li>Valorisation du front lacustre et des commerces de proximité.</li>
-        </ul>
-        <p>Le rendu cartographique est en préparation ; le filtre rappelle simplement ce scénario dans l’interface.</p>
-      `,
-  },
 };

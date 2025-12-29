@@ -14,7 +14,6 @@ export const createEnvironmentController = ({
   let projectResilienceActive = false;
   let projectNoiseActive = false;
   let projectAirActive = false;
-  let projectAttractivityActive = false;
 
   const sliderConfigs = {
     heat: {
@@ -50,7 +49,7 @@ export const createEnvironmentController = ({
       maxLabel: "Avec les mesures",
       initialValue: 0,
       formatLabel: (value) => {
-        if (value <= 5) return "Sans mesures";
+        if (value <= 5) return "Sans les mesures";
         if (value >= 95) return "Avec les mesures";
         return `${value}% vers nos mesures`;
       },
@@ -77,7 +76,7 @@ export const createEnvironmentController = ({
       maxLabel: "Avec les mesures",
       initialValue: 0,
       formatLabel: (value) => {
-        if (value <= 5) return "Sans mesures";
+        if (value <= 5) return "Sans les mesures";
         if (value >= 95) return "Avec les mesures";
         return `${value}% vers nos mesures`;
       },
@@ -119,7 +118,7 @@ export const createEnvironmentController = ({
     const hasDiagnostic = noiseVisibilityState.diagnosticMode !== "none";
     const hasProject = noiseVisibilityState.projectEnabled && noiseVisibilityState.projectMode !== "none";
     const hasSlider = Boolean(environmentPanel.getSliderMode());
-    const shouldShow = hasDiagnostic || hasProject || heatLayerVisible || projectAttractivityActive || hasSlider;
+    const shouldShow = hasDiagnostic || hasProject || heatLayerVisible || hasSlider;
     if (map.getLayer("focus-mask-layer")) {
       map.setLayoutProperty("focus-mask-layer", "visibility", shouldShow ? "visible" : "none");
     }
@@ -229,19 +228,10 @@ export const createEnvironmentController = ({
     notifyProjectModeChange();
   };
 
-  const setProjectAttractivityState = (active) => {
-    projectAttractivityActive = active;
-    if (active) {
-      applyLegendTemplate("attractivity", true);
-    }
-    updateNoiseUI();
-  };
-
   const resetProjectStates = () => {
     if (projectResilienceActive) setProjectResilienceState(false);
     if (projectNoiseActive) setProjectNoiseState(false);
     if (projectAirActive) setProjectAirState(false);
-    if (projectAttractivityActive) setProjectAttractivityState(false);
   };
 
   const resetDiagnosticState = () => {
@@ -280,11 +270,6 @@ export const createEnvironmentController = ({
       activate: () => setProjectResilienceState(true),
       deactivate: () => setProjectResilienceState(false),
     },
-    "project-attractivity": {
-      group: "project",
-      activate: () => setProjectAttractivityState(true),
-      deactivate: () => setProjectAttractivityState(false),
-    },
   };
 
   return {
@@ -294,7 +279,6 @@ export const createEnvironmentController = ({
     setProjectResilienceState,
     setProjectNoiseState,
     setProjectAirState,
-    setProjectAttractivityState,
     resetProjectStates,
     resetDiagnosticState,
     getNoiseVisibilityState: () => ({ ...noiseVisibilityState }),

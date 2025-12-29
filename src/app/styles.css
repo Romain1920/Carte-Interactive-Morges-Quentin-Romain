@@ -473,10 +473,6 @@ body.legend-panel-open {
   --filter-color: #d946ef;
 }
 
-.filter-button[data-filter="project-attractivity"] {
-  --filter-color: #14b8a6;
-}
-
 .panel-link {
   background: none;
   border: 0;
