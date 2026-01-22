@@ -4,7 +4,6 @@ import { diagnosticGeojson } from "../data/geojson/diagnosticGeojson";
 import { pollutionCanvasCoordinates } from "../masks/maskRenderer";
 import { projectPoints } from "../data/projectPoints";
 import { projectAnnotations } from "../data/projectAnnotations";
-import { parkingDemoSteps } from "../data/parkingDemoSteps";
 import { cloneFeature, collectCoordinates, computeBounds, createAreaAnnotator } from "../app/utils/geo";
 import { pollutionLegendTemplates } from "../ui/templates/pollutionLegendTemplates";
 import { renderSurfacePopup } from "../ui/molecules/surfacePopup";
@@ -21,9 +20,11 @@ import { createLayerVisibilityController } from "./layerVisibilityController";
 import { renderLakeRelationshipPopup } from "../ui/organisms/lakeRelationshipPopup";
 import { createMobilePanelDrawer } from "../ui/organisms/mobilePanelDrawer";
 import { createMobileLegendDrawer } from "../ui/organisms/mobileLegendDrawer";
-import { createParkingDemo } from "../ui/organisms/parkingDemo";
 import { renderProjectDetailsPanel, bindProjectDetailsPanel } from "../ui/organisms/projectDetailsPanel";
+import { renderDensityProposalPanel, bindDensityProposalPanel } from "../ui/organisms/densityProposalPanel";
+import { renderParkingIntentPanel, bindParkingIntentPanel } from "../ui/organisms/parkingIntentPanel";
 import { createEnvironmentRenderers } from "../ui/organisms/environmentRenderers";
+import { setupFilterPanelModals } from "../ui/organisms/filterPanelModal";
 
 export const initializeApp = () => {
   const {
@@ -57,7 +58,6 @@ export const initializeApp = () => {
     overlay: legendOverlay,
     closeButton: legendCloseButton,
   });
-  const projectIntentionsButton = document.querySelector('[data-action="project-intentions"]');
   const heatSliderContainer = document.getElementById("heat-slider");
   const heatSliderTitle = document.getElementById("heat-slider-title");
   const heatSliderMinLabel = document.getElementById("heat-slider-min-label");
@@ -98,6 +98,7 @@ export const initializeApp = () => {
       }
     },
   });
+  setupFilterPanelModals();
   // Variables géographiques utilisées pour calculer des surfaces ou pour centrer la carte.
   const morgesCenter = [6.496, 46.509];
   const { annotatePolygonCollection } = createAreaAnnotator({ origin: morgesCenter });
@@ -198,9 +199,6 @@ export const initializeApp = () => {
     onClose: () => document.body.classList.remove("details-open"),
   });
 
-  let closeParkingDemo = () => {};
-  let startParkingDemo = () => {};
-
   // Panneau latéral “détails du projet” (réutilise le contenu des popups).
   const openDetailsPanel = (feature) => {
     detailsPanelController.open({
@@ -210,11 +208,24 @@ export const initializeApp = () => {
   };
   const closeDetailsPanel = () => detailsPanelController.close();
 
+  const openParkingIntentPanel = () => {
+    detailsPanelController.open({
+      render: () => renderParkingIntentPanel(),
+      bind: (container) => bindParkingIntentPanel({ container, openLightbox }),
+    });
+  };
+
+  const openDensityProposalPanel = () => {
+    detailsPanelController.open({
+      render: () => renderDensityProposalPanel(),
+      bind: (container) => bindDensityProposalPanel({ container, openLightbox }),
+    });
+  };
+
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeDetailsPanel();
       closeLightbox();
-      closeParkingDemo();
     }
   });
 
@@ -346,27 +357,17 @@ export const initializeApp = () => {
   layerControlPanel.bind();
   const getLayerInput = (key) => layerControlPanel?.getInput(key);
 
-  // Beaucoup de DOM refs pour la démo, on les charge ici pour éviter de tout redemander plus bas.
-  const parkingDemoButton = document.querySelector('[data-action="parking-demo"]');
-  const parkingDemoOverlay = document.getElementById("parking-demo");
-  const parkingDemoTabs = document.getElementById("parking-demo-tabs");
-  const parkingDemoBody = document.getElementById("parking-demo-body");
-  const parkingDemoClose = document.getElementById("parking-demo-close");
-  const parkingDemoAction = document.getElementById("parking-demo-action");
-
-  const parkingDemoController = createParkingDemo({
-    overlay: parkingDemoOverlay,
-    tabsContainer: parkingDemoTabs,
-    bodyContainer: parkingDemoBody,
-    closeButton: parkingDemoClose,
-    actionButton: parkingDemoAction,
-    steps: parkingDemoSteps,
+  const intentionCards = Array.from(document.querySelectorAll("[data-intention]"));
+  intentionCards.forEach((card) => {
+    card.addEventListener("click", () => {
+      const key = card.dataset.intention;
+      if (key === "parking") {
+        openParkingIntentPanel();
+      } else if (key === "density") {
+        openDensityProposalPanel();
+      }
+    });
   });
-
-  startParkingDemo = () => parkingDemoController.open();
-  closeParkingDemo = () => parkingDemoController.close();
-
-  parkingDemoButton?.addEventListener("click", () => startParkingDemo());
 
   // Petites annotations textuelles qui apparaissent quand on active les scénarios projet (définies dans src/data/projectAnnotations).
   let projectAnnotationsController = null;
@@ -931,7 +932,5 @@ export const initializeApp = () => {
     map.on("styledata", refreshStyleOverlays);
   });
 
-  projectIntentionsButton?.addEventListener("click", () => {
-    console.info("Bouton intentions cliqué — contenu à définir.");
-  });
+  // Les intentions projet sont gérées via le carrousel des tuiles.
 };

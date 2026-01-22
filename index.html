@@ -115,9 +115,15 @@
         </label>
 
         <div class="panel-subtitle panel-subtitle-consequence">En conséquence</div>
-        <div class="filter-panel" aria-label="Filtres disponibles pour le diagnostic">
+        <button type="button" class="filter-panel-mobile-open" data-filter-panel-open="diagnostic">
+          Sélectionner un filtre diagnostic
+        </button>
+        <div class="filter-panel" aria-label="Filtres disponibles pour le diagnostic" data-filter-panel="diagnostic">
           <div class="filter-panel-header">
             <div class="filter-panel-title">Filtres disponibles</div>
+            <button type="button" class="filter-panel-close" aria-label="Fermer la sélection" data-filter-panel-close>
+              <span aria-hidden="true">&times;</span>
+            </button>
             <p>Sélectionne l’indicateur environnemental à afficher : un seul à la fois pour plus de clarté.</p>
           </div>
           <div class="filter-button-grid">
@@ -160,9 +166,6 @@
           </span>
           <input type="checkbox" data-layer="project-parking" />
         </label>
-        <div class="panel-action-row">
-          <button type="button" class="panel-action-button" data-action="parking-demo">Voir la démonstration des reports de stationnements</button>
-        </div>
 
         <div class="panel-subtitle">2. Des espaces libres mis en valeur</div>
         <label class="toggle-item">
@@ -172,9 +175,6 @@
           </span>
           <input type="checkbox" data-layer="project-spaces" />
         </label>
-        <div class="panel-action-row">
-          <button type="button" class="panel-action-button" data-action="project-intentions">Afficher les intentions de projets sur les espaces libérés</button>
-        </div>
 
         <div class="panel-subtitle">3. Une relation au lac réinventée</div>
         <label class="toggle-item">
@@ -207,14 +207,44 @@
           </span>
           <input type="checkbox" data-layer="project-roofs" />
         </label>
-        <div class="panel-action-row">
-          <button type="button" class="panel-action-button" data-action="project-density">Afficher la proposition de densification</button>
+
+        <div class="panel-subtitle">Intentions du projet</div>
+        <div class="intentions-carousel" aria-label="Intentions du projet">
+          <button type="button" class="intentions-card" data-intention="parking">
+            <div class="intentions-card__media">
+              <img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'%3E%3Crect width='800' height='500' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Georgia, serif' font-size='28' fill='%23475569'%3EVisuel%20stationnement%3C/text%3E%3C/svg%3E"
+                alt=""
+              />
+            </div>
+            <div class="intentions-card__body">
+              <div class="intentions-card__title">Nouvelle organisation du stationnement</div>
+              <div class="intentions-card__tag">Démonstration des reports</div>
+              <div class="intentions-card__meta">Voir le projet</div>
+            </div>
+          </button>
+          <button type="button" class="intentions-card" data-intention="density">
+            <div class="intentions-card__media">
+              <img src="https://vl7zgyqezaiej8w4.public.blob.vercel-storage.com/Compost_V1.png" alt="" />
+            </div>
+            <div class="intentions-card__body">
+              <div class="intentions-card__title">Composte, densification douce</div>
+              <div class="intentions-card__tag">Centre historique</div>
+              <div class="intentions-card__meta">Voir le projet</div>
+            </div>
+          </button>
         </div>
 
         <div class="panel-subtitle panel-subtitle-consequence">En conséquence</div>
-        <div class="filter-panel" aria-label="Filtres disponibles pour le projet">
+        <button type="button" class="filter-panel-mobile-open" data-filter-panel-open="project">
+          Sélectionner un filtre projet
+        </button>
+        <div class="filter-panel" aria-label="Filtres disponibles pour le projet" data-filter-panel="project">
           <div class="filter-panel-header">
             <div class="filter-panel-title">Filtres disponibles</div>
+            <button type="button" class="filter-panel-close" aria-label="Fermer la sélection" data-filter-panel-close>
+              <span aria-hidden="true">&times;</span>
+            </button>
             <p>Visualise l’effet du projet sur les nuisances ou les gains attendus.</p>
           </div>
           <div class="filter-button-grid">
