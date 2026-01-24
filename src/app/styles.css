@@ -230,6 +230,8 @@ body.legend-panel-open {
   display: block;
   width: 100%;
   height: auto;
+  object-fit: contain;
+  background: rgba(15, 23, 42, 0.75);
 }
 
 .popup-carousel button {
@@ -677,6 +679,10 @@ body.filter-panel-modal-open {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.intentions-card__media--anchor-bottom {
+  object-position: center bottom;
 }
 
 .intentions-card__body {
@@ -1648,7 +1654,7 @@ body.filter-panel-modal-open {
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 32px;
   z-index: 25;
 }
 
@@ -1658,8 +1664,8 @@ body.filter-panel-modal-open {
 
 .details-content {
   position: relative;
-  width: min(820px, 92vw);
-  max-height: min(92vh, 720px);
+  width: min(1200px, 96vw);
+  max-height: 92vh;
   background: rgba(15, 23, 42, 0.98);
   border-radius: 20px;
   box-shadow: 0 30px 60px rgba(15, 23, 42, 0.5);
@@ -1669,7 +1675,7 @@ body.filter-panel-modal-open {
 }
 
 .details-content .popup-content {
-  max-height: min(70vh, 520px);
+  max-height: 80vh;
   overflow: auto;
 }
 
@@ -1683,7 +1689,8 @@ body.filter-panel-modal-open {
 }
 
 /* Habillage plus doux pour la proposition de densification */
-.density-proposal {
+.density-proposal,
+.renewal-proposal {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -1691,7 +1698,10 @@ body.filter-panel-modal-open {
 
 .density-proposal__hero,
 .density-proposal__body,
-.density-proposal__gallery {
+.density-proposal__gallery,
+.renewal-proposal__hero,
+.renewal-proposal__body,
+.renewal-proposal__gallery {
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid rgba(96, 165, 250, 0.25);
   border-radius: 16px;
@@ -1699,7 +1709,8 @@ body.filter-panel-modal-open {
   box-shadow: 0 14px 30px rgba(15, 23, 42, 0.25);
 }
 
-.density-proposal__badge {
+.density-proposal__badge,
+.renewal-proposal__badge {
   display: inline-flex;
   align-items: center;
   padding: 4px 10px;
@@ -1713,19 +1724,23 @@ body.filter-panel-modal-open {
   margin-bottom: 8px;
 }
 
-.density-proposal h3 {
+.density-proposal h3,
+.renewal-proposal h3 {
   font-size: 20px;
   letter-spacing: 0.2px;
   margin-bottom: 6px;
 }
 
-.density-proposal__hero p {
+.density-proposal__hero p,
+.renewal-proposal__hero p {
   margin: 0;
   font-size: 14.5px;
   color: #dbeafe;
 }
 
-.density-proposal__gallery-title {
+.density-proposal__gallery-title,
+.renewal-proposal__gallery-title,
+.renewal-proposal__comparison-title {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -1733,7 +1748,8 @@ body.filter-panel-modal-open {
   margin-bottom: 8px;
 }
 
-.density-proposal .popup-carousel {
+.density-proposal .popup-carousel,
+.renewal-proposal .popup-carousel {
   margin: 0;
   border: 1px solid rgba(96, 165, 250, 0.25);
   box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
@@ -1743,13 +1759,16 @@ body.filter-panel-modal-open {
   background: rgba(15, 23, 42, 0.7);
 }
 
-.density-proposal .popup-carousel img {
+.density-proposal .popup-carousel img,
+.renewal-proposal .popup-carousel img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  background: rgba(15, 23, 42, 0.8);
 }
 
-.density-proposal__comparison {
+.density-proposal__comparison,
+.renewal-proposal__comparison {
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid rgba(96, 165, 250, 0.25);
   border-radius: 16px;
@@ -1757,6 +1776,18 @@ body.filter-panel-modal-open {
   box-shadow: 0 14px 30px rgba(15, 23, 42, 0.25);
   display: grid;
   gap: 12px;
+}
+
+.density-proposal__body,
+.renewal-proposal__body {
+  column-count: 2;
+  column-gap: 24px;
+}
+
+.density-proposal__body p,
+.renewal-proposal__body p {
+  break-inside: avoid;
+  margin-top: 0;
 }
 
 .density-proposal__visual {
@@ -1787,8 +1818,9 @@ body.filter-panel-modal-open {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
+  background: #fff;
 }
 
 .before-after__overlay {
@@ -1846,6 +1878,64 @@ body.filter-panel-modal-open {
   font-size: 14.5px;
   line-height: 1.6;
   color: #d6e0f5;
+}
+
+.intention-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.intention-details__hero,
+.intention-details__body,
+.intention-details__gallery {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(96, 165, 250, 0.25);
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.25);
+}
+
+.intention-details__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.18);
+  color: #dbeafe;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.intention-details__gallery-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(226, 232, 240, 0.8);
+  margin-bottom: 8px;
+}
+
+.intention-details__body {
+  column-count: 2;
+  column-gap: 24px;
+}
+
+.intention-details__body p {
+  break-inside: avoid;
+  margin-top: 0;
+}
+
+.intention-details .popup-carousel {
+  max-height: 360px;
+}
+
+.intention-details .popup-carousel img {
+  height: auto;
+  max-height: 360px;
+  object-fit: contain;
 }
 
 .details-close {

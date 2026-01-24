@@ -23,6 +23,8 @@ import { createMobileLegendDrawer } from "../ui/organisms/mobileLegendDrawer";
 import { renderProjectDetailsPanel, bindProjectDetailsPanel } from "../ui/organisms/projectDetailsPanel";
 import { renderDensityProposalPanel, bindDensityProposalPanel } from "../ui/organisms/densityProposalPanel";
 import { renderParkingIntentPanel, bindParkingIntentPanel } from "../ui/organisms/parkingIntentPanel";
+import { renderStreetRenewalPanel, bindStreetRenewalPanel } from "../ui/organisms/streetRenewalPanel";
+import { renderSafetyHeritagePanel, bindSafetyHeritagePanel } from "../ui/organisms/safetyHeritagePanel";
 import { createEnvironmentRenderers } from "../ui/organisms/environmentRenderers";
 import { setupFilterPanelModals } from "../ui/organisms/filterPanelModal";
 
@@ -222,6 +224,20 @@ export const initializeApp = () => {
     });
   };
 
+  const openStreetRenewalPanel = () => {
+    detailsPanelController.open({
+      render: () => renderStreetRenewalPanel(),
+      bind: (container) => bindStreetRenewalPanel({ container, openLightbox }),
+    });
+  };
+
+  const openSafetyHeritagePanel = () => {
+    detailsPanelController.open({
+      render: () => renderSafetyHeritagePanel(),
+      bind: (container) => bindSafetyHeritagePanel({ container, openLightbox }),
+    });
+  };
+
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeDetailsPanel();
@@ -365,6 +381,10 @@ export const initializeApp = () => {
         openParkingIntentPanel();
       } else if (key === "density") {
         openDensityProposalPanel();
+      } else if (key === "renewal") {
+        openStreetRenewalPanel();
+      } else if (key === "safety") {
+        openSafetyHeritagePanel();
       }
     });
   });
