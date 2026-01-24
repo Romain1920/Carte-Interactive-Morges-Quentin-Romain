@@ -1,15 +1,3 @@
-export const cloneFeature = (feature = {}, overrides = {}) => {
-  if (!feature || typeof feature !== "object") return feature;
-  return {
-    ...feature,
-    geometry: {
-      ...feature.geometry,
-      coordinates: Array.isArray(feature.geometry?.coordinates) ? [...feature.geometry.coordinates] : feature.geometry?.coordinates,
-    },
-    properties: { ...feature.properties, ...overrides },
-  };
-};
-
 export const createAreaAnnotator = ({ origin = [0, 0], earthRadius = 6378137 } = {}) => {
   const baseLatRad = (origin[1] * Math.PI) / 180;
   const baseLngRad = (origin[0] * Math.PI) / 180;
@@ -41,6 +29,18 @@ export const createAreaAnnotator = ({ origin = [0, 0], earthRadius = 6378137 } =
     }, 0);
   };
 
+  const cloneFeature = (feature = {}, overrides = {}) => {
+    if (!feature || typeof feature !== "object") return feature;
+    return {
+      ...feature,
+      geometry: {
+        ...feature.geometry,
+        coordinates: Array.isArray(feature.geometry?.coordinates) ? [...feature.geometry.coordinates] : feature.geometry?.coordinates,
+      },
+      properties: { ...feature.properties, ...overrides },
+    };
+  };
+
   const annotatePolygonCollection = (collection = { features: [] }) => {
     const features = Array.isArray(collection?.features) ? collection.features : [];
     let totalArea = 0;
@@ -54,9 +54,6 @@ export const createAreaAnnotator = ({ origin = [0, 0], earthRadius = 6378137 } =
   };
 
   return {
-    projectToMeters,
-    ringArea,
-    polygonArea,
     annotatePolygonCollection,
   };
 };

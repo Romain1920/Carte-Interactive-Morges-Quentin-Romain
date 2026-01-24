@@ -19,8 +19,6 @@ const noiseCanvasWidth = 4096;
 const lngSpan = noiseBounds.maxLng - noiseBounds.minLng || 1e-6;
 const latSpan = noiseBounds.maxLat - noiseBounds.minLat || 1e-6;
 const noiseCanvasHeight = Math.max(2048, Math.round((latSpan / lngSpan) * noiseCanvasWidth));
-const noiseBbox = `${noiseBounds.minLng},${noiseBounds.minLat},${noiseBounds.maxLng},${noiseBounds.maxLat}`;
-
 // Fabrique un canvas masqué qui ne dessine l’image que sur le périmètre souhaité.
 const createMaskedImageRenderer = ({ alpha = 0.85, resolveSrc }) => {
   const canvas = document.createElement("canvas");
@@ -80,9 +78,5 @@ const pollutionCanvasCoordinates = [
 export {
   createMaskedImageRenderer,
   createMaskedLocalImageRenderer,
-  noiseMaskCoords,
-  noiseBounds,
-  noiseCanvasWidth,
-  noiseCanvasHeight,
   pollutionCanvasCoordinates,
 };

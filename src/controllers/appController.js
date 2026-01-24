@@ -2,9 +2,7 @@ import maplibregl from "maplibre-gl";
 import { projectGeojson } from "../data/geojson/projectGeojson";
 import { diagnosticGeojson } from "../data/geojson/diagnosticGeojson";
 import { pollutionCanvasCoordinates } from "../masks/maskRenderer";
-import { projectPoints } from "../data/projectPoints";
-import { projectAnnotations } from "../data/projectAnnotations";
-import { cloneFeature, collectCoordinates, computeBounds, createAreaAnnotator } from "../app/utils/geo";
+import { collectCoordinates, computeBounds, createAreaAnnotator } from "../app/utils/geo";
 import { pollutionLegendTemplates } from "../ui/templates/pollutionLegendTemplates";
 import { renderSurfacePopup } from "../ui/molecules/surfacePopup";
 import { createEnvironmentPanel } from "../ui/organisms/environmentPanel";
@@ -12,15 +10,12 @@ import { createFilterPanel } from "../ui/organisms/filterPanel";
 import { setupPanelSections } from "../ui/organisms/panelSections";
 import { createLayerControlPanel } from "../ui/organisms/layerControlPanel";
 import { createLightboxController } from "../ui/organisms/lightbox";
-import { createProjectPoiMarkers } from "../ui/organisms/projectPoiMarkers";
-import { createProjectAnnotationMarkers as createAnnotationMarkersController } from "../ui/organisms/projectAnnotationMarkers";
 import { createDetailsPanel } from "../ui/organisms/detailsPanel";
 import { createEnvironmentController } from "./environmentController";
 import { createLayerVisibilityController } from "./layerVisibilityController";
 import { renderLakeRelationshipPopup } from "../ui/organisms/lakeRelationshipPopup";
 import { createMobilePanelDrawer } from "../ui/organisms/mobilePanelDrawer";
 import { createMobileLegendDrawer } from "../ui/organisms/mobileLegendDrawer";
-import { renderProjectDetailsPanel, bindProjectDetailsPanel } from "../ui/organisms/projectDetailsPanel";
 import { renderDensityProposalPanel, bindDensityProposalPanel } from "../ui/organisms/densityProposalPanel";
 import { renderParkingIntentPanel, bindParkingIntentPanel } from "../ui/organisms/parkingIntentPanel";
 import { renderStreetRenewalPanel, bindStreetRenewalPanel } from "../ui/organisms/streetRenewalPanel";
@@ -42,6 +37,15 @@ export const initializeApp = () => {
     projectAutoAxes,
   } = diagnosticGeojson;
   // Ces valeurs proviennent toutes des fichiers GeoJSON séparés : ça permet d’éviter d’avoir 1 000 lignes de coordonnées dans ce fichier.
+
+  const preloadImages = (urls = []) => {
+    urls.filter(Boolean).forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  };
+
+  preloadImages(diagnosticLakeViews?.features?.map((feature) => feature.properties?.image));
 
   // Références DOM utilisées tout au long du fichier (légende, slider, boutons de filtres…).
   const noiseLegend = document.getElementById("noise-legend");
@@ -105,12 +109,6 @@ export const initializeApp = () => {
   const morgesCenter = [6.496, 46.509];
   const { annotatePolygonCollection } = createAreaAnnotator({ origin: morgesCenter });
 
-  const projectFeatures = projectPoints.map((feature) =>
-    cloneFeature(feature, {
-      title: feature.properties?.title?.startsWith("Projet") ? feature.properties.title : `Projet – ${feature.properties?.title || ""}`,
-    }),
-  );
-
   const {
     diagnosticPollutionConfigs,
     diagnosticHeatRenderer,
@@ -138,7 +136,6 @@ export const initializeApp = () => {
 
   const bounds = (() => {
     const additionalCoords = collectCoordinates([
-      { features: projectFeatures },
       diagnosticAutoAxesPrimary,
       diagnosticAutoAxesSecondary,
       diagnosticAutoAxesTertiary,
@@ -201,13 +198,6 @@ export const initializeApp = () => {
     onClose: () => document.body.classList.remove("details-open"),
   });
 
-  // Panneau latéral “détails du projet” (réutilise le contenu des popups).
-  const openDetailsPanel = (feature) => {
-    detailsPanelController.open({
-      render: () => renderProjectDetailsPanel(feature),
-      bind: (container) => bindProjectDetailsPanel({ container, feature, openLightbox }),
-    });
-  };
   const closeDetailsPanel = () => detailsPanelController.close();
 
   const openParkingIntentPanel = () => {
@@ -260,7 +250,6 @@ export const initializeApp = () => {
     "project-lake-renature",
     "project-density",
     "project-roofs",
-    "project-interventions",
   ];
   let layerControlPanel = null;
 
@@ -269,15 +258,6 @@ export const initializeApp = () => {
     if (!activeLakePopup) return;
     activeLakePopup.remove();
     activeLakePopup = null;
-  };
-
-  let projectMarkersController = null;
-  let projectMarkersVisible = false;
-  const setMarkersVisibility = (visible) => {
-    projectMarkersVisible = visible;
-    if (projectMarkersController) {
-      projectMarkersController.setVisibility(visible);
-    }
   };
 
   const layerVisibilityController = createLayerVisibilityController(map);
@@ -314,7 +294,6 @@ export const initializeApp = () => {
     "project-lake-renature": (checked) => setProjectLakeRenatureVisibility(checked),
     "project-roofs": (checked) => setProjectRoofsVisibility(checked),
     "project-density": (checked) => setProjectDensityVisibility(checked),
-    "project-interventions": (checked) => setMarkersVisibility(checked),
   };
 
   const environmentController = createEnvironmentController({
@@ -325,7 +304,6 @@ export const initializeApp = () => {
     setProjectHeat2050Visibility,
     setProjectNoiseLayerVisibility,
     setProjectAirLayerVisibility,
-    onProjectModeChange: (mode) => updateProjectAnnotationVisibility(mode),
   });
   const {
     filterDefinitions,
@@ -388,13 +366,6 @@ export const initializeApp = () => {
       }
     });
   });
-
-  // Petites annotations textuelles qui apparaissent quand on active les scénarios projet (définies dans src/data/projectAnnotations).
-  let projectAnnotationsController = null;
-  const updateProjectAnnotationVisibility = (mode = "none") => {
-    if (!projectAnnotationsController) return;
-    projectAnnotationsController.setVisibleMode(mode || "none");
-  };
 
   const hideBaseIcons = () => {
     const style = map.getStyle();
@@ -919,20 +890,6 @@ export const initializeApp = () => {
     };
 
     registerLakePopup("diagnostic-lake-fill");
-    projectMarkersController = createProjectPoiMarkers({
-      map,
-      features: projectFeatures,
-      onSelect: (feature) => {
-        map.stop();
-        openDetailsPanel(feature);
-      },
-    });
-    setMarkersVisibility(projectMarkersVisible);
-    projectAnnotationsController = createAnnotationMarkersController({
-      map,
-      annotationsByMode: projectAnnotations,
-    });
-    updateProjectAnnotationVisibility();
 
     const refreshStyleOverlays = () => {
       hideBaseIcons();

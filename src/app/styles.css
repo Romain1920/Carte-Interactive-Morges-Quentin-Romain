@@ -259,55 +259,6 @@ body.legend-panel-open {
   right: 6px;
 }
 
-.popup-comments {
-  border-top: 1px solid #e2e8f0;
-  padding-top: 8px;
-  margin-top: 8px;
-}
-
-.popup-comments ul {
-  padding-left: 16px;
-  margin: 4px 0 8px;
-  max-height: 120px;
-  overflow-y: auto;
-  color: #cbd5f5;
-}
-
-.popup-comments li {
-  font-size: 13px;
-  margin-bottom: 4px;
-}
-
-.popup-comments strong {
-  display: block;
-  margin-bottom: 4px;
-  color: #f8fafc;
-  font-size: 13px;
-}
-
-.popup-comments textarea {
-  width: 100%;
-  box-sizing: border-box;
-  min-height: 44px;
-  resize: vertical;
-  margin-bottom: 6px;
-  background: #1e293b;
-  color: #e2e8f0;
-  border: 1px solid #334155;
-  border-radius: 6px;
-  padding: 6px 8px;
-  font-size: 16px;
-}
-
-.popup-comments button {
-  background: #2563eb;
-  color: #fff;
-  border: 0;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 /* === Panneau latéral des couches === */
 .layer-toggle {
   position: absolute;
@@ -328,12 +279,6 @@ body.legend-panel-open {
   margin: 0 0 6px;
   font-size: 14px;
   font-weight: 600;
-}
-
-.toggle-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 
 .panel-section {
@@ -370,13 +315,6 @@ body.legend-panel-open {
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
   margin-bottom: 14px;
-}
-
-.panel-note {
-  font-size: 12px;
-  margin: 10px 0 0;
-  color: rgba(255, 255, 255, 0.75);
-  line-height: 1.35;
 }
 
 /* Grille de boutons “En conséquence” */
@@ -587,43 +525,6 @@ body.filter-panel-modal-open {
   --filter-color: #d946ef;
 }
 
-.panel-link {
-  background: none;
-  border: 0;
-  color: #60a5fa;
-  text-decoration: underline;
-  font-size: 12px;
-  letter-spacing: 0.01em;
-  padding: 0;
-  margin: 4px 0 0;
-  cursor: pointer;
-}
-
-.panel-action-row {
-  margin: 12px 0 24px;
-}
-
-.panel-action-button {
-  width: 100%;
-  border: 1px solid rgba(148, 163, 184, 0.45);
-  background: rgba(15, 23, 42, 0.4);
-  color: #e2e8f0;
-  font-size: 13px;
-  padding: 12px 16px;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-  text-align: center;
-}
-
-.panel-action-button:hover,
-.panel-action-button:focus-visible {
-  border-color: #38bdf8;
-  color: #fff;
-  background: rgba(56, 189, 248, 0.15);
-  outline: none;
-}
-
 /* Intentions du projet : carrousel de tuiles */
 .intentions-carousel {
   display: grid;
@@ -715,19 +616,6 @@ body.filter-panel-modal-open {
   color: rgba(226, 232, 240, 0.75);
 }
 
-.toggle-group {
-  padding-top: 6px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.toggle-group-title {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 4px;
-}
-
 /* Cases à cocher stylisées */
 .toggle-item {
   display: flex;
@@ -751,15 +639,6 @@ body.filter-panel-modal-open {
 
 .toggle-item:last-child {
   margin-bottom: 0;
-}
-
-.toggle-item.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.toggle-item.disabled input {
-  pointer-events: none;
 }
 
 .legend-icon {
@@ -989,443 +868,6 @@ body.filter-panel-modal-open {
 .panel-popup p {
   margin: 0;
   line-height: 1.4;
-}
-
-/* === Modale démonstration des reports de stationnement === */
-.parking-demo {
-  position: fixed;
-  inset: 0;
-  background: rgba(3, 14, 32, 0.82);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1200;
-}
-
-.parking-demo.visible {
-  display: flex;
-}
-
-.parking-demo__content {
-  width: min(1400px, 96vw);
-  max-height: 95vh;
-  background: #0b1731;
-  border-radius: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 28px 32px;
-  color: #f8fafc;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  position: relative;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
-}
-
-.parking-demo__close {
-  position: absolute;
-  top: 18px;
-  right: 24px;
-  font-size: 30px;
-  line-height: 1;
-  border: none;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-}
-
-.parking-demo__header {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  align-items: flex-start;
-}
-
-.parking-demo__header h4 {
-  margin: 0;
-  font-size: 20px;
-}
-
-.parking-demo__header p {
-  margin: 6px 0 0;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.parking-demo__tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.parking-demo__tab {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.85);
-  border-radius: 999px;
-  padding: 6px 18px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
-.parking-demo__tab.active {
-  background: #2563eb;
-  border-color: #2563eb;
-  color: #fff;
-}
-
-.parking-demo__slides {
-  flex: 1;
-  position: relative;
-  overflow-y: auto;
-  max-height: calc(80vh - 220px);
-  padding-right: 6px;
-}
-
-.parking-demo__body {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-  min-height: 100%;
-}
-
-.parking-demo__body--single {
-  gap: 32px;
-  padding-bottom: 14px;
-}
-
-.parking-demo__text h3 {
-  margin: 0 0 6px;
-  font-size: 18px;
-}
-
-.parking-demo__text p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.82);
-  line-height: 1.45;
-}
-
-.parking-demo__list-wrapper p {
-  margin: 0 0 8px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.parking-demo__body ul {
-  margin: 0;
-  padding-left: 18px;
-  color: rgba(255, 255, 255, 0.78);
-  line-height: 1.5;
-}
-
-.parking-demo__note {
-  font-size: 12px;
-  color: rgba(226, 232, 240, 0.8);
-  margin-top: 6px;
-}
-
-.parking-demo__context {
-  font-size: 14px;
-  color: #f8fafc;
-  margin: 0 0 6px;
-}
-
-.parking-demo__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin: 18px 0 6px;
-}
-
-.parking-chip {
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  background: rgba(15, 23, 42, 0.2);
-  color: #e2e8f0;
-  border-radius: 999px;
-  padding: 6px 14px;
-  display: flex;
-  gap: 8px;
-  align-items: baseline;
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
-}
-
-.parking-chip strong {
-  font-size: 14px;
-}
-
-.parking-chip.active {
-  border-color: #38bdf8;
-  background: rgba(56, 189, 248, 0.15);
-}
-
-.parking-demo__stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.parking-demo__stat-card {
-  flex: 1;
-  min-width: 220px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 16px;
-}
-
-.parking-demo__stat-card h5 {
-  margin: 0 0 8px;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.parking-demo__stat-card strong {
-  font-size: 30px;
-  color: #38bdf8;
-}
-
-.parking-demo__stat-card.negative strong {
-  color: #f87171;
-}
-
-.parking-demo__stat-card.positive strong {
-  color: #34d399;
-}
-
-.parking-demo__list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 12px;
-}
-
-.parking-demo__list-wrapper {
-  max-height: 320px;
-  overflow-y: auto;
-  padding-right: 6px;
-}
-
-.parking-demo__list-wrapper::-webkit-scrollbar {
-  width: 6px;
-}
-
-.parking-demo__list-wrapper::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.3);
-  border-radius: 999px;
-}
-
-.parking-demo__item {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 12px 14px;
-  background: rgba(15, 23, 42, 0.85);
-}
-
-.parking-demo__item strong {
-  display: block;
-  font-size: 15px;
-}
-
-.parking-demo__item span {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.parking-demo__footer {
-  display: flex;
-  justify-content: flex-end;
-}
-
-#parking-demo-action {
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 999px;
-  background: transparent;
-  color: #fff;
-  padding: 8px 18px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-#parking-demo-action:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.parking-demo {
-  position: fixed;
-  inset: 0;
-  background: rgba(3, 14, 32, 0.82);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1200;
-}
-
-.parking-demo.visible {
-  display: flex;
-}
-
-.parking-demo__content {
-  width: min(1100px, 94vw);
-  max-height: 90vh;
-  background: #0b1731;
-  border-radius: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 28px 32px;
-  color: #f8fafc;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  position: relative;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
-}
-
-.parking-demo__close {
-  position: absolute;
-  top: 18px;
-  right: 24px;
-  font-size: 30px;
-  line-height: 1;
-  border: none;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-}
-
-.parking-demo__header {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  align-items: flex-start;
-}
-
-.parking-demo__header h4 {
-  margin: 0;
-  font-size: 20px;
-}
-
-.parking-demo__header p {
-  margin: 6px 0 0;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.parking-demo__progress {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-
-.parking-demo__progress span {
-  width: 34px;
-  height: 4px;
-  border-radius: 999px;
-  background: rgba(148, 163, 184, 0.3);
-}
-
-.parking-demo__progress span.active {
-  background: #38bdf8;
-}
-
-.parking-demo__slides {
-  flex: 1;
-  position: relative;
-  overflow-y: auto;
-  min-height: 520px;
-  padding-right: 6px;
-}
-
-.parking-demo__slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: translateX(40px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.parking-demo__slide.active {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.parking-demo__stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.parking-demo__stat-card {
-  flex: 1;
-  min-width: 220px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 16px;
-}
-
-.parking-demo__stat-card h5 {
-  margin: 0 0 8px;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.parking-demo__stat-card strong {
-  font-size: 30px;
-  color: #38bdf8;
-}
-
-.parking-demo__stat-card.negative strong {
-  color: #f87171;
-}
-
-.parking-demo__stat-card.positive strong {
-  color: #34d399;
-}
-
-.parking-demo__list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 14px;
-}
-
-.parking-demo__item {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 14px 16px;
-  background: rgba(15, 23, 42, 0.9);
-}
-
-.parking-demo__item strong {
-  display: block;
-  font-size: 15px;
-}
-
-.parking-demo__item span {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.parking-demo__footer {
-  display: flex;
-  justify-content: flex-end;
-}
-
-#parking-demo-replay {
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 999px;
-  background: transparent;
-  color: #fff;
-  padding: 8px 18px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-#parking-demo-replay:hover {
-  background: rgba(255, 255, 255, 0.12);
 }
 
 /* === Légende bruit/air/chaleur à droite de la carte === */
@@ -1790,12 +1232,6 @@ body.filter-panel-modal-open {
   margin-top: 0;
 }
 
-.density-proposal__visual {
-  display: grid;
-  gap: 8px;
-}
-
-.density-proposal__visual-title,
 .density-proposal__comparison-title {
   font-size: 12px;
   text-transform: uppercase;
@@ -1979,13 +1415,6 @@ body.filter-panel-modal-open {
     min-height: 100vh;
   }
 
-  .parking-demo__lists {
-    flex-direction: column;
-  }
-
-  .parking-demo__chips {
-    flex-direction: column;
-  }
 }
 
 /* Position du panneau de couches quand l’écran est petit */
@@ -2033,24 +1462,4 @@ body.filter-panel-modal-open {
 
 .maplibregl-popup-tip {
   display: none !important;
-}
-.project-annotation {
-  background: rgba(15, 23, 42, 0.92);
-  color: #e2e8f0;
-  border: 1px solid rgba(148, 163, 184, 0.5);
-  border-radius: 8px;
-  padding: 10px 12px;
-  width: 220px;
-  font-size: 12px;
-  line-height: 1.35;
-  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.35);
-}
-
-.project-annotation strong {
-  display: block;
-  text-transform: uppercase;
-  font-size: 11px;
-  letter-spacing: 0.05em;
-  color: #fcd34d;
-  margin-bottom: 6px;
 }
