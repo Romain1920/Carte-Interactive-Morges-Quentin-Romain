@@ -11,10 +11,10 @@ const buildPlaceholder = (label) => {
 };
 
 const placeholderImages = [
-  "https://vl7zgyqezaiej8w4.public.blob.vercel-storage.com/Compost_V1.png",
   "https://vl7zgyqezaiej8w4.public.blob.vercel-storage.com/Compost%204.png",
   "https://vl7zgyqezaiej8w4.public.blob.vercel-storage.com/Compost%203.png",
   "https://vl7zgyqezaiej8w4.public.blob.vercel-storage.com/Compost%202.png",
+  "https://vl7zgyqezaiej8w4.public.blob.vercel-storage.com/Compost_V1.png",
 ];
 
 const staticAssets = {

@@ -1415,6 +1415,12 @@ body.filter-panel-modal-open {
     min-height: 100vh;
   }
 
+  .density-proposal__body,
+  .renewal-proposal__body,
+  .intention-details__body {
+    column-count: 1;
+  }
+
 }
 
 /* Position du panneau de couches quand l’écran est petit */
