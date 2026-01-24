@@ -30,6 +30,13 @@ const preloadImages = () => {
 };
 
 window.addEventListener("DOMContentLoaded", () => {
-  preloadImages();
   initializeApp();
+  const schedule = (cb) => {
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(cb, { timeout: 2000 });
+    } else {
+      setTimeout(cb, 600);
+    }
+  };
+  schedule(() => preloadImages());
 });
