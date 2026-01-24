@@ -436,7 +436,7 @@ body.legend-panel-open {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
-  z-index: 1100;
+  z-index: 1000;
 }
 
 .filter-panel-mobile-overlay.visible {
@@ -446,6 +446,10 @@ body.legend-panel-open {
 
 body.filter-panel-modal-open {
   overflow: hidden;
+}
+
+body.filter-panel-modal-open .layer-toggle {
+  z-index: 1201;
 }
 
 @media (max-width: 900px) {
@@ -470,6 +474,7 @@ body.filter-panel-modal-open {
     background: rgba(15, 23, 42, 0.97);
     z-index: 1200;
     overflow-y: auto;
+    max-height: 100dvh;
   }
 
   .filter-panel-close {
