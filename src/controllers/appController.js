@@ -57,7 +57,9 @@ export const initializeApp = () => {
   const layerPanel = document.getElementById("layer-panel");
   const mobilePanelToggle = document.getElementById("mobile-panel-toggle");
   const mobilePanelOverlay = document.getElementById("mobile-panel-overlay");
-  createMobilePanelDrawer({ panel: layerPanel, toggleButton: mobilePanelToggle, overlay: mobilePanelOverlay });
+  const mobilePanelDrawer = createMobilePanelDrawer({ panel: layerPanel, toggleButton: mobilePanelToggle, overlay: mobilePanelOverlay });
+  const layerPanelClose = document.querySelector("[data-layer-panel-close]");
+  layerPanelClose?.addEventListener("click", () => mobilePanelDrawer?.close());
   const mobileLegendDrawer = createMobileLegendDrawer({
     legend: noiseLegend,
     toggleButton: legendToggleButton,
@@ -507,6 +509,7 @@ export const initializeApp = () => {
         "symbol-placement": "line",
         "symbol-spacing": 80,
         "text-field": "▶",
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
         "text-size": 14,
         "text-keep-upright": false,
         "text-rotation-alignment": "map",
@@ -526,6 +529,7 @@ export const initializeApp = () => {
         "symbol-placement": "line",
         "symbol-spacing": 80,
         "text-field": "▶",
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
         "text-size": 14,
         "text-keep-upright": false,
         "text-rotation-alignment": "map",
@@ -545,6 +549,7 @@ export const initializeApp = () => {
         "symbol-placement": "line",
         "symbol-spacing": 80,
         "text-field": "▶",
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
         "text-size": 14,
         "text-keep-upright": false,
         "text-rotation-alignment": "map",
@@ -638,6 +643,7 @@ export const initializeApp = () => {
         "symbol-placement": "line",
         "symbol-spacing": 80,
         "text-field": "▶",
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
         "text-size": 14,
         "text-keep-upright": false,
         "text-rotation-alignment": "map",
